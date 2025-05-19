@@ -20,11 +20,6 @@ DEV_NOTE (!) # ... : the IMPORTANT note left by developer
 > **PREREQUISITES**:
 
 1) Make sure you got the latest `Node.js` and `npm` on your machine, as well as latest stable version of `Vite.js` installed upon;
-2) Make sure you have [this GUI dependency](https://github.com/projektorius96/wc-pane) ["npm-linked"](https://docs.npmjs.com/cli/v9/commands/npm-link?v=true#synopsis) locally under `./node_modules/` !
-
-#### Implementations
-
-- [grid-first-coords-system](https://github.com/projektorius96/grid-first-coords-system)
 
 ---
 

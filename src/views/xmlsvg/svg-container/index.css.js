@@ -1,10 +1,12 @@
 /**
- * @returns `true`, whilst setting the styles for bound `this` target element
+ * @returns `true`, whilst setting the styles to bound `this` target element
 */
 export default function () {
 
     /**
      * @arbitrary
+     * 
+     * > DEV_NOTE # The positions of each letter found in English alphabet
      */
     const [S, V, G] = [19, 22, 7];
 

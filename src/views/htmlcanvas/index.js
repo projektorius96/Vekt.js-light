@@ -67,7 +67,7 @@ export class HTMLCanvas {
                     X_IN_MIDDLE: X_IN_MIDDLE * window.devicePixelRatio, 
                     Y_IN_MIDDLE: Y_IN_MIDDLE * window.devicePixelRatio
                 }
-                , 
+                ,
                 SVG: {
                     X_IN_MIDDLE, 
                     Y_IN_MIDDLE

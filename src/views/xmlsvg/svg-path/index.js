@@ -1,15 +1,15 @@
-import { getNamespace, setPoints } from "../modules/index.js";
+import { ENUM, getNamespace, setPoints } from "../modules/index.js";
 
 export const svg_path = getNamespace(import.meta.url);
 customElements.define(svg_path, class extends HTMLElement {
     
     constructor({options}) {
 
-        this.#initPath.call( super(), options )
+        this.#initPath.call( super() , options )
 
     }
 
-    /* void */ #initPath(options){
+    /* void */ #initPath(options) {
 
         !options.hidden 
             ?
@@ -18,9 +18,9 @@ customElements.define(svg_path, class extends HTMLElement {
                         <path
                             id="${ options.id }" 
                             d="${ setPoints.call(this, options.points) }"
-                            stroke-dasharray="${ options.dashed ||  0 }"
-                            stroke-Width="${ options.strokeWidth || 0 }"
-                            style="stroke:${ options.stroke || 'black'}; fill:${ options.fill || 'none' };"
+                            stroke-dasharray="${ options.dashed  || 0 }"
+                            stroke-width="${ options.strokeWidth || 0 }"
+                            style="stroke:${ options.stroke || COLOR.black }; fill:${ options.fill || PRINT.none };"
                         />
                     `)
                 )
@@ -33,3 +33,12 @@ customElements.define(svg_path, class extends HTMLElement {
     }
 
 });
+
+/**
+ * @alias
+ */
+const [
+    PRINT
+    , 
+    COLOR
+] = Array(2).fill(ENUM);

@@ -36,10 +36,9 @@ export default function diffContext({HTMLCanvas, userConfigs}, context){
 
 export
     const
-        ENUMS = {
+        ENUMS = Object.freeze({
             COLOR, SHAPE, UI_EVENT, CASE
-        }
-        ;
+        });
 
 export 
     const
