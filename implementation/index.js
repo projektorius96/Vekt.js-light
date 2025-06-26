@@ -1,11 +1,6 @@
 import { ENUM } from "./primitives.js";
-
-/**
- * @alias
- */
-const
-    [COLOR, SHAPE, UI_EVENT, CASE] = Array(4).fill(ENUM)
-    ;
+import * as conf from './configs/index.json' with { type: 'json' };
+export const config = conf;
 
 export default function diffContext({HTMLCanvas, userConfigs}, context){
     
@@ -20,10 +15,6 @@ export default function diffContext({HTMLCanvas, userConfigs}, context){
                         context, 
                         options: {
                             ...userConfigs.grid,
-                            /**
-                             * @override
-                             */
-                            strokeStyle: COLOR.blue
                         }
                     });
 
@@ -34,28 +25,44 @@ export default function diffContext({HTMLCanvas, userConfigs}, context){
 
 }
 
+/**
+ * @alias
+ */
+const
+    [COLOR, SHAPE, UI_EVENT, CASE] = Array(4).fill(ENUM)
+    ;
+
 export
     const
         ENUMS = Object.freeze({
             COLOR, SHAPE, UI_EVENT, CASE
         });
 
-export 
+// DEV_NOTE (!) # excplicit runtime export for optional value overriding (see for `@override` metatag),..
+// ..good example - GUI bindings attached to equivalent runtime values.
+export
     const
         userConfigs = {
             stage : {
-                /* id: 'stage',  */// (default)
-                /* container: document.body, */// (default)
-                scale: 30,
+                /**
+                 * @default
+                 */
+                ...conf.stage,
+                // /**
+                //  * @override
+                //  */
+                // scale: 30,
             }
             ,
             grid : {
-                id: SHAPE.grid,
-                hidden: !true,
-                dotted: /* ! */true,
-                lineWidth: 1,
-                strokeStyle: COLOR.magenta,
-                opacity: 1 /* values := [0..1] */
+                /**
+                 * @default
+                 */
+                ...config.layers.grid,
+                // /**
+                //  * @override
+                // */
+                // strokeStyle: COLOR.blue,
             }
         }
         ;

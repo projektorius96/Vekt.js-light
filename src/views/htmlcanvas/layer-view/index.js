@@ -3,12 +3,11 @@ import setStyling from './index.css.js';
 export const layer_view = (new URL(import.meta.url)).pathname.split('/').at(-2);
 customElements.define(layer_view, class extends HTMLCanvasElement {
     
-    constructor({id, opacity, hidden, isSkewed}){
+    constructor({id, opacity, hidden}){
 
         if ( setStyling.call( super() , {opacity, hidden} ) ) {
 
             this.id = id;
-            this.isSkewed = isSkewed;
             this.stack = [];
 
         }
