@@ -1,8 +1,7 @@
+import config from './configs/index.js';
 import { ENUM } from "./primitives.js";
-import * as conf from './configs/index.json' with { type: 'json' };
-export const config = conf;
 
-export default function diffContext({HTMLCanvas, userConfigs}, context){
+export default function diffContext({HTMLCanvas}, context){
     
     // DEV_NOTE # because we mix HTML Canvas (i.e. Canvas API) together with XML SVG (i.e. SVG) web technologies, we must do the following check:..
     if ( context instanceof CanvasRenderingContext2D ) {
@@ -14,7 +13,7 @@ export default function diffContext({HTMLCanvas, userConfigs}, context){
                     HTMLCanvas.Views.Grid.draw({
                         context, 
                         options: {
-                            ...userConfigs.grid,
+                            ...userConfigs.layers.grid,
                         }
                     });
 
@@ -38,7 +37,7 @@ export
             COLOR, SHAPE, UI_EVENT, CASE
         });
 
-// DEV_NOTE (!) # excplicit runtime export for optional value overriding (see for `@override` metatag),..
+// DEV_NOTE (!) # excplicit runtime export for optional value overriding (see for `@override` metatag) of its JSON equivalent,..
 // ..good example - GUI bindings attached to equivalent runtime values.
 export
     const
@@ -47,22 +46,24 @@ export
                 /**
                  * @default
                  */
-                ...conf.stage,
-                // /**
-                //  * @override
-                //  */
-                // scale: 30,
+                ...config.stage,
+                /**
+                 * @override
+                 */
+                scale: 30,
             }
             ,
-            grid : {
-                /**
-                 * @default
-                 */
-                ...config.layers.grid,
-                // /**
-                //  * @override
-                // */
-                // strokeStyle: COLOR.blue,
+            layers: {
+                grid : {
+                    /**
+                     * @default
+                     */
+                    ...config.layers.grid,
+                    /**
+                     * @override
+                    */
+                    strokeStyle: COLOR.magenta,
+                }   
             }
         }
         ;

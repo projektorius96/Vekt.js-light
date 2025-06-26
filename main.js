@@ -2,7 +2,6 @@ import { HTMLCanvas } from './src/views/index.js';
 import diffContext, {
     ENUMS,
     userConfigs,
-    config
 } from './implementation/index.js';
 
 import package_json from './package.json' with { type: 'json' };
@@ -14,23 +13,23 @@ document.on(ENUMS.UI_EVENT.DOMContentLoaded, ()=>{
     const
         stage = new HTMLCanvas.ViewGroup.Stage({...userConfigs.stage});
 
-        Object.keys(config.layers).forEach((shape)=>{
+        Object.keys(userConfigs.layers).forEach((shape)=>{
+
             if (stage.children[shape] === undefined){
                 
-                console.log(config.layers[shape]);
-
                 stage.appendChild(
-                    new HTMLCanvas.ViewGroup.Layer({...config.layers[shape]}),
+                    new HTMLCanvas.ViewGroup.Layer({...userConfigs.layers[shape]}),
                 );
                 
             }
-        })
+
+        });
 
     window.on(ENUMS.UI_EVENT.resize, ()=>{
 
             HTMLCanvas
                 .init({stage})
-                    .on( diffContext.bind(null, {HTMLCanvas, userConfigs}) );
+                    .on( diffContext.bind(null, {HTMLCanvas}) );
         
     })
 
