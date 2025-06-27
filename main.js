@@ -1,12 +1,12 @@
 import { HTMLCanvas } from './src/views/index.js';
 import VektLight, {
-    ENUM,
+    ENUMS,
     userConfigs,
 } from './implementation/index.js';
 
 import package_json from './package.json' with { type: 'json' };
 
-document.on(ENUM.UI_EVENT.DOMContentLoaded, ()=>{
+document.on(ENUMS.UI_EVENT.DOMContentLoaded, ()=>{
 
     document.title = package_json.name;
 
@@ -25,7 +25,7 @@ document.on(ENUM.UI_EVENT.DOMContentLoaded, ()=>{
 
         });
 
-    window.on(ENUM.UI_EVENT.resize, ()=>{
+    window.on(ENUMS.UI_EVENT.resize, ()=>{
 
             HTMLCanvas
                 .init({stage})
@@ -34,6 +34,6 @@ document.on(ENUM.UI_EVENT.DOMContentLoaded, ()=>{
     })
 
     // DEV_NOTE (!) # This allows to initiate `<canvas>` hosted "bitmap" with internal context without waiting `window.onresize` to be triggered by end-user
-    window.dispatch( new Event(ENUM.UI_EVENT.resize) );
+    window.dispatch( new Event(ENUMS.UI_EVENT.resize) );
 
 });

@@ -1,5 +1,37 @@
 import { ENUMS } from "./utils.js";
 
+export { 
+    ENUMS 
+}
+
+/**
+ * @type
+ * NOTE: The `userConfig` defines shared writable structure, which besides its primary goal, i.e. setting user (developer) configs as well registering "layers" for `diffContext` switch statement control flow,.. 
+ * ..it also optionally serves as a reference for mapping of GUI bindings,if any!
+ */
+export
+    const
+        userConfigs = {
+            stage: {
+                /* id: 'stage', */// (Default)
+                scale: 30
+            },
+            layers: {
+                grid: {
+                    id: ENUMS.CASE.grid,
+                    strokeStyle: ENUMS.COLOR.magenta,
+                    hidden: !true,
+                    dotted: true,
+                    lineWidth: 1,
+                    opacity: 1
+                },
+                unitSquare: {
+                    id: ENUMS.CASE.unit_square?.replace('_', '-')
+                }
+            }
+        }
+        ;
+
 export default class {
 
     static diffContext({HTMLCanvas}, context) {
@@ -9,7 +41,7 @@ export default class {
                                                 
                 switch (context.canvas.id) {
 
-                    case ENUM.CASE.grid :
+                    case userConfigs.layers.grid.id :
 
                         HTMLCanvas.Views.Grid.draw({
                             context, 
@@ -20,35 +52,13 @@ export default class {
 
                     break;
 
+                    case userConfigs.layers['unit-square'] :
+                        // DEV_NOTE # shape implementation using Vekt.js-light exposed XMLSVG (SVG)
+                    break;
+
                 }
         }
 
     }
 
 }
-
-/**
- * @type
- * NOTE: The `userConfig` defines shared writable structure, which besides its primary goal, it also serve as a reference for mapping of GUI bindings, if any !
- */
-export
-    const
-        userConfigs = {
-            stage: {
-                /* id: "stage", */// (Default)
-                scale: 30
-            },
-            layers: {
-                grid: {
-                    id: ENUM.SHAPE.grid,
-                    strokeStyle: ENUM.COLOR.magenta,
-                    hidden: !true,
-                    dotted: true,
-                    lineWidth: 1,
-                    opacity: 1
-                }
-            }
-        }
-        ;
-
-export const ENUM = ENUMS;
