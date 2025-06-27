@@ -4,11 +4,6 @@ export {
     ENUMS 
 }
 
-/**
- * @type
- * NOTE: The `userConfig` defines shared writable structure, which besides its primary goal, i.e. setting user (developer) configs as well registering "layers" for `diffContext` switch statement control flow,.. 
- * ..it also optionally serves as a reference for mapping of GUI bindings,if any!
- */
 export
     const
         userConfigs = {

@@ -1,5 +1,5 @@
 import setStyling from './index.css.js'
-import { ENUM, getNamespace, setCoords, setPoints, scalePath } from "../modules/index.js";
+import { ENUM, getNamespace, setCoords, setPoints } from "../modules/index.js";
 
 /**
  * @alias
@@ -73,12 +73,6 @@ function setMixin({ref}){
                             ,
                             [METHOD.setPoints](points){                      
                                 this.attributes.d.value = setPoints.call(view, points)
-                            }
-                            ,
-                            [METHOD.scalePath](svgPathAsPoints, scalingFactor){                      
-                                return(
-                                    scalePath(svgPathAsPoints, scalingFactor)
-                                )
                             }
                         }
                     ) ;

@@ -73,21 +73,6 @@ export function setPoints(points = []) {
 
 }
 
-export function scalePath(svg_path, scalar) {
-    return svg_path
-        // # split by space
-        .split(' ')
-        .map(token => {
-            // # if the token is a number
-            if (!isNaN(token)) {
-                return (parseFloat(token) * scalar).toString();
-            }
-            // # else, it's a command (e.g., 'M', 'L')
-            return token;
-        })
-        .join(' ');
-}
-
 /**
  * @param {EventTarget} `currentTarget` - EventTarget-exposed `currentTarget` property
  * @returns {void} Enables the dragging for the `currentTarget` (hereinafter - shape); 
