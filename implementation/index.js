@@ -13,7 +13,6 @@ export
     const
         userConfigs = {
             stage: {
-                /* id: 'stage', */// (Default)
                 scale: 30
             },
             layers: {
@@ -25,8 +24,8 @@ export
                     lineWidth: 1,
                     opacity: 1
                 },
-                unitSquare: {
-                    id: ENUMS.CASE.unit_square?.replace('_', '-')
+                unit_square: {
+                    id: 'unit-square'
                 }
             }
         }
@@ -34,7 +33,7 @@ export
 
 export default class {
 
-    static diffContext({HTMLCanvas}, context) {
+    static draw({HTMLCanvas}, context) {
     
         // DEV_NOTE # because we mix HTML Canvas (i.e. Canvas API) together with XML SVG (i.e. SVG) web technologies, we must do the following check:..
         if ( context instanceof CanvasRenderingContext2D ) {
@@ -50,10 +49,6 @@ export default class {
                             }
                         });
 
-                    break;
-
-                    case userConfigs.layers['unit-square'] :
-                        // DEV_NOTE # shape implementation using Vekt.js-light exposed XMLSVG (SVG)
                     break;
 
                 }

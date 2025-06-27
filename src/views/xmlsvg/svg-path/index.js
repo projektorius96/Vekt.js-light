@@ -5,7 +5,7 @@ customElements.define(svg_path, class extends HTMLElement {
     
     constructor({options}) {
 
-        this.#initPath.call( super() , options )
+        if ( super() ) this.#initPath.call( this , options ) ;
 
     }
 

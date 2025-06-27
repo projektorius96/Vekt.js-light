@@ -1,5 +1,5 @@
-import { HTMLCanvas } from './src/views/index.js';
-import VektLight, {
+import { HTMLCanvas, XMLSVG } from './src/views/index.js';
+import Grid, {
     ENUMS,
     userConfigs,
 } from './implementation/index.js';
@@ -12,24 +12,46 @@ document.on(ENUMS.UI_EVENT.DOMContentLoaded, ()=>{
 
     const
         stage = new HTMLCanvas.ViewGroup.Stage({...userConfigs.stage});
-
-        Object.keys(userConfigs.layers).forEach((shape)=>{
-
-            if (stage.children[shape] === undefined){
-                
-                stage.appendChild(
-                    new HTMLCanvas.ViewGroup.Layer({...userConfigs.layers[shape]}),
-                );
-                
-            }
-
-        });
+                stage.append(...[
+                    new HTMLCanvas.ViewGroup.Layer({...userConfigs.layers.grid})
+                    ,
+                    new XMLSVG.ViewGroup.Container({
+                        options: {
+                            id: 'svg-container-1',
+                        },
+                        paths: [
+                            new XMLSVG.Views.Path({
+                                options: {
+                                    id: ENUMS.PRINT.unit_square,
+                                    hidden: !true,
+                                    dashed: 0.1/* herein: dashed := [0.1..1.0]; to disable, pass either := 0|false */,
+                                    points: [],
+                                    strokeWidth: 3,
+                                    fill: ENUMS.COLOR.none,
+                                    stroke: ENUMS.COLOR.green,
+                                }
+                            })
+                        ]
+                    })
+                ])    
 
     window.on(ENUMS.UI_EVENT.resize, ()=>{
 
             HTMLCanvas
                 .init({stage})
-                    .on( VektLight.diffContext.bind(null, {HTMLCanvas}) );
+                    .on( Grid.draw.bind(null, {HTMLCanvas}) );
+
+            const unitSquare = XMLSVG.Helpers.findBy(ENUMS.PRINT.unit_square);
+            
+            unitSquare.setPoints([
+                ...[{x: 0, y: 0}],
+                ...[{x: 1, y: 0}],
+                ...[{x: 1, y: 1}],
+                ...[{x: 0, y: 1}],
+                ...[{x: 0, y: 0}],
+            ].map((coords)=>{                
+                return coords = { x: coords.x * stage.grid.GRIDCELL_DIM * 4, y: coords.y * stage.grid.GRIDCELL_DIM * 4 }
+            }))
         
     })
 

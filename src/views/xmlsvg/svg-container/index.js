@@ -1,5 +1,5 @@
 import setStyling from './index.css.js'
-import { ENUM, getNamespace, setCoords, setPoints } from "../modules/index.js";
+import { ENUM, getNamespace, setCoords, setPoints, scalePath } from "../modules/index.js";
 
 /**
  * @alias
@@ -15,12 +15,12 @@ const [
 export const svg_container = getNamespace(import.meta.url);
 customElements.define(svg_container, class extends HTMLElement {
 
-    constructor({ options, childrenList }) {
+    constructor({ options, paths }) {
 
         if ( setStyling.call( super() , options) ) {
             
             let interpolatedHTML = "";
-                childrenList.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
+                paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
 
             this.setHTMLUnsafe(/* html */`
                 <svg id="${ options.id || svg_container }">
@@ -31,7 +31,7 @@ customElements.define(svg_container, class extends HTMLElement {
             /**
              * > The following line makes `options` available within life cycle methods, e.g. `connectedCallback` accessed via `this.options`
              */
-            Object.assign(this, {options, childrenList});
+            Object.assign(this, {options, paths});
 
         }
 
@@ -73,6 +73,12 @@ function setMixin({ref}){
                             ,
                             [METHOD.setPoints](points){                      
                                 this.attributes.d.value = setPoints.call(view, points)
+                            }
+                            ,
+                            [METHOD.scalePath](svgPathAsPoints, scalingFactor){                      
+                                return(
+                                    scalePath(svgPathAsPoints, scalingFactor)
+                                )
                             }
                         }
                     ) ;

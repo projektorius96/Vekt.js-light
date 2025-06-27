@@ -9,7 +9,7 @@ export class HTMLCanvas {
     /**
      * @typedef {Array} Iterable
      * 
-     * @param {HTMLDivElement} `stage` - a reference to the current instance of `stage`
+     * @param {HTMLDivElement} `stage` - a reference to the current instance of `stage`; NOTE: "`stage"` is reserved word and `HTMLElement.prototype.id`, hence "ID" the context it is used within !
      * @returns {Iterable} `Iterable` : if such iterable is iterated, each value of such `Iterable`'s is a "`view-group`"; top-level `view-group` conventionally is called **"`stage`"**, otherwise it's a **"`layer`"**
      */
         static init({ stage }) {
