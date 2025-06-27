@@ -1,7 +1,7 @@
 import { HTMLCanvas, XMLSVG } from './src/views/index.js';
 import Grid, {
     ENUMS,
-    userConfigs,
+    userConfig,
 } from './implementation/index.js';
 
 import package_json from './package.json' with { type: 'json' };
@@ -11,9 +11,9 @@ document.on(ENUMS.UI_EVENT.DOMContentLoaded, ()=>{
     document.title = package_json.name;
 
     const
-        stage = new HTMLCanvas.ViewGroup.Stage({...userConfigs.stage});
+        stage = new HTMLCanvas.ViewGroup.Stage({...userConfig.canvas.stage});
                 stage.append(...[
-                    new HTMLCanvas.ViewGroup.Layer({...userConfigs.layers.grid})
+                    new HTMLCanvas.ViewGroup.Layer({...userConfig.canvas.layers.grid})
                     ,
                     new XMLSVG.ViewGroup.Container({
                         options: {
@@ -23,14 +23,10 @@ document.on(ENUMS.UI_EVENT.DOMContentLoaded, ()=>{
                             new XMLSVG.Views.Path({
                                 options: {
                                     id: ENUMS.PRINT.unit_square,
-                                    hidden: !true,
-                                    dashed: 0/* herein: dashed := [0.1..1.0]; to disable, pass either := 0|false */,
-                                    points: [],
-                                    strokeWidth: 3,
-                                    fill: ENUMS.COLOR.none,
-                                    stroke: ENUMS.COLOR.green,
+                                    ...userConfig.svg.paths.unit_square.options
                                 }
                             })
+                            ,
                         ]
                     })
                 ])    
@@ -39,24 +35,7 @@ document.on(ENUMS.UI_EVENT.DOMContentLoaded, ()=>{
 
             HTMLCanvas
                 .init({stage})
-                    .on( Grid.draw.bind(null, {HTMLCanvas}) );
-            
-            XMLSVG.Helpers.findBy(ENUMS.PRINT.unit_square)
-            .setPoints(
-                Array.prototype.map.call(
-                    [
-                        ...[{x: 0, y: 0}],
-                        ...[{x: 1, y: 0}],
-                        ...[{x: 1, y: 1}],
-                        ...[{x: 0, y: 1}],
-                        ...[{x: 0, y: 0}],
-                    ]
-                    ,
-                    (coords)=>{                
-                        return coords = { x: coords.x * stage.grid.GRIDCELL_DIM * 4, y: coords.y * stage.grid.GRIDCELL_DIM * 4 }
-                    }
-                )
-            )
+                    .on( Grid.draw.bind(null, {HTMLCanvas, XMLSVG}) );
         
     })
 
