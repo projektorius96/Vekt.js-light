@@ -1,69 +1,54 @@
-import config from './configs/index.js';
-import { ENUM } from "./primitives.js";
+import { ENUMS } from "./utils.js";
 
-export default function diffContext({HTMLCanvas}, context){
+export default class {
+
+    static diffContext({HTMLCanvas}, context) {
     
-    // DEV_NOTE # because we mix HTML Canvas (i.e. Canvas API) together with XML SVG (i.e. SVG) web technologies, we must do the following check:..
-    if ( context instanceof CanvasRenderingContext2D ) {
-                                            
-            switch (context.canvas.id) {
+        // DEV_NOTE # because we mix HTML Canvas (i.e. Canvas API) together with XML SVG (i.e. SVG) web technologies, we must do the following check:..
+        if ( context instanceof CanvasRenderingContext2D ) {
+                                                
+                switch (context.canvas.id) {
 
-                case CASE.grid :
+                    case ENUM.CASE.grid :
 
-                    HTMLCanvas.Views.Grid.draw({
-                        context, 
-                        options: {
-                            ...userConfigs.layers.grid,
-                        }
-                    });
+                        HTMLCanvas.Views.Grid.draw({
+                            context, 
+                            options: {
+                                ...userConfigs.layers.grid,
+                            }
+                        });
 
-                break;
+                    break;
 
-            }
+                }
+        }
+
     }
 
 }
 
 /**
- * @alias
+ * @type
+ * NOTE: The `userConfig` defines shared writable structure, which besides its primary goal, it also serve as a reference for mapping of GUI bindings, if any !
  */
-const
-    [COLOR, SHAPE, UI_EVENT, CASE] = Array(4).fill(ENUM)
-    ;
-
-export
-    const
-        ENUMS = Object.freeze({
-            COLOR, SHAPE, UI_EVENT, CASE
-        });
-
-// DEV_NOTE (!) # excplicit runtime export for optional value overriding (see for `@override` metatag) of its JSON equivalent,..
-// ..good example - GUI bindings attached to equivalent runtime values.
 export
     const
         userConfigs = {
-            stage : {
-                /**
-                 * @default
-                 */
-                ...config.stage,
-                /**
-                 * @override
-                 */
-                scale: 30,
-            }
-            ,
+            stage: {
+                /* id: "stage", */// (Default)
+                scale: 30
+            },
             layers: {
-                grid : {
-                    /**
-                     * @default
-                     */
-                    ...config.layers.grid,
-                    /**
-                     * @override
-                    */
-                    strokeStyle: COLOR.magenta,
-                }   
+                grid: {
+                    id: ENUM.SHAPE.grid,
+                    strokeStyle: ENUM.COLOR.magenta,
+                    hidden: !true,
+                    dotted: true,
+                    lineWidth: 1,
+                    opacity: 1
+                }
             }
         }
         ;
+
+export const ENUM = ENUMS;
