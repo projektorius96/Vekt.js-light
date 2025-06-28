@@ -35,6 +35,25 @@ export
                             stroke: ENUMS.COLOR.green,
                         }
                         ,
+                        getPoints(){
+                            return (
+                                Array.prototype.map.call(
+                                    [
+                                        ...[{x: 0, y: 0}],
+                                        ...[{x: 1, y: 0}],
+                                        ...[{x: 1, y: 1}],
+                                        ...[{x: 0, y: 1}],
+                                        ...[{x: 0, y: 0}],
+                                    ]
+                                    ,
+                                    (coords)=>{
+                                        let scalingFactor = 4;                
+                                        return coords = { x: coords.x * stage.grid.GRIDCELL_DIM * scalingFactor, y: coords.y * stage.grid.GRIDCELL_DIM * scalingFactor }
+                                    }
+                                )
+                            )
+                        }
+                        ,
                         transform: {
                             translate: (svgPath)=>{
 
@@ -93,22 +112,8 @@ export default class {
             const unitSquare = XMLSVG.Helpers
                 .findBy(ENUMS.PRINT.unit_square)
             
-            unitSquare
-            .setPoints(
-                Array.prototype.map.call(
-                    [
-                        ...[{x: 0, y: 0}],
-                        ...[{x: 1, y: 0}],
-                        ...[{x: 1, y: 1}],
-                        ...[{x: 0, y: 1}],
-                        ...[{x: 0, y: 0}],
-                    ]
-                    ,
-                    (coords)=>{
-                        let scalingFactor = 4;                
-                        return coords = { x: coords.x * stage.grid.GRIDCELL_DIM * scalingFactor, y: coords.y * stage.grid.GRIDCELL_DIM * scalingFactor }
-                    }
-                )
+            unitSquare.setPoints(
+                userConfig.svg.paths.unit_square.getPoints()
             );
 
             userConfig
