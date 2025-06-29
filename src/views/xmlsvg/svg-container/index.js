@@ -10,7 +10,9 @@ const [
     CASE
     ,
     METHOD
-] = Array(3).fill(ENUM);
+    ,
+    PRINT
+] = Array(4).fill(ENUM);
 
 export const svg_container = getNamespace(import.meta.url);
 customElements.define(svg_container, class extends HTMLElement {
@@ -58,7 +60,7 @@ customElements.define(svg_container, class extends HTMLElement {
 function setMixin({ref}){
     Array
     .from(ref)
-        .forEach((view)=>{
+        .forEach((view)=>{           
             switch (view.tagName.toLowerCase()) {
                 case CASE.path :
                     Object.assign(
@@ -71,8 +73,20 @@ function setMixin({ref}){
                                 );
                             }
                             ,
-                            [METHOD.setPoints](points){                      
-                                this.attributes.d.value = setPoints.call(view, points)
+                            [METHOD.setPoints](points, scalingFactor){                      
+                                this.attributes.d.value = setPoints.call(view, points, scalingFactor)
+                            }
+                            ,
+                            [METHOD.getTranslate](){
+                                    return view.getAttribute(PRINT.transform)
+                            }
+                            ,
+                            [METHOD.setTranslate]({translateX = 0, translateY = 0}){
+                                    view.setAttribute(
+                                        PRINT.transform
+                                        ,
+                                        `${PRINT.translate}(${translateX},${translateY})`
+                                    )
                             }
                         }
                     ) ;

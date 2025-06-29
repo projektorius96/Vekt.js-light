@@ -27,59 +27,21 @@ export
                 paths: {
                     unit_square: {
                         options: {
+                            id: ENUMS.PRINT.unit_square,
                             hidden: !true,
                             dashed: 0/* herein: dashed := [0.1..1.0]; to disable, pass either := 0|false */,
-                            points: [],
+                            points: [
+                                ...[
+                                    ...[{x: 0, y: 0}],
+                                    ...[{x: 1, y: 0}],
+                                    ...[{x: 1, y: 1}],
+                                    ...[{x: 0, y: 1}],
+                                    ...[{x: 0, y: 0}],
+                                ]
+                            ],
                             strokeWidth: 3,
                             fill: ENUMS.COLOR.none,
                             stroke: ENUMS.COLOR.green,
-                        }
-                        ,
-                        /**
-                         * @override `SVGPathElement.prototype.getPoints()`
-                         */
-                        getPoints(){
-                            return (
-                                Array.prototype.map.call(
-                                    [
-                                        ...[{x: 0, y: 0}],
-                                        ...[{x: 1, y: 0}],
-                                        ...[{x: 1, y: 1}],
-                                        ...[{x: 0, y: 1}],
-                                        ...[{x: 0, y: 0}],
-                                    ]
-                                    ,
-                                    (coords)=>{
-                                        let scalingFactor = 4;                
-                                        return coords = { x: coords.x * stage.grid.GRIDCELL_DIM * scalingFactor, y: coords.y * stage.grid.GRIDCELL_DIM * scalingFactor }
-                                    }
-                                )
-                            )
-                        }
-                        ,
-                        transform: {
-                            translate: (svgPath)=>{
-
-                                const [
-                                    unit_square$width
-                                    , 
-                                    unit_square$height
-                                ] = [
-                                    svgPath.getBoundingClientRect().width
-                                    , 
-                                    svgPath.getBoundingClientRect().height
-                                ];
-                                
-                                svgPath.setAttribute(
-                                    ENUMS.PRINT.transform
-                                    , 
-                                    `${ENUMS.PRINT.translate}(${stage.grid.SVG.X_IN_MIDDLE - (unit_square$width / 2)},${stage.grid.SVG.Y_IN_MIDDLE - (unit_square$height / 2)})`
-                                )
-                                    
-                                return true;
-
-                            }
-                            ,
                         }
                     }
                 }
@@ -113,27 +75,28 @@ export default class {
 
             /* === [userConfig.svg.paths.unit_square] === */
 
-            Array
-                .from({length: 2})
-                .fill( XMLSVG.Helpers.findBy(ENUMS.PRINT.unit_square) )
-                    .forEach((shape, operationCycle)=>{
-                        switch (operationCycle) {
-                            case 0:
-                                shape.setPoints(
-                                    userConfig
-                                    .svg.paths
-                                    .unit_square
-                                    .getPoints()
-                                )
-                            break;
-                            case 1:
-                                userConfig
-                                .svg.paths
-                                .unit_square
-                                    .transform.translate(shape)
-                            break;
-                        }
-                    })
+            Array(2)
+                .fill( XMLSVG.Helpers.findByID( ENUMS.PRINT.unit_square ) )
+                .forEach( (path, operationCycle)=>{
+                    switch (operationCycle) {
+                        case 0:
+                            path.setPoints(
+                                /* points: */
+                                userConfig.svg.paths.unit_square.options.points
+                                ,
+                                /* scalingFactor: */
+                                stage.grid.GRIDCELL_DIM * 4
+                            )
+                        break;
+                        case 1:
+                            const { width, height } = path.getBoundingClientRect();
+                            path.setTranslate({
+                                translateX: stage.grid.SVG.X_IN_MIDDLE - (width / 2),
+                                translateY: stage.grid.SVG.Y_IN_MIDDLE - (height / 2),
+                            })
+                        break;
+                    }
+                } );
             
             /* === [userConfig.svg.paths.unit_square] === */
 

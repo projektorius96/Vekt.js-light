@@ -59,13 +59,13 @@ export function setCoords() {
  * @param {Array} points - list of points comprising a `path`, where such `path` is assigned to `SVGPathElement.attributes.d` internally;
  * @returns {SVGPathElement.attributes.d} path
  */
-export function setPoints(points = []) {
+export function setPoints(points = [], scalingFactor = 1) {
     
     if (points.length === 0) return "";
         let path = `M 0 0`;
             points.forEach((point, i) => {
                 if (i > 0){
-                    path += ` L ${point.x} ${point.y}`;
+                    path += ` L ${point.x * scalingFactor} ${point.y * scalingFactor}`;
                 }
             });
     

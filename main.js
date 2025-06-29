@@ -22,7 +22,6 @@ document.on(ENUMS.UI_EVENT.DOMContentLoaded, ()=>{
                         paths: [
                             new XMLSVG.Views.Path({
                                 options: {
-                                    id: ENUMS.PRINT.unit_square,
                                     ...userConfig.svg.paths.unit_square.options
                                 }
                             })

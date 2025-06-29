@@ -21,7 +21,7 @@ export class XMLSVG {
     }
 
     static Helpers = {
-        findBy(id){
+        findByID(id){
             return (
                 document?.getElementById(id)
             )
