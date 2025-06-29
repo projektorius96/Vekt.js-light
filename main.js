@@ -1,5 +1,5 @@
 import { HTMLCanvas, XMLSVG } from './src/views/index.js';
-import Grid, {
+import Implementation, {
     ENUMS,
     userConfig,
 } from './implementation/index.js';
@@ -35,7 +35,7 @@ document.on(ENUMS.UI_EVENT.DOMContentLoaded, ()=>{
 
             HTMLCanvas
                 .init({stage})
-                    .on( Grid.draw.bind(null, {HTMLCanvas, XMLSVG}) );
+                    .on( Implementation.draw.bind(null, {HTMLCanvas, XMLSVG}) );
         
     })
 

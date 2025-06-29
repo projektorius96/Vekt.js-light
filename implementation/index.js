@@ -35,6 +35,9 @@ export
                             stroke: ENUMS.COLOR.green,
                         }
                         ,
+                        /**
+                         * @override `SVGPathElement.prototype.getPoints()`
+                         */
                         getPoints(){
                             return (
                                 Array.prototype.map.call(
@@ -76,6 +79,7 @@ export
                                 return true;
 
                             }
+                            ,
                         }
                     }
                 }
@@ -107,21 +111,31 @@ export default class {
 
         } else {
 
-            /* === UNIT-OF-SQUARE === */
+            /* === [userConfig.svg.paths.unit_square] === */
 
-            const unitSquare = XMLSVG.Helpers
-                .findBy(ENUMS.PRINT.unit_square)
+            Array
+                .from({length: 2})
+                .fill( XMLSVG.Helpers.findBy(ENUMS.PRINT.unit_square) )
+                    .forEach((shape, operationCycle)=>{
+                        switch (operationCycle) {
+                            case 0:
+                                shape.setPoints(
+                                    userConfig
+                                    .svg.paths
+                                    .unit_square
+                                    .getPoints()
+                                )
+                            break;
+                            case 1:
+                                userConfig
+                                .svg.paths
+                                .unit_square
+                                    .transform.translate(shape)
+                            break;
+                        }
+                    })
             
-            unitSquare.setPoints(
-                userConfig.svg.paths.unit_square.getPoints()
-            );
-
-            userConfig
-            .svg.paths
-            .unit_square
-                .transform.translate(unitSquare)
-            
-            /* === UNIT-OF-SQUARE === */
+            /* === [userConfig.svg.paths.unit_square] === */
 
         }
 
