@@ -1,17 +1,17 @@
 export default class {
 
-    static draw({XMLSVG, ENUMS}) {
-
+    static draw({XMLSVG, id}) {
+        
         const { userConfig } = stage.implementation; // DEV_NOTE # The reference `stage` is reserved ID, thus accessibe globally with ease
 
             Array(2)
-            .fill( XMLSVG.Helpers.findByID( ENUMS.PRINT.unit_square ) )
-            .forEach((path, operationCycle)=>{
+            .fill( XMLSVG.Helpers.findByID( id ) )
+            .forEach((path, operationCycle)=>{                
                 switch (operationCycle) {
                     case 0:
                         path?.setPoints(
                             /* points: */
-                            userConfig.svg.paths.unit_square.options.points
+                            userConfig.svg.paths[id].options.points
                             ,
                             /* scalingFactor: */
                             stage.grid.GRIDCELL_DIM * 4
@@ -26,6 +26,8 @@ export default class {
                     break;
                 }
             });
+
+            return XMLSVG.Helpers.findByID( id );
 
     }
 

@@ -25,13 +25,30 @@ export default class {
                     paths: [
                         new XMLSVG.Views.Path({
                             options: {
-                                ...userConfig.svg.paths.unit_square.options
+                                ...userConfig.svg.paths.unit_square.options,
+                            }
+                        })
+                        ,
+                        new XMLSVG.Views.Path({
+                            options: {
+                                ...userConfig.svg.paths.unit_square.options,
+                                /**
+                                 * @override
+                                 */
+                                id: ENUMS.PRINT.right_triangle,
+                                points: [
+                                    ...userConfig.svg.paths.unit_square.options.points
+                                        .filter((vec2, i)=>{
+                                            if (i !== 2) return vec2;
+                                        })
+                                ],
+                                stroke: 'red'
                             }
                         })
                         ,
                     ]
                 })
-            ])
+            ]);
 
             Object.assign(
                 stage

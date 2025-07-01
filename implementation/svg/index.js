@@ -2,10 +2,11 @@ import UnitSquare from './unit-square/index.js';
 
 export default class {
 
-    static initSVG() {
+    static initSVG({XMLSVG, ENUMS}) {
         
         return([
-            UnitSquare.draw(...arguments)
+            UnitSquare.draw({XMLSVG, id: ENUMS.PRINT.unit_square}),
+            UnitSquare.draw({XMLSVG, id: ENUMS.PRINT.right_triangle}),
         ])
 
     }
