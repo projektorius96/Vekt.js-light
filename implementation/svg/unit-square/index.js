@@ -27,10 +27,6 @@ export default class {
                 }
             });
 
-        return ({
-            box: XMLSVG.Helpers.findByID( ENUMS.PRINT.unit_square )?.getBoundingClientRect() 
-        })
-
     }
 
 }
