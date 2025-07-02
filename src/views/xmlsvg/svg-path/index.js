@@ -6,6 +6,7 @@ customElements.define(svg_path, class extends HTMLElement {
     constructor({options}) {
 
         if ( super() ) this.#initPath.call( this , options ) ;
+            this.children[options.id].setAttribute("options.points", options.points.map(({x, y})=>[x, y].join(",").trim()))
 
     }
 

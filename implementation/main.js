@@ -13,35 +13,21 @@ export default class {
 
         const stage = new HTMLCanvas.ViewGroup.Stage({...userConfig.canvas.stage});
 
-        if ( stage ) {
+            if ( stage ) {
 
-            stage.append(...[
-                new HTMLCanvas.ViewGroup.Layer({...userConfig.canvas.layers.grid})
-                ,
-                new XMLSVG.ViewGroup.Container({
-                    options: {
-                        id: 'svg-container-1',
-                    },
-                    paths: [
-                        new XMLSVG.Views.Path({
-                            options: {
-                                ...userConfig.svg.paths.unit_square.options
-                            }
-                        })
-                        ,
-                    ]
-                })
-            ])
+                stage.append(...[
+                    new HTMLCanvas.ViewGroup.Layer({...userConfig.canvas.layers.grid})
+                    ,
+                    new XMLSVG.ViewGroup.Container({
+                        options: {
+                            id: 'svg-container',
+                        },
+                        paths: [
+                            ...Views.registerPaths({XMLSVG, ENUMS, userConfig})
+                        ]
+                    })
 
-            Object.assign(
-                stage
-                , 
-                {
-                    implementation: {
-                        userConfig
-                    }
-                }
-            )
+                ]);
 
             return stage;
 
@@ -68,17 +54,15 @@ export default class {
                         options: {
                             ...userConfig.canvas.layers.grid,
                         }
-                    });
+                    })
 
                 break;
 
             }
 
-        } 
-        /* DEV_NOTE # context of HTML, XML (including SVG, e.g. "XMLSVG"): */
-        else {
+        } else {
 
-            Views.initSVG({XMLSVG, ENUMS})
+            Views.drawPaths({XMLSVG, ENUMS});
 
         }
 

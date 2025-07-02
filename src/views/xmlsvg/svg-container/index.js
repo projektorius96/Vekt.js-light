@@ -67,6 +67,20 @@ function setMixin({ref}){
                         view
                         , 
                         {
+                            [METHOD.parsePoints](){
+                                return(
+                                    this.getAttribute("options.points")
+                                    .split(",")
+                                    .map(Number)
+                                    .map((vec2, i, attr)=>{
+                                        if (i % 2 === 0) {
+                                            return vec2 = {x: attr[i], y: attr[i+1]}
+                                        }
+                                    })
+                                    .filter(Boolean)
+                                );
+                            }
+                            ,
                             [METHOD.getPoints](){
                                 return(
                                     this.attributes.d.value
