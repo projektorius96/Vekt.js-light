@@ -62,7 +62,7 @@ export default class {
 
         } else {
 
-            Views.drawPaths({XMLSVG, ENUMS});
+            Views.drawPaths({HTMLCanvas, XMLSVG, ENUMS});
 
         }
 

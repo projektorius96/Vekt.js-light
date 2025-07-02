@@ -38,11 +38,11 @@ export default class {
     /**
      * > This `default.drawPaths` method tweaks each of recently initialized `XMLSVG.Views.Path`
      */
-    static drawPaths({XMLSVG, ENUMS}) {
+    static drawPaths({HTMLCanvas, XMLSVG, ENUMS}) {
         
         return([
-            UnitSquare.draw({XMLSVG, id: ENUMS.PRINT.unit_square, scalingFactor: stage?.grid.GRIDCELL_DIM * 4}),
-            UnitSquare.draw({XMLSVG, id: ENUMS.PRINT.right_triangle, scalingFactor: stage?.grid.GRIDCELL_DIM * 3}),
+            UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS, id: ENUMS.PRINT.unit_square, scalingFactor: stage?.grid.GRIDCELL_DIM * 3}),
+            UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS, id: ENUMS.PRINT.right_triangle, scalingFactor: stage?.grid.GRIDCELL_DIM * 2}),
         ])
 
     }
