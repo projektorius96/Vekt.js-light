@@ -50,16 +50,6 @@ export default class {
                 })
             ]);
 
-            Object.assign(
-                stage
-                , 
-                {
-                    implementation: {
-                        userConfig
-                    }
-                }
-            )
-
             return stage;
 
         }

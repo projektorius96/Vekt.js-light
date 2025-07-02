@@ -1,8 +1,6 @@
 export default class {
 
-    static draw({XMLSVG, id}) {
-        
-        const { userConfig } = stage.implementation; // DEV_NOTE # The reference `stage` is reserved ID, thus accessibe globally with ease
+    static draw({XMLSVG, id, scalingFactor = 1}) {
 
             Array(2)
             .fill( XMLSVG.Helpers.findByID( id ) )
@@ -11,10 +9,10 @@ export default class {
                     case 0:
                         path?.setPoints(
                             /* points: */
-                            userConfig.svg.paths[id].options.points
+                            path.parsePoints()
                             ,
                             /* scalingFactor: */
-                            stage.grid.GRIDCELL_DIM * 4
+                            scalingFactor
                         )
                     break;
                     case 1:
