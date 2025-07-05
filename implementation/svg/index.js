@@ -36,14 +36,27 @@ export default class {
     }
 
     /**
-     * > This `default.drawPaths` method tweaks each of recently initialized `XMLSVG.Views.Path`
+     * > This `default.drawPaths` method "draws" each of recently initialized `XMLSVG.Views.Path`
      */
-    static drawPaths({HTMLCanvas, XMLSVG, ENUMS}) {
-        
-        return([
-            UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS, id: ENUMS.PRINT.unit_square, scalingFactor: stage?.grid.GRIDCELL_DIM * 3}),
-            UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS, id: ENUMS.PRINT.right_triangle, scalingFactor: stage?.grid.GRIDCELL_DIM * 2}),
-        ])
+    static drawPaths({HTMLCanvas, XMLSVG, ENUMS, SVGList = Array}) {
+
+        /**
+         * @description
+         * 
+         * An idiomatic way of grouping (batching) path calls efficiently, but
+         * also assigning a meaningful alias for `Array`, such as "`SVGList`" within the code itself
+         */
+        let HOVER_OVER_ME;
+            SVGList
+                .of(
+                    { id: ENUMS.PRINT.unit_square, scalingFactor: stage?.grid.GRIDCELL_DIM * 3 }
+                    ,
+                    { id: ENUMS.PRINT.right_triangle, scalingFactor: stage?.grid.GRIDCELL_DIM * 2 }
+                )
+                .on(
+                    (object)=>UnitSquare.draw({...object, HTMLCanvas, XMLSVG, ENUMS})
+                )
+                ;
 
     }
 

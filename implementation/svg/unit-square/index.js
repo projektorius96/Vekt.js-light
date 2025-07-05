@@ -4,7 +4,7 @@ export default class {
 
             Array(2)
             .fill( XMLSVG.Helpers.findByID( id ) )
-            .forEach((path, operationCycle)=>{                
+            .on((path, operationCycle)=>{                                
                 switch (operationCycle) {
                     // Step 1) : initializes actual path(s)
                     case 0 : path?.setPoints( path.parsePoints() , scalingFactor ) ; break ;
