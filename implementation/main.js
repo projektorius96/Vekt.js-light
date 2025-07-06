@@ -21,12 +21,8 @@ export default class {
                     new XMLSVG.ViewGroup.Container({
                         options: {
                             id: 'svg-container',
-                        },
-                        paths: [
-                            ...Views.registerPaths({XMLSVG, ENUMS, userConfig})
-                        ]
+                        }
                     })
-
                 ]);
 
             return stage;
@@ -62,7 +58,7 @@ export default class {
 
         } else {
 
-            Views.drawPaths({HTMLCanvas, XMLSVG, ENUMS});
+            Views.drawPaths({HTMLCanvas, XMLSVG, ENUMS, userConfig});
 
         }
 

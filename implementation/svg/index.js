@@ -40,13 +40,11 @@ export default class {
      */
     static drawPaths({HTMLCanvas, XMLSVG, ENUMS, SVGList = Array}) {
 
-        /**
-         * @description
-         * 
-         * An idiomatic way of grouping (batching) path calls efficiently, but
-         * also assigning a meaningful alias for `Array`, such as "`SVGList`" within the code itself
-         */
-        let HOVER_OVER_ME;
+        XMLSVG.Helpers.findByID("svg-container").setPaths(
+            this.registerPaths(...arguments)
+        )
+
+        if ( XMLSVG.Helpers.findByID("svg-container") ){
             SVGList
                 .of(
                     { id: ENUMS.PRINT.unit_square, scalingFactor: stage?.grid.GRIDCELL_DIM * 3 }
@@ -57,7 +55,7 @@ export default class {
                     (object)=>UnitSquare.draw({...object, HTMLCanvas, XMLSVG, ENUMS})
                 )
                 ;
-
+        }
     }
 
 }

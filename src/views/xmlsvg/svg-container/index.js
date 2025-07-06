@@ -17,27 +17,17 @@ const [
 export const svg_container = getNamespace(import.meta.url);
 customElements.define(svg_container, class extends HTMLElement {
 
-    constructor({ options, paths }) {
+    constructor({ options }) {
 
         if ( setStyling.call( super() , options) ) {
-            
-            let interpolatedHTML = "";
-                paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
-
-            this.setHTMLUnsafe(/* html */`
-                <svg id="${ options.id || svg_container }">
-                    ${ interpolatedHTML }
-                </svg>
-            `);
 
             /**
              * > The following line makes `options` available within life cycle methods, e.g. `connectedCallback` accessed via `this.options`
              */
-            Object.assign(this, {options, paths});
+            Object.assign(this, {options})
 
         }
 
-        Object.assign(this, {options})
         return this;
 
     }
@@ -47,19 +37,31 @@ customElements.define(svg_container, class extends HTMLElement {
      * @implements
      */
     connectedCallback(){
+
+            this.id = this.options.id;
+            Object.assign(this, {
+                [METHOD.setPaths](paths){
+                    let interpolatedHTML = "";
+                        /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
+
+                    this.setHTMLUnsafe(/* html */`
+                        <svg viewBox="${this.getAttribute('viewBox')}">${ interpolatedHTML }</svg>
+                    `);
+                    
+                    setMixin(this?.firstElementChild.children);
+                }
+            })
             
             setCoords.call(this);
             window.addEventListener( UI_EVENT.resize , ()=> setCoords.call(this) );
-
-            setMixin({ref: this.firstElementChild.children});
 
     }
         
 })
 
-function setMixin({ref}){
+function setMixin(htmlcollection){
     Array
-    .from(ref)
+    .from(htmlcollection)
         .forEach((view)=>{           
             switch (view.tagName.toLowerCase()) {
                 case CASE.path :

@@ -38,19 +38,7 @@ export function getNamespace(import_meta_url) {
  */
 export function setCoords() {
 
-    const 
-        svgElement = this.firstElementChild
-        ,
-        viewBox = svgElement.viewBox.baseVal
-        ;
-
-        svgElement.setAttribute(ATTR.viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
-        
-    return ({
-        getViewBox(){
-            return viewBox
-        }
-    });
+        this.setAttribute(ATTR.viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
     
 }
 
