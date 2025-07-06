@@ -1,9 +1,9 @@
 export default class {
 
-    static draw({HTMLCanvas, XMLSVG, ENUMS, id, scalingFactor = 1}) {
+    static draw({HTMLCanvas, XMLSVG, ENUMS, id, scalingFactor = 1, angle = 0}) {
 
             Array(2)
-            .fill( XMLSVG.Helpers.findByID( id ) )
+            .fill( XMLSVG.Helpers.findByID( this.id ) )
             .on((path, operationCycle)=>{                                
                 switch (operationCycle) {
                     // Step 1) : initializes actual path(s)
@@ -19,7 +19,7 @@ export default class {
                                         ENUMS.ATTRIBUTE.transform
                                         , 
                                         new DOMMatrix(
-                                            HTMLCanvas.Helpers.Trigonometry.setTransform(0, stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
+                                            HTMLCanvas.Helpers.Trigonometry.setTransform(angle, stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
                                         ).toString()
                                     )
                                 break;
@@ -28,7 +28,7 @@ export default class {
                                         ENUMS.ATTRIBUTE.transform
                                         , 
                                         new DOMMatrix(
-                                            HTMLCanvas.Helpers.Trigonometry.setTransform(45, stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
+                                            HTMLCanvas.Helpers.Trigonometry.setTransform(angle, stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
                                         ).toString()
                                     )
                                 break;

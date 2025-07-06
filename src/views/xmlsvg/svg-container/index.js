@@ -49,6 +49,8 @@ customElements.define(svg_container, class extends HTMLElement {
                     `);
                     
                     setMixin(this?.firstElementChild.children);
+
+                    return true;
                 }
             })
             
