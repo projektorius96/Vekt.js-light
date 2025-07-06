@@ -15,46 +15,57 @@ export default class {
     }
 
     static drawPaths({HTMLCanvas, XMLSVG, ENUMS, userConfig, SVGList = Array}) {
- 
-        if (
-            document.querySelector(
-                this.registerContainersForSVG({XMLSVG}).at(0).tagName
-            )
-            .setPaths([
-                new XMLSVG.Views.Path({
-                options: {
-                    ...userConfig.svg.paths.unit_square.options,
-                }
-                })
-                ,
-                new XMLSVG.Views.Path({
-                    options: {
-                        ...userConfig.svg.paths.unit_square.options,
-                        /**
-                         * @override
-                         */
-                        id: ENUMS.PRINT.right_triangle,
-                        points: [
-                            ...userConfig.svg.paths.unit_square.options.points
-                                .filter((vec2, i) => {
-                                    if (i !== 2) return vec2;
-                                })
-                        ],
-                        stroke: ENUMS.COLOR.red
-                    }
-                })
-                ,
-            ])
-        ){
-            SVGList
-            .from(
-                document.querySelector("svg-container > svg").paths
-            )
-            .on(
-                UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) 
-            )
-        }
 
+        SVGList
+        .of(...this.registerContainersForSVG({XMLSVG}))
+        .on((container, index)=>{
+            switch (index) {
+                case 0:
+
+                    const pathsWereSet = 
+                        document.querySelector(container.tagName)
+                        .setPaths([
+                            new XMLSVG.Views.Path({
+                            options: {
+                                ...userConfig.svg.paths.unit_square.options,
+                            }
+                            })
+                            ,
+                            new XMLSVG.Views.Path({
+                                options: {
+                                    ...userConfig.svg.paths.unit_square.options,
+                                    /**
+                                     * @override
+                                     */
+                                    id: ENUMS.PRINT.right_triangle,
+                                    points: [
+                                        ...userConfig.svg.paths.unit_square.options.points
+                                            .filter((vec2, i) => {
+                                                if (i !== 2) return vec2;
+                                            })
+                                    ],
+                                    stroke: ENUMS.COLOR.red
+                                }
+                            })
+                            ,
+                        ]);
+
+                    if (pathsWereSet) {
+                        
+                        SVGList
+                        .from(
+                            document.querySelector(`${container.tagName} > ${container.tagName.replace("-CONTAINER", "")}`)?.paths
+                        )
+                        .on(
+                            UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) 
+                        )
+
+                    }
+                    
+                break;
+            }
+        });
+        
     }
 
 }
