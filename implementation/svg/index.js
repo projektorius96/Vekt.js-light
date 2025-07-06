@@ -1,4 +1,5 @@
 import UnitSquare from './unit-square/index.js';
+import UnitCircle from './unit-circle/index.js';
 
 export default class {
 
@@ -10,12 +11,12 @@ export default class {
                     id: 'group_1',
                 }
             })
-            /* ,
+            ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'group_Nth',
+                    id: 'group_2',
                 }
-            }) */
+            })
         ])
 
     }
@@ -25,6 +26,8 @@ export default class {
         SVGList
         .of(...this.registerContainersForSVG({XMLSVG}))
         .on((container)=>{
+
+        const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
 
             switch (container.id) {
 
@@ -62,10 +65,31 @@ export default class {
                     
                 break;
 
-                // case ENUMS.CASE.group_Nth :
-                //     /* XMLSVG.Helpers.findByID(container.id)
-                //     .setPaths([], ({paths}) => SVGList.from(paths).on( DefaultExportOfYourImplementation.draw({HTMLCanvas, XMLSVG, ENUMS}) )); */
-                // break;
+                case ENUMS.CASE.group_2 :
+
+                    XMLSVG.Helpers.findByID(container.id)
+                    .setPaths([
+                        new XMLSVG.Views.Path({
+                            options: {
+                                id: ENUMS.PRINT.unit_circle,
+                                hidden: !true,
+                                /* herein: dashed := [1.0..10]; to disable, pass either := 0|false */
+                                dashed: 0,
+                                points: [
+                                    ...setRange(0, 1, 360 * 2).map((deg)=>{
+                                        return {
+                                            x: 1 * Math.cos( Converters.degToRad( deg ) ) - 1 /* <== removes the radius, when the shape is not filled */,
+                                            y: 1 * Math.sin( Converters.degToRad( deg ) ) - 0,
+                                        }
+                                    })
+                                ],
+                                strokeWidth: 3,
+                                fill: ENUMS.COLOR.none,
+                                stroke: ENUMS.COLOR.purple,
+                            }
+                        })
+                    ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
+                break;
             }
         });
         

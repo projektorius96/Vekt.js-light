@@ -8,13 +8,13 @@ export default class {
 
                         case (ENUMS.PRINT.unit_square) :
 
-                            this.init.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 3, angle: 45 });
+                            this.init.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 2.5, angle: 0 });
                         
                         break ;
 
                         case (ENUMS.PRINT.right_triangle) : 
                         
-                            this.init.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 3, angle: 0 }) ; 
+                            this.init.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 2, angle: 0 }) ; 
                         
                         break ;
 
@@ -63,7 +63,7 @@ export default class {
                 }
             });
             
-            /* return XMLSVG.Helpers.findByID( id ); */
+            return true;
 
     }
 

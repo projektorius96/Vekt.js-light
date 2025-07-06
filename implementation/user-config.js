@@ -10,11 +10,11 @@ export
                 layers: {
                     grid: {
                         id: ENUMS.CASE.grid,
-                        strokeStyle: ENUMS.COLOR.magenta,
+                        strokeStyle: ENUMS.COLOR.black,
                         hidden: !true,
-                        dotted: true,
+                        dotted: !true,
                         lineWidth: 1,
-                        opacity: 1
+                        opacity: 0.25
                     }
                 }
             }
