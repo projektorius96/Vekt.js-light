@@ -7,9 +7,15 @@ export default class {
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'svg-container',
+                    id: 'group_1',
                 }
             })
+            /* ,
+            new XMLSVG.ViewGroup.Container({
+                options: {
+                    id: 'group_Nth',
+                }
+            }) */
         ])
 
     }
@@ -18,12 +24,13 @@ export default class {
 
         SVGList
         .of(...this.registerContainersForSVG({XMLSVG}))
-        .on((container, index)=>{
-            switch (index) {
-                case 0:
+        .on((container)=>{
 
-                    const pathsWereSet = 
-                        document.querySelector(container.tagName)
+            switch (container.id) {
+
+                case ENUMS.CASE.group_1 :
+
+                        XMLSVG.Helpers.findByID(container.id)
                         .setPaths([
                             new XMLSVG.Views.Path({
                             options: {
@@ -48,21 +55,17 @@ export default class {
                                 }
                             })
                             ,
-                        ]);
-
-                    if (pathsWereSet) {
-                        
-                        SVGList
-                        .from(
-                            document.querySelector(`${container.tagName} > ${container.tagName.replace("-CONTAINER", "")}`)?.paths
-                        )
-                        .on(
-                            UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) 
-                        )
-
-                    }
+                        ]
+                        , 
+                        ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) )
+                        );
                     
                 break;
+
+                // case ENUMS.CASE.group_Nth :
+                //     /* XMLSVG.Helpers.findByID(container.id)
+                //     .setPaths([], ({paths}) => SVGList.from(paths).on( DefaultExportOfYourImplementation.draw({HTMLCanvas, XMLSVG, ENUMS}) )); */
+                // break;
             }
         });
         

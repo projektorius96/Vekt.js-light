@@ -1,21 +1,27 @@
 export default class {
 
     static draw({HTMLCanvas, XMLSVG, ENUMS}){
-        return (
-            (path)=>{
-                switch (path.id) {
 
-                    case ENUMS.PRINT.unit_square :
-                        this.init.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 3, angle: 45 })
-                    break;
+            return (
+                (path)=>{
+                    switch (path.id) {
 
-                    case ENUMS.PRINT.right_triangle :
-                        this.init.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 3, angle: 0 })
-                    break;
+                        case (ENUMS.PRINT.unit_square) :
 
+                            this.init.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 3, angle: 45 });
+                        
+                        break ;
+
+                        case (ENUMS.PRINT.right_triangle) : 
+                        
+                            this.init.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 3, angle: 0 }) ; 
+                        
+                        break ;
+
+                    }
                 }
-            }
-        );
+            );
+
     }
 
     static init({HTMLCanvas, XMLSVG, ENUMS, id, scalingFactor = 1, angle = 0}) {
