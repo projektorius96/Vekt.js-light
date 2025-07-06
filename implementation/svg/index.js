@@ -2,11 +2,24 @@ import UnitSquare from './unit-square/index.js';
 
 export default class {
 
-    static drawPaths({HTMLCanvas, XMLSVG, ENUMS, userConfig, SVGList = Array}) {
+    static registerContainersForSVG({XMLSVG}){
 
+        return([
+            new XMLSVG.ViewGroup.Container({
+                options: {
+                    id: 'svg-container',
+                }
+            })
+        ])
+
+    }
+
+    static drawPaths({HTMLCanvas, XMLSVG, ENUMS, userConfig, SVGList = Array}) {
+ 
         if (
-            XMLSVG.Helpers
-            .findByID("svg-container")
+            document.querySelector(
+                this.registerContainersForSVG({XMLSVG}).at(0).tagName
+            )
             .setPaths([
                 new XMLSVG.Views.Path({
                 options: {
@@ -32,26 +45,14 @@ export default class {
                 })
                 ,
             ])
-        ) {
-
+        ){
             SVGList
             .from(
                 document.querySelector("svg-container > svg").paths
             )
-            .on((path)=>{
-                switch (path.id) {
-
-                    case ENUMS.PRINT.unit_square :
-                        UnitSquare.draw.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 3, angle: 45 })
-                    break;
-
-                    case ENUMS.PRINT.right_triangle :
-                        UnitSquare.draw.call(path, { HTMLCanvas, XMLSVG, ENUMS, id: path.id, scalingFactor: stage?.grid.GRIDCELL_DIM * 3, angle: 0 })
-                    break;
-
-                }
-            })
-
+            .on(
+                UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) 
+            )
         }
 
     }

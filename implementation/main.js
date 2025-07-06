@@ -18,11 +18,7 @@ export default class {
                 stage.append(...[
                     new HTMLCanvas.ViewGroup.Layer({...userConfig.canvas.layers.grid})
                     ,
-                    new XMLSVG.ViewGroup.Container({
-                        options: {
-                            id: 'svg-container',
-                        }
-                    })
+                    ...Views.registerContainersForSVG({XMLSVG})
                 ]);
 
             return stage;
