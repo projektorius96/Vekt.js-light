@@ -1,15 +1,27 @@
 import { HTMLCanvas, XMLSVG } from './src/views/index.js';
 import Implementation from './implementation/main.js';
+import { observeJSONL } from './implementation/observers/fs/index.js';
 
 import package_json from './package.json' with { type: 'json' };
 
-document.on('DOMContentLoaded', ()=>{
-
+document.on('DOMContentLoaded', async ()=>{
+    
     document.title = package_json.name;
 
     const
-        stage = Implementation.init({HTMLCanvas, XMLSVG})  
+        stage = Implementation.init({HTMLCanvas, XMLSVG})
+        ;
 
+    if (stage) {
+
+        stage.on('click', async (e)=>{
+
+            await observeJSONL(stage);
+
+        }, {once: true})
+
+    }
+    
     window.on('resize', ()=>{
 
             HTMLCanvas
