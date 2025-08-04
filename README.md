@@ -40,7 +40,7 @@ DEV_NOTE (!) # ... : the IMPORTANT note left by developer
 Most of the time you will be coding under the following paths (_notice, the paths are given in diomatic, Unix-like format_):
 
 - `<root>/implementation/user-config.js`
-- `<root>/implementation/svg/index.js` and relative paths under `/svg/` or below it
+- `<root>/implementation/svg/main.js` and relative paths under `/svg/` or below it
 
 ---
 

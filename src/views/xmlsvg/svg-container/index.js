@@ -76,7 +76,8 @@ function setMixin(htmlcollection){
                         {
                             [METHOD.parsePoints](){
                                 return(
-                                    this.getAttribute("options.points")
+                                    /* this.getAttribute("data-options.points") */// alternatively we access via `dataset`
+                                    this.dataset['options.points']
                                     .split(",")
                                     .map(Number)
                                     .map((vec2, i, attr)=>{

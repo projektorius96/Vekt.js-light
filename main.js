@@ -1,5 +1,5 @@
 import { HTMLCanvas, XMLSVG } from './src/views/index.js';
-import Implementation from './implementation/main.js';
+import Implementation from './implementation/index.js';
 
 import package_json from './package.json' with { type: 'json' };
 

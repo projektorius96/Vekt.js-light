@@ -43,7 +43,7 @@ export default class {
                                         ENUMS.ATTRIBUTE.transform
                                         , 
                                         new DOMMatrix(
-                                            HTMLCanvas.Helpers.Trigonometry.setTransform(angle, stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
+                                            HTMLCanvas.Helpers.Trigonometry.setTransform(angle, /* stage.grid.SVG.X_IN_MIDDLE - (width / 2) */0, /* stage.grid.SVG.Y_IN_MIDDLE - (height / 2) */0)
                                         ).toString()
                                     )
                                 break;
