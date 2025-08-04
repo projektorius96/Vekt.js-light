@@ -1,6 +1,6 @@
 import { ENUMS } from "./utils.js";
 import { userConfig } from "./user-config.js";
-import Views from './svg/index.js';
+import Views from './svg/main.js';
 
 export default class {
 
