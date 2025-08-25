@@ -41,12 +41,14 @@ customElements.define(svg_container, class extends HTMLElement {
     connectedCallback(){
 
             Object.assign(this, {
+
                 [METHOD.setPaths](paths, callback){
                     let interpolatedHTML = "";
                         /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
 
+                    const XML_NAMESPACE = 'xmlns=http://www.w3.org/2000/svg';
                     this.setHTMLUnsafe(/* html */`
-                        <svg viewBox="${this.getAttribute('viewBox')}">${ interpolatedHTML }</svg>
+                        <svg ${ XML_NAMESPACE } viewBox="${ this.getAttribute('viewBox') }">${ interpolatedHTML }</svg>
                     `);
                     
                     setMixin(this?.firstElementChild.children);
@@ -55,12 +57,15 @@ customElements.define(svg_container, class extends HTMLElement {
 
                     return true;
                 }
+
             })
             
             setCoords.call(this);
             window.addEventListener( UI_EVENT.resize , ()=> setCoords.call(this) );
 
     }
+
+    
         
 })
 
