@@ -9,7 +9,7 @@ export default class {
      * @see default.draw
      * @static
      */
-    static init({HTMLCanvas, XMLSVG}) {
+    static init({HTMLCanvas}) {
 
         const stage = new HTMLCanvas.ViewGroup.Stage({...userConfig.canvas.stage});
 
@@ -17,8 +17,6 @@ export default class {
 
                 stage.append(...[
                     new HTMLCanvas.ViewGroup.Layer({...userConfig.canvas.layers.grid})
-                    ,
-                    ...Views.registerContainersForSVG({XMLSVG})
                 ]);
 
             return stage;
@@ -32,7 +30,7 @@ export default class {
      * @see default.init
      * @static
      */
-    static draw({HTMLCanvas, XMLSVG}, context) {
+    static draw({HTMLCanvas}, context) {
     
         // DEV_NOTE # because we mix HTML Canvas (i.e. Canvas API) together with XML SVG (i.e. SVG) web technologies, we must do the following `context` check:..
         if ( context instanceof CanvasRenderingContext2D ) {
@@ -54,7 +52,7 @@ export default class {
 
         } else {
 
-            Views.drawPaths({HTMLCanvas, XMLSVG, ENUMS, userConfig});
+            Views.drawPaths({HTMLCanvas, ENUMS, userConfig});
 
         }
 
