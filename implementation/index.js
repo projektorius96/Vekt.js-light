@@ -19,10 +19,11 @@ export default class {
                     new HTMLCanvas.ViewGroup.Layer({...userConfig.canvas.layers.grid})
                 ]);
 
+                Views.drawSVGPaths({HTMLCanvas, ENUMS, userConfig});
+
+            }
+            
             return stage;
-
-        }
-
     }
 
     /**
@@ -31,13 +32,13 @@ export default class {
      * @static
      */
     static draw({HTMLCanvas}, context) {
-    
+        
         // DEV_NOTE # because we mix HTML Canvas (i.e. Canvas API) together with XML SVG (i.e. SVG) web technologies, we must do the following `context` check:..
         if ( context instanceof CanvasRenderingContext2D ) {
                                                 
             switch (context.canvas.id) {
 
-                case userConfig.canvas.layers.grid.id :
+                case ENUMS.CASE.grid :
 
                     HTMLCanvas.Views.Grid.draw({
                         context, 
@@ -49,10 +50,6 @@ export default class {
                 break;
 
             }
-
-        } else {
-
-            Views.drawPaths({HTMLCanvas, ENUMS, userConfig});
 
         }
 

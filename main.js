@@ -1,5 +1,6 @@
 import { HTMLCanvas } from './src/views/index.js';
 import Implementation from './implementation/index.js';
+import Views from './implementation/svg/main.js';
 
 import package_json from './package.json' with { type: 'json' };
 
@@ -8,13 +9,16 @@ document.on('DOMContentLoaded', ()=>{
     document.title = package_json.name;
 
     const
-        stage = Implementation.init({HTMLCanvas})  
+        stage = Implementation.init({HTMLCanvas})
 
     window.on('resize', ()=>{
 
             HTMLCanvas
                 .init({stage})
-                    .on( Implementation.draw.bind(null, {HTMLCanvas}) );
+                    .forEach( Implementation.draw.bind(null, {HTMLCanvas}) );
+
+            Views.resizeSVGPaths({stage})
+            
         
     })
 

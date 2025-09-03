@@ -4,5 +4,8 @@
     "type": "module",
     "devDependencies": {
         "vite": "^7.0.0"
+    },
+    "dependencies": {
+        "@svgdotjs/svg.js": "^3.2.4"
     }
 }
