@@ -19,7 +19,9 @@ export default class {
                     new HTMLCanvas.ViewGroup.Layer({...userConfig.canvas.layers.grid})
                 ]);
 
-                Views.drawSVGPaths({HTMLCanvas, ENUMS, userConfig});
+                if (stage.layers.grid){
+                    Views.drawSVGPaths({stage})
+                }
 
             }
             
@@ -47,6 +49,8 @@ export default class {
                         }
                     })
 
+                                Views.resizeSVGPaths({stage})
+
                 break;
 
             }
@@ -55,4 +59,8 @@ export default class {
 
     }
 
+}
+
+export const utils = {
+    ENUMS
 }
