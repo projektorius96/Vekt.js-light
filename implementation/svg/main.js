@@ -36,9 +36,9 @@ export default class {
                         XMLSVG.Helpers.findByID(container.id)
                         .setPaths([
                             new XMLSVG.Views.Path({
-                            options: {
-                                ...userConfig.svg.paths.unit_square.options,
-                            }
+                                options: {
+                                    ...userConfig.svg.paths.unit_square.options,
+                                }
                             })
                             ,
                             new XMLSVG.Views.Path({
@@ -60,7 +60,7 @@ export default class {
                             ,
                         ]
                         , 
-                        ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) )
+                        ({paths}) => SVGList.from(paths).on( UnitSquare.forward({HTMLCanvas, XMLSVG, ENUMS}) )
                         );
                     
                 break;
@@ -88,7 +88,7 @@ export default class {
                                 stroke: ENUMS.COLOR.purple,
                             }
                         })
-                    ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
+                    ], ({paths}) => SVGList.from(paths).on( UnitCircle.forward({HTMLCanvas, XMLSVG, ENUMS}) ));
                 break;
             }
         });
