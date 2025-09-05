@@ -21,7 +21,17 @@ customElements.define(svg_path, class extends HTMLElement {
                 this.#serializePoints
             ].forEach((f)=>f.call(this, options));
         }
-            
+        
+        // DEV_NOTE # we're are re
+        Object.assign(SVGPathElement, {
+            [options.id] : {
+                scalingFactor: options.scalingFactor,
+                angle: options.angle,
+                skewX: options.skewX,
+                skewY: options.skewY
+            }
+        })
+        
 
     }
 
