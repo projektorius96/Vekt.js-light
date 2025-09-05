@@ -38,12 +38,16 @@ export default class {
                             new XMLSVG.Views.Path({
                                 options: {
                                     ...userConfig.svg.paths.unit_square.options,
+                                    scalingFactor: stage?.grid.GRIDCELL_DIM * 2.5,
+                                    angle: 0,
                                 }
                             })
                             ,
                             new XMLSVG.Views.Path({
                                 options: {
                                     ...userConfig.svg.paths.unit_square.options,
+                                    scalingFactor: stage?.grid.GRIDCELL_DIM * 2.0,
+                                    angle: 0,
                                     /**
                                      * @override
                                      */
@@ -60,7 +64,7 @@ export default class {
                             ,
                         ]
                         , 
-                        ({paths}) => SVGList.from(paths).on( UnitSquare.forward({HTMLCanvas, XMLSVG, ENUMS}) )
+                        ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) )
                         );
                     
                 break;
@@ -72,9 +76,7 @@ export default class {
                         new XMLSVG.Views.Path({
                             options: {
                                 id: ENUMS.PRINT.unit_circle,
-                                hidden: !true,
-                                /* herein: dashed := [1.0..10]; to disable, pass either := 0|false */
-                                dashed: 0,
+                                scalingFactor: stage?.grid.GRIDCELL_DIM * 2.0,
                                 points: [
                                     ...setRange(0, 1, 360 * 2).map((deg)=>{
                                         return {
@@ -83,16 +85,16 @@ export default class {
                                         }
                                     })
                                 ],
+                                /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
+                                dashed: 0,
                                 strokeWidth: 3,
                                 fill: ENUMS.COLOR.none,
                                 stroke: ENUMS.COLOR.purple,
                             }
                         })
-                    ], ({paths}) => SVGList.from(paths).on( UnitCircle.forward({HTMLCanvas, XMLSVG, ENUMS}) ));
+                    ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
                 break;
             }
         });
-        
     }
-
 }
