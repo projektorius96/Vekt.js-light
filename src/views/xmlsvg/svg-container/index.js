@@ -11,7 +11,7 @@ const [
     ,
     METHOD
     ,
-    PRINT
+    ATTR
 ] = Array(4).fill(ENUM);
 
 export const svg_container = getNamespace(import.meta.url);
@@ -34,15 +34,12 @@ customElements.define(svg_container, class extends HTMLElement {
 
     }
     
-
-    /**
-     * @implements
-     */
     connectedCallback(){
 
             Object.assign(this, {
 
                 [METHOD.setPaths](paths, callback){
+                                    
                     let interpolatedHTML = "";
                         /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
 
@@ -51,9 +48,7 @@ customElements.define(svg_container, class extends HTMLElement {
                         <svg ${ XML_NAMESPACE } viewBox="${ this.getAttribute('viewBox') }">${ interpolatedHTML }</svg>
                     `);
                     
-                    setMixin(this?.firstElementChild.children);
-
-                    callback({paths: this.children.item(0).children})
+                    if ( setMixin(this?.firstElementChild.children) ) callback({paths: this?.firstElementChild.children});
 
                     return true;
                 }
@@ -79,10 +74,13 @@ function setMixin(htmlcollection){
                         view
                         , 
                         {
+                            /**
+                             * @see `<root>\\src\\views\\xmlsvg\\svg-path\\index.js` for its getter equivalent under `this.#serializePoints` call
+                             */
                             [METHOD.parsePoints](){
                                 return(
-                                    /* this.getAttribute("data-options.points") */// alternatively we access via `dataset`
-                                    this.dataset['options.points']
+                                    /* this.getAttribute("data-points") */// alternatively we access via `dataset`
+                                    this.dataset.points
                                     .split(",")
                                     .map(Number)
                                     .map((vec2, i, attr)=>{
@@ -105,14 +103,14 @@ function setMixin(htmlcollection){
                             }
                             ,
                             [METHOD.getTranslate](){
-                                    return view.getAttribute(PRINT.transform)
+                                    return view.getAttribute(ATTR.transform)
                             }
                             ,
                             [METHOD.setTranslate]({translateX = 0, translateY = 0}){
                                     view.setAttribute(
-                                        PRINT.transform
+                                        ATTR.transform
                                         ,
-                                        `${PRINT.translate}(${translateX},${translateY})`
+                                        `${ATTR.translate}(${translateX},${translateY})`
                                     )
                             }
                         }
@@ -120,4 +118,6 @@ function setMixin(htmlcollection){
                 break ;
             }
         })
+
+        return true;
 }

@@ -1,6 +1,6 @@
 import { ENUMS } from "./utils.js";
 import { userConfig } from "./user-config.js";
-import Views from './svg/main.js';
+import Views from './svg/index.js';
 
 export default class {
 
@@ -40,7 +40,7 @@ export default class {
             switch (context.canvas.id) {
 
                 case userConfig.canvas.layers.grid.id :
-
+                
                     HTMLCanvas.Views.Grid.draw({
                         context, 
                         options: {

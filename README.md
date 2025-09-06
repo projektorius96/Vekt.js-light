@@ -4,11 +4,11 @@
 
 ### Annotations
 
-> The annotations you may have stumbled upon by examining the source code itself:..
+> The annotations you may have stumbled upon by examining the source code itself, as follows:..
 
 ```diff
-DEV_NOTE # ... : a note left by developer
-DEV_NOTE (!) # ... : the IMPORTANT note left by developer
+DEV_NOTE # ... : a note left by author developer
+DEV_NOTE (!) # ... : the IMPORTANT note left by author developer
 ```
 
 ### Table of contents
@@ -17,30 +17,16 @@ DEV_NOTE (!) # ... : the IMPORTANT note left by developer
 
 ### Development environment
 
-> **PREREQUISITES**:
+#### **PREREQUISITES**:
 
 1) Make sure you got the latest `Node.js` and `npm` on your machine, as well as latest stable version of `Vite.js` installed upon;
 
-> **TROUBLESHOOTING**:
-
-- Windows with WSL2 installed, even if no distro is currently running on the machine, may experience WebSocket-based Hot Module Reload (HMR) disconnection error you will see in your browser's console, hence minimum required `vite.config` that is configured to fall back to HTTP Polling:
-
-```js
-
-    server: {
-        watch: {
-            usePolling: true,
-        }
-    }
-
-```
-
-> **DEV REMARKS**:
+#### **REMARKS**:
 
 Most of the time you will be coding under the following paths (_notice, the paths are given in diomatic, Unix-like format_):
 
-- `<root>/implementation/user-config.js`
-- `<root>/implementation/svg/main.js` and relative paths under `/svg/` or below it
+- `<root>/implementation/user-config.js`;
+- `<root>/implementation/svg/index.js` and relative paths under `/svg/` or below it.
 
 ---
 

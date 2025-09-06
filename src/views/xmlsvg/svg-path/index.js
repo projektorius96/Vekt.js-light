@@ -3,11 +3,7 @@ import { ENUM, getNamespace, setPoints } from "../modules/index.js";
 /**
  * @alias
  */
-const [
-    PRINT
-    , 
-    COLOR
-] = Array(2).fill(ENUM);
+const COLOR = ENUM;
 
 export const svg_path = getNamespace(import.meta.url);
 customElements.define(svg_path, class extends HTMLElement {
@@ -20,22 +16,11 @@ customElements.define(svg_path, class extends HTMLElement {
                 , 
                 this.#serializePoints
             ].forEach((f)=>f.call(this, options));
-        }
-        
-        // DEV_NOTE # we're are re
-        Object.assign(SVGPathElement, {
-            [options.id] : {
-                scalingFactor: options.scalingFactor,
-                angle: options.angle,
-                skewX: options.skewX,
-                skewY: options.skewY
-            }
-        })
-        
+        }        
 
     }
 
-    /* void */ #initPath(options) {
+    #initPath(options) {
 
         !options.hidden 
             ?
@@ -46,7 +31,7 @@ customElements.define(svg_path, class extends HTMLElement {
                             d="${ setPoints.call(this, options.points) }"
                             stroke-dasharray="${ options.dashed  || 0 }"
                             stroke-width="${ options.strokeWidth || 0 }"
-                            style="stroke:${ options.stroke || COLOR.black }; fill:${ options.fill || PRINT.none };"
+                            style="stroke:${ options.stroke || COLOR.black }; fill:${ options.fill || COLOR.none };"
                         />
                     `)
                 )
@@ -54,15 +39,43 @@ customElements.define(svg_path, class extends HTMLElement {
             false 
             ;
 
+            this.#setDataAttrs.call(
+                this
+                , 
+                {
+                    id: options.id,
+                    dataset: new Map([
+                        ['data-scaling', ( options.scaling ?? 1 )],
+                        ['data-angle',    ( options.angle  || 0 )],
+                        ['data-skew_x',  ( options.skew_x  || 0 )],
+                        ['data-skew_y',  ( options.skew_y  || 0 )],
+                    ])
+                }
+            )
+
         return;
 
     }
 
+    #setDataAttrs({id, dataset}){
+        
+        dataset.entries().forEach(([k, v])=>{
+            this.children[id].setAttribute(k, v)
+        })
+
+        return;
+        
+    }
+
     /**
-     * @see `<root>\\implementation\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.parsePoints]` namespace
+     * @see `<root>\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.parsePoints]` namespace
      */
-    /* void */ #serializePoints(options) {
-        this.children[options.id].setAttribute("data-options.points", options.points.map(({x, y})=>[x, y].join(",").trim()))
+    #serializePoints(options) {
+
+        this.children[options.id].setAttribute("data-points", options.points.map(({x, y})=>[x, y].join(",").trim()));
+
+        return;
+
     }
 
 });
