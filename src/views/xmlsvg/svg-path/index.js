@@ -12,7 +12,7 @@ const [
 export const svg_path = getNamespace(import.meta.url);
 customElements.define(svg_path, class extends HTMLElement {
     
-    constructor({options}) {
+    constructor(container, {options}) {
 
         if ( super() ) {
             [
@@ -22,16 +22,14 @@ customElements.define(svg_path, class extends HTMLElement {
             ].forEach((f)=>f.call(this, options));
         }
         
-        // DEV_NOTE # we're are re
-        Object.assign(SVGPathElement, {
+        Object.assign(container, {
             [options.id] : {
                 scalingFactor: options.scalingFactor,
                 angle: options.angle,
                 skewX: options.skewX,
                 skewY: options.skewY
             }
-        })
-        
+        });
 
     }
 

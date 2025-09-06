@@ -43,6 +43,7 @@ customElements.define(svg_container, class extends HTMLElement {
             Object.assign(this, {
 
                 [METHOD.setPaths](paths, callback){
+                                    
                     let interpolatedHTML = "";
                         /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
 

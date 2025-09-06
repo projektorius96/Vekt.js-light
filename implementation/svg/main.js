@@ -35,16 +35,18 @@ export default class {
 
                         XMLSVG.Helpers.findByID(container.id)
                         .setPaths([
-                            new XMLSVG.Views.Path({
+                            new XMLSVG.Views.Path(container, {
                                 options: {
+                                    /* container, */
                                     ...userConfig.svg.paths.unit_square.options,
                                     scalingFactor: stage?.grid.GRIDCELL_DIM * 2.5,
                                     angle: 0,
                                 }
                             })
                             ,
-                            new XMLSVG.Views.Path({
+                            new XMLSVG.Views.Path(container, {
                                 options: {
+                                    /* container, */
                                     ...userConfig.svg.paths.unit_square.options,
                                     scalingFactor: stage?.grid.GRIDCELL_DIM * 2.0,
                                     angle: 0,
@@ -64,7 +66,7 @@ export default class {
                             ,
                         ]
                         , 
-                        ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) )
+                        ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS, container}) )
                         );
                     
                 break;
@@ -73,8 +75,9 @@ export default class {
 
                     XMLSVG.Helpers.findByID(container.id)
                     .setPaths([
-                        new XMLSVG.Views.Path({
+                        new XMLSVG.Views.Path(container, {
                             options: {
+                                /* container, */
                                 id: ENUMS.PRINT.unit_circle,
                                 scalingFactor: stage?.grid.GRIDCELL_DIM * 2.0,
                                 points: [
@@ -92,7 +95,7 @@ export default class {
                                 stroke: ENUMS.COLOR.purple,
                             }
                         })
-                    ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
+                    ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS, container}) ));
                 break;
             }
         });

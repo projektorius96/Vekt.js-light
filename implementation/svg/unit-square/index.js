@@ -1,43 +1,43 @@
 export default class {
 
-    static draw({HTMLCanvas, XMLSVG, ENUMS}){
+    static draw({HTMLCanvas, XMLSVG, ENUMS, container}){
 
             return (
-                (path)=>{
-
+                ({id})=>{
+                    
                     Array(2)
-                    .fill( XMLSVG.Helpers.findByID( path.id ) )
-                    .on((_path)=>{
+                    .fill( XMLSVG.Helpers.findByID( id ) )
+                    .on((path)=>{
                                                         
                         function initPoints(){
-                            _path?.setPoints( _path.parsePoints() , SVGPathElement[_path.id]?.scalingFactor || 1 )
+                            path?.setPoints( path.parsePoints() , container[path.id]?.scalingFactor || 1 )
                         }
                         function transformPoints(){
 
                             const
                                 { setTransform } = HTMLCanvas.Helpers.Trigonometry
                                 ,
-                                { width, height } = _path?.getBoundingClientRect()
+                                { width, height } = path?.getBoundingClientRect()
                                 ;
                             
-                            switch (_path.id) {
+                            switch (path.id) {
 
                                 case ENUMS.SHAPE.right_triangle:
-                                    _path.setAttribute(
+                                    path.setAttribute(
                                         ENUMS.ATTRIBUTE.transform
                                         , 
                                         new DOMMatrix(
-                                            setTransform(( SVGPathElement[_path.id]?.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
+                                            setTransform(( container[path.id]?.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
                                         ).toString()
                                     )
                                 break;
 
                                 case ENUMS.SHAPE.unit_square:
-                                    _path.setAttribute(
+                                    path.setAttribute(
                                         ENUMS.ATTRIBUTE.transform
                                         , 
                                         new DOMMatrix(
-                                            setTransform(( SVGPathElement[_path.id]?.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
+                                            setTransform(( container[path.id]?.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
                                         ).toString()
                                     )
                                 break;
