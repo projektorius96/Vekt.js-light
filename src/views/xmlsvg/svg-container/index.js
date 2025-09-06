@@ -11,7 +11,7 @@ const [
     ,
     METHOD
     ,
-    PRINT
+    ATTR
 ] = Array(4).fill(ENUM);
 
 export const svg_container = getNamespace(import.meta.url);
@@ -103,14 +103,14 @@ function setMixin(htmlcollection){
                             }
                             ,
                             [METHOD.getTranslate](){
-                                    return view.getAttribute(PRINT.transform)
+                                    return view.getAttribute(ATTR.transform)
                             }
                             ,
                             [METHOD.setTranslate]({translateX = 0, translateY = 0}){
                                     view.setAttribute(
-                                        PRINT.transform
+                                        ATTR.transform
                                         ,
-                                        `${PRINT.translate}(${translateX},${translateY})`
+                                        `${ATTR.translate}(${translateX},${translateY})`
                                     )
                             }
                         }

@@ -55,6 +55,8 @@ customElements.define(svg_path, class extends HTMLElement {
      * @see `<root>\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.parsePoints]` namespace
      */
     /* void */ #serializePoints(options) {
+        console.log(this);
+        
         this.children[options.id].setAttribute("data-points", options.points.map(({x, y})=>[x, y].join(",").trim()))
     }
 
