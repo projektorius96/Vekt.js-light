@@ -27,28 +27,24 @@ export default class {
         .of(...this.registerContainersForSVG({XMLSVG}))
         .on((container)=>{
 
-        const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
-
             switch (container.id) {
 
                 case ENUMS.CASE.group_1 :
 
                         XMLSVG.Helpers.findByID(container.id)
                         .setPaths([
-                            new XMLSVG.Views.Path(container, {
+                            new XMLSVG.Views.Path({
                                 options: {
-                                    /* container, */
                                     ...userConfig.svg.paths.unit_square.options,
-                                    scalingFactor: stage?.grid.GRIDCELL_DIM * 2.5,
+                                    scaling: stage?.grid.GRIDCELL_DIM * 2.5,
                                     angle: 0,
                                 }
                             })
                             ,
-                            new XMLSVG.Views.Path(container, {
+                            new XMLSVG.Views.Path({
                                 options: {
-                                    /* container, */
                                     ...userConfig.svg.paths.unit_square.options,
-                                    scalingFactor: stage?.grid.GRIDCELL_DIM * 2.0,
+                                    scaling: stage?.grid.GRIDCELL_DIM * 2.0,
                                     angle: 0,
                                     /**
                                      * @override
@@ -66,20 +62,20 @@ export default class {
                             ,
                         ]
                         , 
-                        ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS, container}) )
+                        ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) )
                         );
                     
                 break;
 
                 case ENUMS.CASE.group_2 :
 
+                    const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
                     XMLSVG.Helpers.findByID(container.id)
                     .setPaths([
-                        new XMLSVG.Views.Path(container, {
+                        new XMLSVG.Views.Path({
                             options: {
-                                /* container, */
                                 id: ENUMS.PRINT.unit_circle,
-                                scalingFactor: stage?.grid.GRIDCELL_DIM * 2.0,
+                                scaling: stage?.grid.GRIDCELL_DIM * 2.0,
                                 points: [
                                     ...setRange(0, 1, 360 * 2).map((deg)=>{
                                         return {
@@ -95,7 +91,7 @@ export default class {
                                 stroke: ENUMS.COLOR.purple,
                             }
                         })
-                    ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS, container}) ));
+                    ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
                 break;
             }
         });

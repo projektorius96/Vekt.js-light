@@ -34,10 +34,6 @@ customElements.define(svg_container, class extends HTMLElement {
 
     }
     
-
-    /**
-     * @implements
-     */
     connectedCallback(){
 
             Object.assign(this, {
@@ -52,9 +48,7 @@ customElements.define(svg_container, class extends HTMLElement {
                         <svg ${ XML_NAMESPACE } viewBox="${ this.getAttribute('viewBox') }">${ interpolatedHTML }</svg>
                     `);
                     
-                    setMixin(this?.firstElementChild.children);
-
-                    callback({paths: this.children.item(0).children})
+                    if ( setMixin(this?.firstElementChild.children) ) callback({paths: this?.firstElementChild.children});
 
                     return true;
                 }
@@ -80,10 +74,13 @@ function setMixin(htmlcollection){
                         view
                         , 
                         {
+                            /**
+                             * @see `<root>\\src\\views\\xmlsvg\\svg-path\\index.js` for its getter equivalent under `this.#serializePoints` call
+                             */
                             [METHOD.parsePoints](){
                                 return(
-                                    /* this.getAttribute("data-options.points") */// alternatively we access via `dataset`
-                                    this.dataset['options.points']
+                                    /* this.getAttribute("data-points") */// alternatively we access via `dataset`
+                                    this.dataset.points
                                     .split(",")
                                     .map(Number)
                                     .map((vec2, i, attr)=>{
@@ -121,4 +118,6 @@ function setMixin(htmlcollection){
                 break ;
             }
         })
+
+        return true;
 }

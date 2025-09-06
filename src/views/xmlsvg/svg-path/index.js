@@ -12,7 +12,7 @@ const [
 export const svg_path = getNamespace(import.meta.url);
 customElements.define(svg_path, class extends HTMLElement {
     
-    constructor(container, {options}) {
+    constructor({options}) {
 
         if ( super() ) {
             [
@@ -20,16 +20,7 @@ customElements.define(svg_path, class extends HTMLElement {
                 , 
                 this.#serializePoints
             ].forEach((f)=>f.call(this, options));
-        }
-        
-        Object.assign(container, {
-            [options.id] : {
-                scalingFactor: options.scalingFactor,
-                angle: options.angle,
-                skewX: options.skewX,
-                skewY: options.skewY
-            }
-        });
+        }        
 
     }
 
@@ -45,6 +36,10 @@ customElements.define(svg_path, class extends HTMLElement {
                             stroke-dasharray="${ options.dashed  || 0 }"
                             stroke-width="${ options.strokeWidth || 0 }"
                             style="stroke:${ options.stroke || COLOR.black }; fill:${ options.fill || PRINT.none };"
+                            data-scaling="${ options.scaling ?? 1 }"
+                            data-angle="${ options.angle  || 0 }"
+                            data-skewX="${ options.skewX  || 0 }"
+                            data-skewY="${ options.skewY  || 0 }"
                         />
                     `)
                 )
@@ -57,10 +52,10 @@ customElements.define(svg_path, class extends HTMLElement {
     }
 
     /**
-     * @see `<root>\\implementation\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.parsePoints]` namespace
+     * @see `<root>\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.parsePoints]` namespace
      */
     /* void */ #serializePoints(options) {
-        this.children[options.id].setAttribute("data-options.points", options.points.map(({x, y})=>[x, y].join(",").trim()))
+        this.children[options.id].setAttribute("data-points", options.points.map(({x, y})=>[x, y].join(",").trim()))
     }
 
 });
