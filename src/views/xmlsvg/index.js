@@ -1,5 +1,5 @@
 import './DOMutils.js';
-import { ENUM, enableDraggingFor } from './modules/index.js';
+import { ENUM } from './modules/index.js';
 import { svg_container } from './svg-container/index.js';
 import { svg_path } from './svg-path/index.js';
 
@@ -27,9 +27,6 @@ export class XMLSVG {
             )
         }
     }
-
-    // DEV_NOTE (!) # to avoid possible Vite.js mangled refs behaviour, it's recommended NOT to use `.name` read-only prop of `Function`
-    static [PRINT.enableDraggingFor/* .name */] = enableDraggingFor;
 
     static {
 
