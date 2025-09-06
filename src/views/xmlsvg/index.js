@@ -1,14 +1,6 @@
 import './DOMutils.js';
-import { ENUM } from './modules/index.js';
 import { svg_container } from './svg-container/index.js';
 import { svg_path } from './svg-path/index.js';
-
-/**
- * @alias
- */
-const 
-    PRINT = ENUM
-    ;
 
 export class XMLSVG {
 
