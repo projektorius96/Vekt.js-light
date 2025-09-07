@@ -1,3 +1,15 @@
+function skewXMatrix(phi, translateX, translateY) {
+    return new DOMMatrix([
+        1, 0, Math.tan(phi), 1, translateX, translateY
+    ]);
+}
+
+function skewYMatrix(phi, translateX, translateY) {
+    return new DOMMatrix([
+        1, Math.tan(phi), 0, 1, translateX, translateY
+    ]);
+}
+
 /**
  * @param {Number} angle - user-friendly value in angle degrees
  * @param {Number} [x=0] - default component of ({x,y}) ordered pair  
@@ -5,7 +17,7 @@
  * 
  * @returns {Array} _this function generates a raw homogeneous matrix_
  */
-export function setTransform(angle, x=0, y=0) {
+export function setTransform({angle = 0, translateX = 0, translateY = 0, skew = false}) {
 
     const cos = Math.cos( degToRad( angle ) );
     const sin = Math.sin( degToRad( angle ) );
@@ -14,12 +26,33 @@ export function setTransform(angle, x=0, y=0) {
     let y12 = sin;
     let x21 = -sin;
     let y22 = cos;
-    let z31 = x;
-    let z32 = y;
+    let z31 = translateX;
+    let z32 = translateY;
 
-    return (
-        [x11, y12, x21, y22, z31, z32]
-    );
+    const homogeneousCoords = [x11, y12, x21, y22, z31, z32];
+
+    if ( homogeneousCoords && skew ) {
+
+        let transformedMatrix = new DOMMatrix();
+            // DEV_NOTE (!) # under the hood SKIA follows column-vector multiplication conventional rule, thus following .multiply call will rotate first, then skew, as follows:
+            if ( skew?.X ) transformedMatrix = (new DOMMatrix( skewXMatrix( degToRad( skew?.X?.phi ), z31, z32 ) )).multiply(homogeneousCoords) ;
+            if ( skew?.Y ) transformedMatrix = (new DOMMatrix( skewYMatrix( degToRad( skew?.Y?.phi ), z31, z32 ) )).multiply(homogeneousCoords) ;        
+        
+        return (
+
+            [...transformedMatrix.toString().replace(/^matrix\((.*)\)$/, '$1').split(', ')]
+
+        );
+
+    } else {
+
+        return (
+
+            [...homogeneousCoords]
+
+        );
+
+    }
 
 }
 

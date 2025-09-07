@@ -1,23 +1,34 @@
-import UnitSquare from './unit-square/index.js';
-import UnitCircle from './unit-circle/index.js';
+/* import './styles.css' */
+import UnitCircle from './shapes/unit-circle/index.js';
+import UnitSquare from './shapes/unit-square/index.js';
+import UnitVector from './shapes/unit-vector/index.js';
+import Helpers from './shapes/Helpers.js';
 
 export default class {
 
     /**
+     * DEV_TIP: Within `XMLSVG.ViewGroup.Container` call (see `default.registerContainersForSVG`), prefixing `options.id` value with a few exclamation mark (_one is enough, more improves readability_) will idiomatically opt-out from switch statement selection (see `default.drawPaths`)
+     * 
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
-    static registerContainersForSVG({XMLSVG}){
-
+    static registerContainersForSVG({XMLSVG}){     
+        
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'group_1',
+                    id: 'parallelogram',
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'group_2',
+                    id: 'axes',
+                }
+            })
+            ,
+            new XMLSVG.ViewGroup.Container({
+                options: {
+                    id: '!!!circle',
                 }
             })
         ])
@@ -30,6 +41,8 @@ export default class {
      */
     static drawPaths({HTMLCanvas, XMLSVG, ENUMS, userConfig, SVGList = Array}) {
 
+        const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
+
         SVGList
         .of(...this.registerContainersForSVG({XMLSVG}))
         .on(
@@ -38,37 +51,17 @@ export default class {
 
                 switch (id) {
 
-                    case (ENUMS.CASE.group_1) :
+                    case (ENUMS.CASE.parallelogram) :
 
                             XMLSVG.Helpers.findByID(id)
                             .setPaths([
                                 new XMLSVG.Views.Path({
                                     options: {
                                         ...userConfig.svg.paths.unit_square.options,
-                                        scaling: stage?.grid.GRIDCELL_DIM * 2.5,
+                                        scaling: stage?.grid.GRIDCELL_DIM * 3,
                                         angle: 0,
                                     }
                                 })
-                                ,
-                                new XMLSVG.Views.Path({
-                                    options: {
-                                        ...userConfig.svg.paths.unit_square.options,
-                                        scaling: stage?.grid.GRIDCELL_DIM * 2.0,
-                                        angle: 0,
-                                        /**
-                                         * @override
-                                         */
-                                        id: ENUMS.PRINT.right_triangle,
-                                        points: [
-                                            ...userConfig.svg.paths.unit_square.options.points
-                                                .filter((vec2, i) => {
-                                                    if (i !== 2) return vec2;
-                                                })
-                                        ],
-                                        stroke: ENUMS.COLOR.red
-                                    }
-                                })
-                                ,
                             ]
                             , 
                             ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) )
@@ -76,9 +69,8 @@ export default class {
                         
                     break;
 
-                    case (ENUMS.CASE.group_2) :
+                    case (ENUMS.CASE.circle) :
 
-                        const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
                             new XMLSVG.Views.Path({
@@ -102,6 +94,94 @@ export default class {
                             })
                         ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
 
+                    break;
+
+                    case (ENUMS.CASE.axes) :
+
+                        const TRANSLATE_X = 2; // if set to 0, this will point towards origin
+                        XMLSVG.Helpers.findByID(id)
+                        .setPaths([
+                            ...Array(3).fill(XMLSVG.Views.Path).map((axis, i)=>{
+
+                                const sharedOptions = {
+                                    id: '',
+                                    scaling: 1 * stage?.grid.GRIDCELL_DIM,
+                                    angle: 0,
+                                    points: [
+                                        ...Helpers.drawAxis({
+                                            setRange
+                                            , 
+                                            degToRad: Converters.degToRad
+                                            , 
+                                            arrowHeadOptions: {
+                                                sharpness: 4, 
+                                                length: 1/3
+                                            }
+                                            ,
+                                            TRANSLATE_X
+                                        })
+                                    ],
+                                    /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
+                                    dashed: 0,
+                                    strokeWidth: 3,
+                                    fillStroke: ENUMS.COLOR.magenta
+                                }
+                                
+                                const step = ++i;
+                                switch (step) {
+                                    case 1:
+                                        return (
+                                            axis = new axis({
+                                                options: {
+                                                    ...sharedOptions,
+                                                    /**
+                                                     * @override
+                                                     */
+                                                    id: ENUMS.PRINT.axis_x,
+                                                    fillStroke: ENUMS.COLOR.green,
+                                                    scaling: stage?.grid.GRIDCELL_DIM * 1.5,
+                                                    angle: 0,
+                                                }
+                                            })
+                                        )
+                                    /* break; */
+                                    case 2:
+                                        const SNAP_TO_ANGLE = (1 / Math.sin(Math.PI/4));
+                                        return (
+                                            axis = new axis({
+                                                options: {
+                                                    ...sharedOptions,
+                                                    /**
+                                                     * @override
+                                                     */
+                                                    id: ENUMS.PRINT.axis_y,
+                                                    fillStroke: ENUMS.COLOR.blue,
+                                                    scaling: stage.grid.GRIDCELL_DIM + SNAP_TO_ANGLE,
+                                                    angle: 135
+                                                }
+                                            })
+                                        )
+                                    /* break; */
+                                    case 3:
+                                        return (
+                                            axis = new axis({
+                                                options: {
+                                                    ...sharedOptions,
+                                                    /**
+                                                     * @override
+                                                     */
+                                                    id: ENUMS.PRINT.axis_z,
+                                                    fillStroke: ENUMS.COLOR.red,
+                                                    scaling: stage?.grid.GRIDCELL_DIM * 1.5,
+                                                    angle: -90
+                                                }
+                                            })
+                                        )
+                                    /* break; */
+                                }
+                                
+                            })
+                        ], ({paths}) => SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
                     break;
                 }
         

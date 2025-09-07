@@ -45,7 +45,7 @@ customElements.define(svg_container, class extends HTMLElement {
 
                     const XML_NAMESPACE = 'xmlns=http://www.w3.org/2000/svg';
                     this.setHTMLUnsafe(/* html */`
-                        <svg ${ XML_NAMESPACE } viewBox="${ this.getAttribute('viewBox') }">${ interpolatedHTML }</svg>
+                        <svg ${ XML_NAMESPACE } name="${ this.id }" viewBox="${ this.getAttribute('viewBox') }">${ interpolatedHTML }</svg>
                     `);
                     
                     if ( setMixin(this?.firstElementChild.children) ) callback({paths: this?.firstElementChild.children});

@@ -12,9 +12,9 @@ export
                         id: ENUMS.CASE.grid,
                         strokeStyle: ENUMS.COLOR.black,
                         hidden: !true,
-                        dotted: !true,
-                        lineWidth: 1,
-                        opacity: 0.25
+                        dotted: /* ! */true,
+                        lineWidth: 2,
+                        opacity: 0.5
                     }
                 }
             }
@@ -30,13 +30,15 @@ export
                             points: [
                                 ...[{x: 0, y: 0}],
                                 ...[{x: 1, y: 0}],
-                                ...[{x: 1, y: 1}],
-                                ...[{x: 0, y: 1}],
+                                ...[{x: 1, y: 0.5}],
+                                ...[{x: 0, y: 0.5}],
                                 ...[{x: 0, y: 0}],
                             ],
                             strokeWidth: 3,
-                            fill: ENUMS.COLOR.none,
-                            stroke: ENUMS.COLOR.green,
+                            fill: ENUMS.COLOR.grey,
+                            stroke: ENUMS.COLOR.black,
+                            stroke: 'black',
+                            opacity: 0.25
                         }
                     }
                 }
