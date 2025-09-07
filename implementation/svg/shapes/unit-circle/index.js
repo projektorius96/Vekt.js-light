@@ -25,7 +25,13 @@ export default class {
                                     ENUMS.ATTRIBUTE.transform
                                     ,
                                     new DOMMatrix(
-                                        setTransform(( path.dataset.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE + (width / 2), stage.grid.SVG.Y_IN_MIDDLE/*  - (height / 2) */)
+                                        setTransform({
+                                            angle: ( path.dataset.angle || 0 )
+                                            , 
+                                            translateX: stage.grid.SVG.X_IN_MIDDLE + (width / 2)
+                                            ,
+                                            translateY: stage.grid.SVG.Y_IN_MIDDLE
+                                        })
                                     ).toString()
                                 )
 

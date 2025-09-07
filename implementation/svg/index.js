@@ -1,5 +1,6 @@
-import UnitSquare from './shapes/unit-square/index.js';
+/* import './styles.css' */
 import UnitCircle from './shapes/unit-circle/index.js';
+import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
 import Helpers from './shapes/Helpers.js';
 
@@ -15,19 +16,19 @@ export default class {
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: '!!!group_1',
+                    id: 'parallelogram',
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: '!!!group_2',
+                    id: 'axes',
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'group_3',
+                    id: '!!!circle',
                 }
             })
         ])
@@ -48,41 +49,19 @@ export default class {
             
             ({id})=>{
 
-                const HIDE_PATH = 0;
-
                 switch (id) {
 
-                    case (ENUMS.CASE.group_1) :
+                    case (ENUMS.CASE.parallelogram) :
 
                             XMLSVG.Helpers.findByID(id)
                             .setPaths([
                                 new XMLSVG.Views.Path({
                                     options: {
                                         ...userConfig.svg.paths.unit_square.options,
-                                        scaling: stage?.grid.GRIDCELL_DIM * 2.5,
+                                        scaling: stage?.grid.GRIDCELL_DIM * 3,
                                         angle: 0,
                                     }
                                 })
-                                ,
-                                new XMLSVG.Views.Path({
-                                    options: {
-                                        ...userConfig.svg.paths.unit_square.options,
-                                        scaling: stage?.grid.GRIDCELL_DIM * 2.0,
-                                        angle: 0,
-                                        /**
-                                         * @override
-                                         */
-                                        id: ENUMS.PRINT.right_triangle,
-                                        points: [
-                                            ...userConfig.svg.paths.unit_square.options.points
-                                                .filter((vec2, i) => {
-                                                    if (i !== 2) return vec2;
-                                                })
-                                        ],
-                                        stroke: ENUMS.COLOR.red
-                                    }
-                                })
-                                ,
                             ]
                             , 
                             ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS}) )
@@ -90,7 +69,7 @@ export default class {
                         
                     break;
 
-                    case (ENUMS.CASE.group_2) :
+                    case (ENUMS.CASE.circle) :
 
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
@@ -117,7 +96,7 @@ export default class {
 
                     break;
 
-                    case (ENUMS.CASE.group_3) :
+                    case (ENUMS.CASE.axes) :
 
                         const TRANSLATE_X = 2; // if set to 0, this will point towards origin
                         XMLSVG.Helpers.findByID(id)
@@ -167,6 +146,7 @@ export default class {
                                         )
                                     /* break; */
                                     case 2:
+                                        const SNAP_TO_ANGLE = (1 / Math.sin(Math.PI/4));
                                         return (
                                             axis = new axis({
                                                 options: {
@@ -176,6 +156,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.axis_y,
                                                     fillStroke: ENUMS.COLOR.blue,
+                                                    scaling: stage.grid.GRIDCELL_DIM + SNAP_TO_ANGLE,
                                                     angle: 135
                                                 }
                                             })
