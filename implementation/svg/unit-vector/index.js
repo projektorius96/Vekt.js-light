@@ -2,8 +2,6 @@ export default class {
 
     static draw({HTMLCanvas, XMLSVG, ENUMS}){
 
-
-
             return (
 
                 ({id})=>{
@@ -34,5 +32,28 @@ export default class {
                         }();
             });
     }
+
+    static [addArrowHead.name] = addArrowHead;
+
+}
+
+/**
+ * > Kudos to: ChatGPT for cleaner version of my brain of storm
+ */
+function addArrowHead({sharpness=1, length=1, TRANSLATE_X = 0, TRANSLATE_Y = 0}) {
+
+    // Arrowhead points in *local coords* (pointing along +X axis)
+    const baseShape = [
+        { x: 0,    y: 0 },                       // tip of arrow
+        { x: -length, y:  length / sharpness },  // bottom wing
+        { x: -length, y: -length / sharpness },   // top wing
+        { x: 0,    y: 0 }, // explicitly closing the arrow
+    ];
+
+    // Rotate + translate to actual orientation
+    return baseShape.map(point => ({
+        x: (point.x * Math.cos(/* angle */0) - point.y * Math.sin(/* angle */0) + TRANSLATE_X),
+        y: (point.x * Math.sin(/* angle */0) + point.y * Math.cos(/* angle */0) + TRANSLATE_Y)
+    }));
 
 }

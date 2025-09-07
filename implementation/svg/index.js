@@ -9,7 +9,7 @@ export default class {
      * 
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
-    static registerContainersForSVG({XMLSVG}){
+    static registerContainersForSVG({XMLSVG}){        
 
         return([
             new XMLSVG.ViewGroup.Container({
@@ -118,25 +118,32 @@ export default class {
 
                     case (ENUMS.CASE.group_3) :
 
+                        const TRANSLATE_X = 2; // if set to 0, this will point towards origin
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
                             new XMLSVG.Views.Path({
                                 options: {
                                     id: ENUMS.PRINT.unit_vector,
                                     scaling: 1 * stage?.grid.GRIDCELL_DIM,
-                                    angle: 0,
+                                    angle: -45,
                                     points: [
-                                        ...setRange(0, 1, 2 * 90).map((deg)=>{
+                                        ...setRange(0, 1, 2*90).map((deg)=>{
                                             return {
-                                                x: 1 * Math.cos( Converters.degToRad( deg ) ) - 1 /* <== removes the radius, when the shape is not filled */,
+                                                x: (1 * Math.cos( Converters.degToRad( deg ) ) + TRANSLATE_X) - 1 /* <== removes the radius, when the shape is not filled */,
                                                 y: (1 / Number.MAX_SAFE_INTEGER) * Math.sin( Converters.degToRad( deg ) ) - 0,
                                             }
+                                        })
+                                        ,
+                                        ...UnitVector.addArrowHead({
+                                            sharpness: 4,
+                                            length: 1/3,
+                                            TRANSLATE_X
                                         })
                                     ],
                                     /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
                                     dashed: 0,
                                     strokeWidth: 3,
-                                    fill: ENUMS.COLOR.none,
+                                    fill: ENUMS.COLOR.blue,
                                     stroke: ENUMS.COLOR.blue,
                                 }
                             })
