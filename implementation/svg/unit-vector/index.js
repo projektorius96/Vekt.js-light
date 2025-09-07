@@ -6,7 +6,7 @@ export default class {
 
                 ({id})=>{
 
-                    const path = XMLSVG.Helpers.findByID( id );
+                    const path = XMLSVG.Helpers.findByID( id ); console.log(path.id);
                                                         
                         void function initPoints() {
 
@@ -21,9 +21,8 @@ export default class {
                                 { width, height } = path?.getBoundingClientRect()
                                 ;
                             
-                            switch (path.id) {
-
-                                case ENUMS.SHAPE.right_triangle:
+                            switch (id) {
+                                case ENUMS.CASE.unit_vector:
                                     path.setAttribute(
                                         ENUMS.ATTRIBUTE.transform
                                         , 
@@ -33,7 +32,7 @@ export default class {
                                     )
                                 break;
 
-                                case ENUMS.SHAPE.unit_square:
+                                case ENUMS.CASE.unit_vector_with_head:
                                     path.setAttribute(
                                         ENUMS.ATTRIBUTE.transform
                                         , 
@@ -42,7 +41,6 @@ export default class {
                                         ).toString()
                                     )
                                 break;
-
                             }
                         
                         }();
