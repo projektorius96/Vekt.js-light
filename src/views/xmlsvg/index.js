@@ -17,6 +17,11 @@ export class XMLSVG {
             return (
                 document?.getElementById(id)
             )
+        },
+        findByName(svg_name, self = 0){
+            return (
+                document.getElementsByName(svg_name).item(self)
+            )
         }
     }
 

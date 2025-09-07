@@ -2,11 +2,13 @@ export default class {
 
     static draw({HTMLCanvas, XMLSVG, ENUMS}){
 
+
+
             return (
 
                 ({id})=>{
 
-                    const path = XMLSVG.Helpers.findByID( id ); console.log(path.id);
+                    const path = XMLSVG.Helpers.findByID( id );
                                                         
                         void function initPoints() {
 
@@ -21,27 +23,13 @@ export default class {
                                 { width, height } = path?.getBoundingClientRect()
                                 ;
                             
-                            switch (id) {
-                                case ENUMS.CASE.unit_vector:
-                                    path.setAttribute(
-                                        ENUMS.ATTRIBUTE.transform
-                                        , 
-                                        new DOMMatrix(
-                                            setTransform(( path.dataset.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
-                                        ).toString()
-                                    )
-                                break;
-
-                                case ENUMS.CASE.unit_vector_with_head:
-                                    path.setAttribute(
-                                        ENUMS.ATTRIBUTE.transform
-                                        , 
-                                        new DOMMatrix(
-                                            setTransform(( path.dataset.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE - (width / 2), stage.grid.SVG.Y_IN_MIDDLE - (height / 2))
-                                        ).toString()
-                                    )
-                                break;
-                            }
+                                path.setAttribute(
+                                    ENUMS.ATTRIBUTE.transform
+                                    , 
+                                    new DOMMatrix(
+                                        setTransform(( path.dataset.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE/*  - (width / 2) *//*  + (stage.grid.GRIDCELL_DIM * 2) */, stage.grid.SVG.Y_IN_MIDDLE/*  - (height / 2) */)
+                                    ).toString()
+                                )
                         
                         }();
             });

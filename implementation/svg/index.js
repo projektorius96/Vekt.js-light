@@ -20,7 +20,7 @@ export default class {
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: '!!!group_2',
+                    id: 'group_2',
                 }
             })
             ,
@@ -46,6 +46,8 @@ export default class {
         .on(
             
             ({id})=>{
+
+                const HIDE_PATH = 0;
 
                 switch (id) {
 
@@ -133,34 +135,33 @@ export default class {
                                     ],
                                     /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
                                     dashed: 0,
-                                    strokeWidth: 2,
+                                    strokeWidth: 3,
                                     fill: ENUMS.COLOR.none,
-                                    stroke: ENUMS.COLOR.green,
+                                    stroke: ENUMS.COLOR.blue,
                                 }
                             })
                             ,
                             new XMLSVG.Views.Path({
                                 options: {
-                                    id: ENUMS.PRINT.unit_vector_with_head,
-                                    scaling: 1 * stage?.grid.GRIDCELL_DIM,
+                                    id: ENUMS.PRINT.angle_of_application,
+                                    scaling: 1 * stage?.grid.GRIDCELL_DIM * HIDE_PATH,
                                     angle: -90,
                                     points: [
-                                        ...setRange(0, 90, 180).map((deg)=>{
+                                        ...setRange(0, 1, 2 * 90).map((deg)=>{
                                             return {
                                                 x: 1 * Math.cos( Converters.degToRad( deg ) ) - 1 /* <== removes the radius, when the shape is not filled */,
-                                                y: 1 * Math.sin( Converters.degToRad( deg ) ) - 0,
+                                                y: (1 / Number.MAX_SAFE_INTEGER) * Math.sin( Converters.degToRad( deg ) ) + 2,
                                             }
                                         })
                                     ],
                                     /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
                                     dashed: 0,
-                                    strokeWidth: 2,
+                                    strokeWidth: 3,
                                     fill: ENUMS.COLOR.none,
-                                    stroke: ENUMS.COLOR.green,
+                                    stroke: ENUMS.COLOR.red,
                                 }
                             })
                         ], ({paths}) => SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
-
                     break;
                 }
         
