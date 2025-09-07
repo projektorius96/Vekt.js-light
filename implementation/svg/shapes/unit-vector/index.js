@@ -25,7 +25,7 @@ export default class {
                                     ENUMS.ATTRIBUTE.transform
                                     , 
                                     new DOMMatrix(
-                                        setTransform(( path.dataset.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE/*  - (width / 2) *//*  + (stage.grid.GRIDCELL_DIM * 2) */, stage.grid.SVG.Y_IN_MIDDLE/*  - (height / 2) */)
+                                        setTransform(( path.dataset.angle || 0 ), stage.grid.SVG.X_IN_MIDDLE/*  - (width / 2) */, stage.grid.SVG.Y_IN_MIDDLE/*  - (height / 2) */)
                                     ).toString()
                                 )
                         
@@ -38,7 +38,7 @@ export default class {
 }
 
 /**
- * > Kudos to: ChatGPT for cleaner version of my brain of storm
+ * > Kudos to: ChatGPT for cleaner version of my brain of storm...
  */
 function addArrowHead({sharpness=1, length=1, TRANSLATE_X = 0, TRANSLATE_Y = 0}) {
 
@@ -46,14 +46,14 @@ function addArrowHead({sharpness=1, length=1, TRANSLATE_X = 0, TRANSLATE_Y = 0})
     const baseShape = [
         { x: 0,    y: 0 },                       // tip of arrow
         { x: -length, y:  length / sharpness },  // bottom wing
-        { x: -length, y: -length / sharpness },   // top wing
-        { x: 0,    y: 0 }, // explicitly closing the arrow
+        { x: -length, y: -length / sharpness },  // top wing
+        { x: 0,    y: 0 },                       // explicitly closing the arrow
     ];
 
     // Rotate + translate to actual orientation
     return baseShape.map(point => ({
-        x: (point.x * Math.cos(/* angle */0) - point.y * Math.sin(/* angle */0) + TRANSLATE_X),
-        y: (point.x * Math.sin(/* angle */0) + point.y * Math.cos(/* angle */0) + TRANSLATE_Y)
+        x: (point.x * Math.cos(0) - point.y * Math.sin(0) + TRANSLATE_X),
+        y: (point.x * Math.sin(0) + point.y * Math.cos(0) + TRANSLATE_Y)
     }));
 
 }

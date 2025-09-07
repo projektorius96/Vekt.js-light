@@ -31,7 +31,7 @@ customElements.define(svg_path, class extends HTMLElement {
                             d="${ setPoints.call(this, options.points) }"
                             stroke-dasharray="${ options.dashed  || 0 }"
                             stroke-width="${ options.strokeWidth || 0 }"
-                            style="stroke:${ options.stroke || COLOR.black }; fill:${ options.fill || COLOR.none };"
+                            style="stroke:${ (options.stroke || options.fillStroke ) || COLOR.black }; fill:${ (options.fill || options.fillStroke) || COLOR.none };"
                         />
                     `)
                 )
@@ -57,7 +57,7 @@ customElements.define(svg_path, class extends HTMLElement {
 
     }
 
-    #setDataAttrs({id, dataset}){
+    #setDataAttrs({id, dataset}) {
         
         dataset.entries().forEach(([k, v])=>{
             this.children[id].setAttribute(k, v)

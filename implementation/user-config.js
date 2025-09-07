@@ -12,7 +12,7 @@ export
                         id: ENUMS.CASE.grid,
                         strokeStyle: ENUMS.COLOR.black,
                         hidden: !true,
-                        dotted: !true,
+                        dotted: /* ! */true,
                         lineWidth: 1,
                         opacity: 0.25
                     }
