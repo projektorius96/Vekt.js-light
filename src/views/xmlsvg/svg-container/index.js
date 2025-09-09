@@ -78,8 +78,7 @@ function setMixin(htmlcollection){
                              * @see `<root>\\src\\views\\xmlsvg\\svg-path\\index.js` for its getter equivalent under `this.#serializePoints` call
                              */
                             [METHOD.parsePoints](){
-                                return(
-                                    /* this.getAttribute("data-points") */// alternatively we access via `dataset`
+                                return (
                                     this.dataset.points
                                     .split(",")
                                     .map(Number)
@@ -92,26 +91,15 @@ function setMixin(htmlcollection){
                                 );
                             }
                             ,
+                            // DEV_NOTE # can be use in tandem with [METHOD.parsePoints], the latter will convert points representation to Array.prototype, instead of String.prototype
                             [METHOD.getPoints](){
-                                return(
+                                return (
                                     this.attributes.d.value
                                 );
                             }
                             ,
-                            [METHOD.setPoints](points, scalingFactor){                      
+                            [METHOD.setPoints](points, scalingFactor){                    
                                 this.attributes.d.value = setPoints.call(view, points, scalingFactor)
-                            }
-                            ,
-                            [METHOD.getTranslate](){
-                                    return view.getAttribute(ATTR.transform)
-                            }
-                            ,
-                            [METHOD.setTranslate]({translateX = 0, translateY = 0}){
-                                    view.setAttribute(
-                                        ATTR.transform
-                                        ,
-                                        `${ATTR.translate}(${translateX},${translateY})`
-                                    )
                             }
                         }
                     ) ;

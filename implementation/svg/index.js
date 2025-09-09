@@ -2,7 +2,6 @@
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
-import Helpers from './shapes/Helpers.js';
 import { startAnimation } from '../modules/animations.js';
 
 export default class {
@@ -48,7 +47,7 @@ export default class {
         .of(...this.registerContainersForSVG({XMLSVG}))
         .on(
             
-            ({id}, i)=>{
+            ({id}, containerCount)=>{
 
                 switch (id) {
 
@@ -99,7 +98,6 @@ export default class {
 
                     case (ENUMS.CASE.axes) :
 
-                        const TRANSLATE_X = 2; // if set to 0, this will point towards origin
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
                             ...Array(3).fill(XMLSVG.Views.Path).map((axis, i)=>{
@@ -109,17 +107,8 @@ export default class {
                                     scaling: 1 * stage?.grid.GRIDCELL_DIM,
                                     angle: 0,
                                     points: [
-                                        ...Helpers.drawAxis({
-                                            setRange
-                                            , 
-                                            degToRad: Converters.degToRad
-                                            , 
-                                            arrowHeadOptions: {
-                                                sharpness: 4, 
-                                                length: 1/3
-                                            }
-                                            ,
-                                            TRANSLATE_X
+                                        ...UnitVector.drawAxis({
+                                            HTMLCanvas
                                         })
                                     ],
                                     /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
@@ -183,13 +172,35 @@ export default class {
                                 
                             })
                         ], ({paths}) => {
+                                                        
+                            // // EXAMPLE # change angle
+                            // const animAngle = startAnimation({duration: 10, from: Number(paths.z_axis.dataset.angle), to: Number.MAX_SAFE_INTEGER * 360, callback: function({count}) {
+                            //     /* console.log(count) */// # [PASSING]
+                            //     paths.z_axis.dataset.angle = count;
+                            //     SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
+                            // }});
+                            // /* animAngle.pause() */// # [PASSING]
 
-                            startAnimation({duration: 10, from: Number(paths.z_axis.dataset.angle), to: Number.MAX_SAFE_INTEGER * 360, callback: function({count}) {
-                                /* console.log(count) */
-                                paths.z_axis.dataset.angle = count;
-                                SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
+                            SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
+
+                            const animShift = startAnimation({duration: 10, from: 0, to: 360, callback: function({count}) {
+                                    console.log(count)
+                                    paths.z_axis.setPoints([
+                                        ...UnitVector.drawAxis({count/* : -1 * count */, HTMLCanvas})
+                                    ], Number(paths.z_axis.dataset.scaling))
+                                    
+                                    if (count === 18/* 0 */-1){                                        
+
+                                        // startAnimation({duration: 100, from: 0, to: 180, callback: function({count}) {
+                                        //     paths.z_axis.setPoints([
+                                        //         ...UnitVector.drawAxis({count: -1 * count, HTMLCanvas})
+                                        //     ], Number(paths.z_axis.dataset.scaling))
+                                        // }});
+
+                                    }
+
                             }});
-                            
+                            /* animShift.pause() */// # [PASSING]
 
                         });
                     break;

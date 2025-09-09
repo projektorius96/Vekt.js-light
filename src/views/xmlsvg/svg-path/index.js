@@ -72,7 +72,7 @@ customElements.define(svg_path, class extends HTMLElement {
      */
     #serializePoints(options) {
 
-        this.children[options.id].setAttribute("data-points", options.points.map(({x, y})=>[x, y].join(",").trim()));
+        this.children[options.id].dataset.points = options.points.map(({x, y})=>[x, y].join(",").trim());
 
         return;
 

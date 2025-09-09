@@ -50,13 +50,13 @@ export function setCoords() {
 export function setPoints(points = [], scalingFactor = 1) {
     
     if (points.length === 0) return "";
-        let path = `M 0 0`;
+        let d = `M 0 0`;
             points.forEach((point, i) => {
                 if (i > 0){
-                    path += ` L ${point.x * scalingFactor} ${point.y * scalingFactor}`;
+                    d += ` L ${point.x * scalingFactor} ${point.y * scalingFactor}`;
                 }
             });
     
-    return path;
+    return d;
 
 }

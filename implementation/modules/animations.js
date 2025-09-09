@@ -1,10 +1,7 @@
-/* let componentWasDefined = false; */
-
 // CREDITS : Kudos to Copilot (ChatGPT-5) for help writing this logic
-export function startAnimation({ from = 0, to = 180, duration = 1000, callback = (c)=>c }) {
+export function startAnimation({ from = 0, to = 180, duration = 1000, iterations = Infinity, callback }) {
 
     const ac_namespace = 'animation-counter';
-
     if (!(customElements.get(ac_namespace))) {
 
         customElements.define(ac_namespace, class extends HTMLElement {
@@ -19,8 +16,6 @@ export function startAnimation({ from = 0, to = 180, duration = 1000, callback =
                 position: absolute;
             `;
 
-            /* defined = true; */
-
         }
 
         })
@@ -31,12 +26,12 @@ export function startAnimation({ from = 0, to = 180, duration = 1000, callback =
 
     }
 
-    customElements.whenDefined(ac_namespace).then(()=>{
+    /* customElements.whenDefined(ac_namespace).then(()=>{ */
 
     const effect = new KeyframeEffect(
         document.body.children[ac_namespace],
-        [{ transform: `rotate(${from}deg)` }, { transform: `rotate(${to}deg)` }],
-        { duration, iterations: Infinity }
+        [{ opacity: 0 }, { opacity: 1 }],
+        { duration, iterations }
     );
 
     const animation = new Animation(effect, document.timeline);
@@ -67,9 +62,9 @@ export function startAnimation({ from = 0, to = 180, duration = 1000, callback =
 
     trackTime();
 
-    })
+    /* }) */
 
-    return true;
+    return animation;
 
 }
 
