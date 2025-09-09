@@ -3,6 +3,7 @@ import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
 import Helpers from './shapes/Helpers.js';
+import { startAnimation } from '../modules/animations.js';
 
 export default class {
 
@@ -47,7 +48,7 @@ export default class {
         .of(...this.registerContainersForSVG({XMLSVG}))
         .on(
             
-            ({id})=>{
+            ({id}, i)=>{
 
                 switch (id) {
 
@@ -137,7 +138,7 @@ export default class {
                                                     /**
                                                      * @override
                                                      */
-                                                    id: ENUMS.PRINT.axis_x,
+                                                    id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
                                                     scaling: stage?.grid.GRIDCELL_DIM * 1.5,
                                                     angle: 0,
@@ -154,7 +155,7 @@ export default class {
                                                     /**
                                                      * @override
                                                      */
-                                                    id: ENUMS.PRINT.axis_y,
+                                                    id: ENUMS.PRINT.y_axis,
                                                     fillStroke: ENUMS.COLOR.blue,
                                                     scaling: stage.grid.GRIDCELL_DIM + SNAP_TO_ANGLE,
                                                     angle: 135
@@ -170,7 +171,7 @@ export default class {
                                                     /**
                                                      * @override
                                                      */
-                                                    id: ENUMS.PRINT.axis_z,
+                                                    id: ENUMS.PRINT.z_axis,
                                                     fillStroke: ENUMS.COLOR.red,
                                                     scaling: stage?.grid.GRIDCELL_DIM * 1.5,
                                                     angle: -90
@@ -181,10 +182,20 @@ export default class {
                                 }
                                 
                             })
-                        ], ({paths}) => SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
+                        ], ({paths}) => {
+
+                            startAnimation({duration: 10, from: Number(paths.z_axis.dataset.angle), to: Infinity, callback: function({count}) {
+                                /* console.log(count) */
+                                paths.z_axis.dataset.angle = count;
+                                SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
+                            }});
+                            
+
+                        });
                     break;
                 }
         
-            });
+        });
+        
     }
 }
