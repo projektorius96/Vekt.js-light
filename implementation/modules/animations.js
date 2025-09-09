@@ -48,7 +48,11 @@ export function startAnimation({ from = 0, to = 180, duration = 1000, iterations
                 lastTick = tick;
                 count++;
                 if (count === to) {
-                    animation.pause();
+                    // count = 0;
+                    // lastTick = 0;
+                    // animation.cancel()
+                    // animation.play();
+                    animation.pause()
                 } else {
                     /* console.log(count); */
                     callback({count})

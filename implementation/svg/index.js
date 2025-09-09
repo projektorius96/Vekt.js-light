@@ -41,6 +41,8 @@ export default class {
      */
     static drawPaths({HTMLCanvas, XMLSVG, ENUMS, userConfig, SVGList = Array}) {
 
+        const SNAP_TO_GRID = 1 / Math.sin(Math.PI/4);
+
         const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
 
         SVGList
@@ -129,14 +131,13 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    scaling: stage?.grid.GRIDCELL_DIM * 1.5,
+                                                    scaling: SNAP_TO_GRID * stage?.grid.GRIDCELL_DIM,
                                                     angle: 0,
                                                 }
                                             })
                                         )
                                     /* break; */
                                     case 2:
-                                        const SNAP_TO_ANGLE = (1 / Math.sin(Math.PI/4));
                                         return (
                                             axis = new axis({
                                                 options: {
@@ -146,7 +147,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.y_axis,
                                                     fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: stage.grid.GRIDCELL_DIM + SNAP_TO_ANGLE,
+                                                    scaling: stage.grid.GRIDCELL_DIM + SNAP_TO_GRID,
                                                     angle: 135
                                                 }
                                             })
@@ -162,7 +163,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.z_axis,
                                                     fillStroke: ENUMS.COLOR.red,
-                                                    scaling: stage?.grid.GRIDCELL_DIM * 1.5,
+                                                    scaling: SNAP_TO_GRID * stage?.grid.GRIDCELL_DIM,
                                                     angle: -90
                                                 }
                                             })
@@ -172,37 +173,39 @@ export default class {
                                 
                             })
                         ], ({paths}) => {
-                                                        
-                            // // EXAMPLE # change angle
-                            // const animAngle = startAnimation({duration: 10, from: Number(paths.z_axis.dataset.angle), to: Number.MAX_SAFE_INTEGER * 360, callback: function({count}) {
-                            //     /* console.log(count) */// # [PASSING]
-                            //     paths.z_axis.dataset.angle = count;
-                            //     SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
-                            // }});
-                            // /* animAngle.pause() */// # [PASSING]
 
                             SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
+                            
+                            const sharedAnimProps = {duration: 10, from: 0, to: 180}
+                            paths.x_axis.setPoints([
+                                ...UnitVector.drawAxis({count: sharedAnimProps.to, HTMLCanvas})
+                            ], Number(paths.x_axis.dataset.scaling))
+                            paths.y_axis.setPoints([
+                                ...UnitVector.drawAxis({count: sharedAnimProps.to, HTMLCanvas})
+                            ], Number(paths.y_axis.dataset.scaling))
 
-                            const animShift = startAnimation({duration: 100, from: 0, to: 180, callback: function({count}) {
-                                    console.log(count)
+
+                            const animShift = startAnimation({...sharedAnimProps, callback: function({count}) {
                                     paths.z_axis.setPoints([
-                                        ...UnitVector.drawAxis({count/* : -1 * count */, HTMLCanvas})
+                                        ...UnitVector.drawAxis({count, HTMLCanvas})
                                     ], Number(paths.z_axis.dataset.scaling))
                                     
-                                    if (count === 180-1){
-                                        
-                                        paths.z_axis.dataset.angle *= -1;
-                                        SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
+                                    if (count === (sharedAnimProps.to/2)-1){
 
-                                        startAnimation({duration: 100, from: 0, to: 180, callback: function({count}) {
+                                        // DEV_NOTE # this will be called in a different scenario
+                                       /*  paths.z_axis.dataset.angle *= -1;
+                                        SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) ); */
+
+                                        startAnimation({...sharedAnimProps, callback: function({count}) {
                                             paths.z_axis.setPoints([
-                                                ...UnitVector.drawAxis({count/* : -1 * count */, HTMLCanvas})
+                                                ...UnitVector.drawAxis({count: sharedAnimProps.to - count , HTMLCanvas})
                                             ], Number(paths.z_axis.dataset.scaling))
                                         }});
 
                                     }
 
                             }});
+                            
                             /* animShift.pause() */// # [PASSING]
 
                         });

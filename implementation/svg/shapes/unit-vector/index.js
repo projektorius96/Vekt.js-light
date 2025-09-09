@@ -58,7 +58,7 @@ export default class UnitVector {
  * 
  * @param {Object} `callee` - callee is `XMLSVG.Views.Path` 
  */
-function drawAxis({HTMLCanvas, TRANSLATE_X = 2, TRANSLATE_Y = 0, count = 0, arrowHeadOptions = {}}) {
+function drawAxis({HTMLCanvas, count = 1}) {
 
     /**
      * @dependencies
@@ -74,7 +74,7 @@ function drawAxis({HTMLCanvas, TRANSLATE_X = 2, TRANSLATE_Y = 0, count = 0, arro
     const OrderedPair = Array;
 
     const
-        HAVER_CIRCLE = [0, 1+count, 180]
+        HAVER_CIRCLE = [0, 1, count]
         ,
         LIMIT_TO_0 = (1 / Number.MAX_SAFE_INTEGER)
         ;
@@ -83,9 +83,11 @@ function drawAxis({HTMLCanvas, TRANSLATE_X = 2, TRANSLATE_Y = 0, count = 0, arro
         ...OrderedPair.from([
             ...setRange(...HAVER_CIRCLE).map((deg) => {
                 return ({
-                    x: (1 * Math.cos(Converters.degToRad(deg)) + TRANSLATE_X) - 1 /* <== removes the radius, when the shape is not filled */,
-                    /* x: (1 * deg + TRANSLATE_X) - 1, */// DEV_TIP # "chamber effect"
-                    y: (LIMIT_TO_0 * Math.sin(Converters.degToRad(deg)) + TRANSLATE_Y) - 0,
+                    x: deg/stage.grid.GRIDCELL_DIM,
+                    y: 0
+                    // x: (/* Math.cos(Converters.degToRad( */deg/* )) */ + (TRANSLATE_X+2)/stage.grid.GRIDCELL_DIM) - 1 /* <== removes the radius, when the shape is not filled */,
+                    // /* x: (1 * deg + TRANSLATE_X) - 1, */// DEV_TIP # "chamber effect"
+                    // y: (LIMIT_TO_0 * /* Math.sin(Converters.degToRad( */deg/* )) */ + TRANSLATE_Y) - 0,
                 });
             })
         ])

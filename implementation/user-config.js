@@ -33,7 +33,13 @@ export
                                 ...[{x: 1, y: 0.5}],
                                 ...[{x: 0, y: 0.5}],
                                 ...[{x: 0, y: 0}],
-                            ],
+                            ].map((p)=>{
+                                const SNAP_TO_GRID = 1 / Math.sin(Math.PI/4);
+                                return p = {
+                                    x: p.x * SNAP_TO_GRID,
+                                    y: p.y * SNAP_TO_GRID,
+                                }
+                            }),
                             strokeWidth: 3,
                             fill: ENUMS.COLOR.grey,
                             stroke: ENUMS.COLOR.black,
