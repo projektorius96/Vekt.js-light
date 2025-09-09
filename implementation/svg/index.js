@@ -183,19 +183,22 @@ export default class {
 
                             SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
 
-                            const animShift = startAnimation({duration: 10, from: 0, to: 360, callback: function({count}) {
+                            const animShift = startAnimation({duration: 100, from: 0, to: 180, callback: function({count}) {
                                     console.log(count)
                                     paths.z_axis.setPoints([
                                         ...UnitVector.drawAxis({count/* : -1 * count */, HTMLCanvas})
                                     ], Number(paths.z_axis.dataset.scaling))
                                     
-                                    if (count === 18/* 0 */-1){                                        
+                                    if (count === 180-1){
+                                        
+                                        paths.z_axis.dataset.angle *= -1;
+                                        SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
 
-                                        // startAnimation({duration: 100, from: 0, to: 180, callback: function({count}) {
-                                        //     paths.z_axis.setPoints([
-                                        //         ...UnitVector.drawAxis({count: -1 * count, HTMLCanvas})
-                                        //     ], Number(paths.z_axis.dataset.scaling))
-                                        // }});
+                                        startAnimation({duration: 100, from: 0, to: 180, callback: function({count}) {
+                                            paths.z_axis.setPoints([
+                                                ...UnitVector.drawAxis({count/* : -1 * count */, HTMLCanvas})
+                                            ], Number(paths.z_axis.dataset.scaling))
+                                        }});
 
                                     }
 
