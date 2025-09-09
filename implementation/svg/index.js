@@ -184,7 +184,7 @@ export default class {
                             })
                         ], ({paths}) => {
 
-                            startAnimation({duration: 10, from: Number(paths.z_axis.dataset.angle), to: Infinity, callback: function({count}) {
+                            startAnimation({duration: 10, from: Number(paths.z_axis.dataset.angle), to: Number.MAX_SAFE_INTEGER * 360, callback: function({count}) {
                                 /* console.log(count) */
                                 paths.z_axis.dataset.angle = count;
                                 SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
