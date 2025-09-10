@@ -1,5 +1,5 @@
 // CREDITS : Kudos to Copilot (ChatGPT-5) for help writing this logic
-export function startAnimation({ from = 0, to = 180, duration = 1000, iterations = Infinity, callback }) {
+export function startAnimation({ from = 0, to = 1, duration = 1000, iterations = 1, callback }) {
 
     const ac_namespace = 'animation-counter';
     if (!(customElements.get(ac_namespace))) {
@@ -28,13 +28,13 @@ export function startAnimation({ from = 0, to = 180, duration = 1000, iterations
 
     /* customElements.whenDefined(ac_namespace).then(()=>{ */
 
-    const effect = new KeyframeEffect(
+    let effect = new KeyframeEffect(
         document.body.children[ac_namespace],
         [{ opacity: 0 }, { opacity: 1 }],
         { duration, iterations }
     );
 
-    const animation = new Animation(effect, document.timeline);
+    let animation = new Animation(effect, document.timeline);
         animation.play();
 
     let count = from;
@@ -48,8 +48,15 @@ export function startAnimation({ from = 0, to = 180, duration = 1000, iterations
                 lastTick = tick;
                 count++;
                 if (count === to) {
-                    /* animation.persist() */
-                    animation.pause()
+                    /* animation.cancel() */
+                    /* animation.play() */
+                    // DEV_NOTE # instead, do the following:..
+                    count = 0; // reset count
+                    effect = new KeyframeEffect(/* reset KeyframeEffect */
+                        document.body.children[ac_namespace],
+                        effect.getKeyframes(),
+                        effect.getTiming()
+                    );
                 } else {
                     callback({count})
                 }
@@ -72,4 +79,4 @@ export function startAnimation({ from = 0, to = 180, duration = 1000, iterations
 //     callback: function({count}){
 //         console.log(count)
 //     }
-// }) /* [PASSING] # will iterate single value of count */
+// })

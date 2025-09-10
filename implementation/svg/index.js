@@ -176,32 +176,49 @@ export default class {
 
                             SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
                             
-                            const sharedAnimProps = {duration: 10, from: 0, to: 180}
-                            paths.x_axis.setPoints([
-                                ...UnitVector.drawAxis({count: sharedAnimProps.to, HTMLCanvas})
-                            ], Number(paths.x_axis.dataset.scaling))
-                            paths.y_axis.setPoints([
-                                ...UnitVector.drawAxis({count: sharedAnimProps.to, HTMLCanvas})
-                            ], Number(paths.y_axis.dataset.scaling))
+                            const sharedAnimProps = {duration: 10, from: 0, to: 180, iterations: Infinity}
+                            
+                            function renderRest(count = 180) {
 
+                                paths.x_axis.setPoints([
+                                    ...UnitVector.drawAxis({count/* : sharedAnimProps.to */, HTMLCanvas})
+                                ], Number(paths.x_axis.dataset.scaling))
+                                paths.y_axis.setPoints([
+                                    ...UnitVector.drawAxis({count/* : sharedAnimProps.to */, HTMLCanvas})
+                                ], Number(paths.y_axis.dataset.scaling))
+
+
+                            } renderRest()
+                            
 
                             const animShift = startAnimation({...sharedAnimProps, callback: function({count}) {
 
+                                    const reverseCountOnCondition = (c)=>{
+                                        if (c <= 90){
+                                            return ({
+                                                value: c
+                                            })
+                                        } else /* (c > 90) */ {
+                                            return ({
+                                                value: 180 - c
+                                            })
+                                        }
+                                    }
+                                
                                     paths.z_axis.setPoints([
-                                        ...UnitVector.drawAxis({count, HTMLCanvas})
+                                        ...UnitVector.drawAxis({count: reverseCountOnCondition(count).value, HTMLCanvas})
                                     ], Number(paths.z_axis.dataset.scaling))
-                                    
-                                    if (count === (sharedAnimProps.to)-1){
+                                                                        
+                                    if (count === (sharedAnimProps.to)-1) {
 
-                                        // DEV_NOTE # this will be called in a different scenario
-                                       /*  paths.z_axis.dataset.angle *= -1;
-                                        SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) ); */
+                                        paths.z_axis.dataset.angle *= -1;
+                                        SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
 
-                                        const animShiftReverse = startAnimation({...sharedAnimProps, callback: function({count: reverseCount}) {
-                                            paths.z_axis.setPoints([
-                                                ...UnitVector.drawAxis({count: (sharedAnimProps.to) - reverseCount , HTMLCanvas})
-                                            ], Number(paths.z_axis.dataset.scaling))
-                                        }});
+                                        renderRest(180);
+                                        paths.z_axis.setPoints([
+                                        ...UnitVector.drawAxis({count: reverseCountOnCondition(count).value, HTMLCanvas})
+                                        ], Number(paths.z_axis.dataset.scaling))
+                                        
 
                                     }
 
