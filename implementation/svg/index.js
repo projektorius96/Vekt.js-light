@@ -186,19 +186,20 @@ export default class {
 
 
                             const animShift = startAnimation({...sharedAnimProps, callback: function({count}) {
+
                                     paths.z_axis.setPoints([
                                         ...UnitVector.drawAxis({count, HTMLCanvas})
                                     ], Number(paths.z_axis.dataset.scaling))
                                     
-                                    if (count === (sharedAnimProps.to/2)-1){
+                                    if (count === (sharedAnimProps.to)-1){
 
                                         // DEV_NOTE # this will be called in a different scenario
                                        /*  paths.z_axis.dataset.angle *= -1;
                                         SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) ); */
 
-                                        startAnimation({...sharedAnimProps, callback: function({count}) {
+                                        const animShiftReverse = startAnimation({...sharedAnimProps, callback: function({count: reverseCount}) {
                                             paths.z_axis.setPoints([
-                                                ...UnitVector.drawAxis({count: sharedAnimProps.to - count , HTMLCanvas})
+                                                ...UnitVector.drawAxis({count: (sharedAnimProps.to) - reverseCount , HTMLCanvas})
                                             ], Number(paths.z_axis.dataset.scaling))
                                         }});
 
