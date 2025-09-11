@@ -7,7 +7,7 @@ import { startAnimation } from '../modules/animations.js';
 export default class {
 
     /**
-     * DEV_TIP: Within `XMLSVG.ViewGroup.Container` call (see `default.registerContainersForSVG`), prefixing `options.id` value with a few exclamation mark (_one is enough, more improves readability_) will idiomatically opt-out from switch statement selection (see `default.drawPaths`)
+     * **DEV_TIP**: Within `XMLSVG.ViewGroup.Container` call (see `default.registerContainersForSVG`), prefixing `options.id` value with a few exclamation mark (_one is enough, more improves readability_) will idiomatically opt-out from switch statement selection (see `default.drawPaths`)
      * 
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
@@ -49,7 +49,7 @@ export default class {
         .of(...this.registerContainersForSVG({XMLSVG}))
         .on(
             
-            ({id}, containerCount)=>{
+            ({id})=>{
 
                 switch (id) {
 
@@ -131,7 +131,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    scaling: SNAP_TO_GRID * stage?.grid.GRIDCELL_DIM,
+                                                    scaling: 1 * stage.grid.GRIDCELL_DIM,
                                                     angle: 0,
                                                 }
                                             })
@@ -147,7 +147,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.y_axis,
                                                     fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: stage.grid.GRIDCELL_DIM + SNAP_TO_GRID,
+                                                    scaling: 1 * stage?.grid.GRIDCELL_DIM,
                                                     angle: 135
                                                 }
                                             })
@@ -163,7 +163,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.z_axis,
                                                     fillStroke: ENUMS.COLOR.red,
-                                                    scaling: SNAP_TO_GRID * stage?.grid.GRIDCELL_DIM,
+                                                    scaling: 1 * stage?.grid.GRIDCELL_DIM,
                                                     angle: -90
                                                 }
                                             })
@@ -173,53 +173,51 @@ export default class {
                                 
                             })
                         ], ({paths}) => {
-
-                            SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
                             
                             const sharedAnimProps = {duration: 10, from: 0, to: 180, iterations: Infinity}
                             
-                            function renderRest(count = 180) {
+                            function renderRest(count = sharedAnimProps.to) {
+
+                                SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
 
                                 paths.x_axis.setPoints([
-                                    ...UnitVector.drawAxis({count/* : sharedAnimProps.to */, HTMLCanvas})
-                                ], Number(paths.x_axis.dataset.scaling))
+                                    ...UnitVector.drawAxis({count, HTMLCanvas})
+                                ], 1);
                                 paths.y_axis.setPoints([
-                                    ...UnitVector.drawAxis({count/* : sharedAnimProps.to */, HTMLCanvas})
-                                ], Number(paths.y_axis.dataset.scaling))
+                                    ...UnitVector.drawAxis({count, HTMLCanvas})
+                                ], 1);
 
-
-                            } renderRest()
-                            
+                            } renderRest();
 
                             const animShift = startAnimation({...sharedAnimProps, callback: function({count}) {
 
                                     const reverseCountOnCondition = (c)=>{
-                                        if (c <= 90){
+                                        if (c <= sharedAnimProps.to/2){
                                             return ({
                                                 value: c
                                             })
                                         } else /* (c > 90) */ {
                                             return ({
-                                                value: 180 - c
+                                                value: sharedAnimProps.to - c
                                             })
                                         }
                                     }
                                 
                                     paths.z_axis.setPoints([
                                         ...UnitVector.drawAxis({count: reverseCountOnCondition(count).value, HTMLCanvas})
-                                    ], Number(paths.z_axis.dataset.scaling))
+                                    ])
                                                                         
                                     if (count === (sharedAnimProps.to)-1) {
 
                                         paths.z_axis.dataset.angle *= -1;
-                                        SVGList.from(paths).on( UnitVector.draw({HTMLCanvas, XMLSVG, ENUMS}) );
+                                        SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
 
-                                        renderRest(180);
+                                        renderRest(sharedAnimProps.to);
+                                        
                                         paths.z_axis.setPoints([
                                         ...UnitVector.drawAxis({count: reverseCountOnCondition(count).value, HTMLCanvas})
-                                        ], Number(paths.z_axis.dataset.scaling))
+                                        ])
                                         
-
                                     }
 
                             }});
