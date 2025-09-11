@@ -54,7 +54,7 @@ export default class {
 
         } else {
 
-            Views.drawPaths({HTMLCanvas, XMLSVG, ENUMS, userConfig});
+            Views.drawPaths({HTMLCanvas, XMLSVG, ENUMS});
 
         }
 

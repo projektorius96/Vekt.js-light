@@ -1,6 +1,6 @@
 export default class {
 
-    static draw({HTMLCanvas, XMLSVG, ENUMS}){
+    static draw({HTMLCanvas, XMLSVG, ENUMS, skew = { X: { phi: 0 } }}){
 
             return (
 
@@ -32,11 +32,7 @@ export default class {
                                         , 
                                         translateY: stage.grid.SVG.Y_IN_MIDDLE/*  - (height / 2) */
                                         ,
-                                        skew : {
-                                            X: {
-                                                phi: -45
-                                            }
-                                        }
+                                        skew
                                     })
                                 ).toString()
                             )
