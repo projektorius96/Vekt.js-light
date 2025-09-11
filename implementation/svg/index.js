@@ -180,49 +180,49 @@ export default class {
 
                                 SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
 
-                                paths.x_axis.setPoints([
-                                    ...UnitVector.drawAxis({count, HTMLCanvas})
-                                ], 1);
-                                paths.y_axis.setPoints([
-                                    ...UnitVector.drawAxis({count, HTMLCanvas})
-                                ], 1);
+                                // paths.x_axis.setPoints([
+                                //     ...UnitVector.drawAxis({count, HTMLCanvas})
+                                // ], 1);
+                                // paths.y_axis.setPoints([
+                                //     ...UnitVector.drawAxis({count, HTMLCanvas})
+                                // ], 1);
 
                             } renderRest();
 
-                            const animShift = startAnimation({...sharedAnimProps, callback: function({count}) {
+                            // const animShift = startAnimation({...sharedAnimProps, callback: function({count}) {
 
-                                    const reverseCountOnCondition = (c)=>{
-                                        if (c <= sharedAnimProps.to/2){
-                                            return ({
-                                                value: c
-                                            })
-                                        } else /* (c > 90) */ {
-                                            return ({
-                                                value: sharedAnimProps.to - c
-                                            })
-                                        }
-                                    }
+                            //         const reverseCountOnCondition = (c)=>{
+                            //             if (c <= sharedAnimProps.to/2){
+                            //                 return ({
+                            //                     value: c
+                            //                 })
+                            //             } else /* (c > 90) */ {
+                            //                 return ({
+                            //                     value: sharedAnimProps.to - c
+                            //                 })
+                            //             }
+                            //         }
                                 
-                                    paths.z_axis.setPoints([
-                                        ...UnitVector.drawAxis({count: reverseCountOnCondition(count).value, HTMLCanvas})
-                                    ])
+                            //         paths.z_axis.setPoints([
+                            //             ...UnitVector.drawAxis({count: reverseCountOnCondition(count).value, HTMLCanvas})
+                            //         ])
                                                                         
-                                    if (count === (sharedAnimProps.to)-1) {
+                            //         if (count === (sharedAnimProps.to)-1) {
 
-                                        paths.z_axis.dataset.angle *= -1;
-                                        SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
+                            //             paths.z_axis.dataset.angle *= -1;
+                            //             SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
 
-                                        renderRest(sharedAnimProps.to);
+                            //             renderRest(sharedAnimProps.to);
                                         
-                                        paths.z_axis.setPoints([
-                                        ...UnitVector.drawAxis({count: reverseCountOnCondition(count).value, HTMLCanvas})
-                                        ])
+                            //             paths.z_axis.setPoints([
+                            //             ...UnitVector.drawAxis({count: reverseCountOnCondition(count).value, HTMLCanvas})
+                            //             ])
                                         
-                                    }
+                            //         }
 
-                            }});
+                            // }});
                             
-                            /* animShift.pause() */// # [PASSING]
+                            // /* animShift.pause() */// # [PASSING]
 
                         });
                     break;
