@@ -179,13 +179,7 @@ export default class {
                             function renderRest(count = sharedAnimProps.to) {
 
                                 SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
-
-                                // paths.x_axis.setPoints([
-                                //     ...UnitVector.drawAxis({count, HTMLCanvas})
-                                // ], 1);
-                                // paths.y_axis.setPoints([
-                                //     ...UnitVector.drawAxis({count, HTMLCanvas})
-                                // ], 1);
+                                
 
                             } renderRest();
 

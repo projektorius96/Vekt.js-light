@@ -49,7 +49,7 @@ export default class UnitVector {
  * 
  * @param {Object} `callee` - callee is `XMLSVG.Views.Path` 
  */
-function drawAxis({HTMLCanvas, count = 1}) {
+function drawAxis({HTMLCanvas, count = 90}) {
 
     /**
      * @dependencies
@@ -58,13 +58,13 @@ function drawAxis({HTMLCanvas, count = 1}) {
         { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry
         ;
     
-
     /**
      * @alias
      */
     const OrderedPair = Array;
 
     const
+        // DEV_NOTE (!) # DO NOT TOUCH [HAVER_CIRCLE] configuration
         HAVER_CIRCLE = [0, 1, count]
         ,
         LIMIT_TO_0 = (1 / Number.MAX_SAFE_INTEGER)
@@ -74,8 +74,8 @@ function drawAxis({HTMLCanvas, count = 1}) {
         ...OrderedPair.from([
             ...setRange(...HAVER_CIRCLE).map((point) => {
                 return ({
-                    x: point/* /LIMIT_TO_0 */,
-                    y: 0
+                    x: Math.cos( HTMLCanvas.Helpers.Trigonometry.Converters.degToRad(point) )/*  - 1 */,
+                    y: LIMIT_TO_0 * Math.sin( HTMLCanvas.Helpers.Trigonometry.Converters.degToRad(point) )
                 });
             })
         ])
