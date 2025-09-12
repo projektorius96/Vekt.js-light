@@ -11,23 +11,40 @@ export default class {
      * 
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
-    static registerContainersForSVG({XMLSVG}){   
+    static registerContainersForSVG({XMLSVG}){
+        
+        const sharedOptions = {
+            scaling: 1,
+            id: ''
+        }
         
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
+                    ...sharedOptions,
+                    /**
+                     * @override
+                     */
                     id: 'parallelogram',
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
+                    ...sharedOptions,
+                    /**
+                     * @override
+                     */
                     id: 'axes',
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
+                    ...sharedOptions,
+                    /**
+                     * @override
+                     */
                     id: '!!!circle',
                 }
             })
@@ -134,7 +151,7 @@ export default class {
                     break;
 
                     case (ENUMS.CASE.axes) :
-
+                        
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
                             ...Array(3).fill(XMLSVG.Views.Path).map((axis, i)=>{
@@ -146,7 +163,7 @@ export default class {
                                     points: [
                                         ...UnitVector.drawAxis({
                                             HTMLCanvas
-                                        })
+                                        }),
                                     ],
                                     /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
                                     dashed: false,
@@ -202,7 +219,7 @@ export default class {
                                                     angle: -90
                                                 }
                                             })
-                                        )
+                                        );
                                     break;
                                 }
                                 
@@ -219,7 +236,50 @@ export default class {
                                 
                                 paths.y_axis.setPoints([
                                     ...UnitVector.drawAxis({count: 90, HTMLCanvas})
-                                ], Number( 1 * paths.z_axis.dataset.scaling * SNAP_TO_GRID ))
+                                ], Number( 1 * paths.y_axis.dataset.scaling ))
+
+                                void function z_axis(){
+
+                                    const                                   
+                                        { e: translateX, f: translateY } = paths.z_axis.transform.baseVal.getItem(0).matrix
+                                        ;
+                                    
+                                    const arrowHead
+                                        = new XMLSVG.Views.Path({
+                                            options: {
+                                                ...JSON.parse(paths.z_axis.dataset.options),
+                                                /**
+                                                 * @override
+                                                 */
+                                                id: `z_vector`, 
+                                                points: [
+                                                    ...UnitVector.addArrowHead({scaling: Number( paths.z_axis.dataset.scaling )})
+                                                ]
+                                            }
+                                            })
+                                        ;
+                                                                        
+                                    arrowHead.children.z_vector.setAttribute(
+                                        ENUMS.ATTRIBUTE.transform
+                                        , 
+                                        new DOMMatrix(
+                                            HTMLCanvas.Helpers.Trigonometry.setTransform({
+                                                angle: ( Number( paths.z_axis.dataset.angle ) )
+                                                , 
+                                                translateX: stage.grid.SVG.X_IN_MIDDLE
+                                                , 
+                                                translateY: stage.grid.SVG.Y_IN_MIDDLE - stage.grid.GRIDCELL_DIM
+                                            })
+                                        ).toString()
+                                    )
+                                    
+                                    paths.z_axis.getParent().insertAdjacentHTML(
+                                        'beforeend'
+                                        ,
+                                        arrowHead.children.z_vector.outerHTML
+                                    )
+                                    
+                                }();
                                 
 
                             }();

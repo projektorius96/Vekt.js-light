@@ -22,6 +22,7 @@ customElements.define(svg_container, class extends HTMLElement {
         if ( setStyling.call( super() , options) ) {
 
             this.id = options.id;
+            this.scaling = options.scaling;
 
             /**
              * > The following line makes `options` available within life cycle methods, e.g. `connectedCallback` accessed via `this.options`
@@ -38,6 +39,10 @@ customElements.define(svg_container, class extends HTMLElement {
 
             Object.assign(this, {
 
+                [METHOD.getContainer](){
+                    return this;
+                }
+                ,
                 [METHOD.setPaths](paths, callback){
                                     
                     let interpolatedHTML = "";
@@ -100,6 +105,12 @@ function setMixin(htmlcollection){
                             ,
                             [METHOD.setPoints](points, scalingFactor){                    
                                 this.attributes.d.value = setPoints.call(view, points, scalingFactor)
+                            }
+                            ,
+                            [METHOD.getParent](){                    
+                                return (
+                                    this?.parentElement
+                                )
                             }
                         }
                     ) ;
