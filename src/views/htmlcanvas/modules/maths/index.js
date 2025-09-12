@@ -1,4 +1,5 @@
 function skewXMatrix(phi, translateX, translateY) {
+    // signature: scaleX, skewX, skewY, scaleY, translateX, translateY
     return new DOMMatrix([
         1, 0, Math.tan(phi), 1, translateX, translateY
     ]);
@@ -6,11 +7,15 @@ function skewXMatrix(phi, translateX, translateY) {
 
 function skewYMatrix(phi, translateX, translateY) {
     return new DOMMatrix([
+        // signature: scaleX, skewX, skewY, scaleY, translateX, translateY
         1, Math.tan(phi), 0, 1, translateX, translateY
     ]);
 }
 
 /**
+ * @tutorial
+ * {@link https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Transformations}
+ * 
  * @param {Number} angle - user-friendly value in angle degrees
  * @param {Number} [x=0] - default component of ({x,y}) ordered pair  
  * @param {Number} [y=0] - default component of ({x,y}) ordered pair

@@ -1,5 +1,5 @@
 
-export default class UnitVector {
+export default class {
 
     static setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) {
 
@@ -67,15 +67,16 @@ function drawAxis({HTMLCanvas, count = 90}) {
         // DEV_NOTE (!) # DO NOT TOUCH [HAVER_CIRCLE] configuration
         HAVER_CIRCLE = [0, 1, count]
         ,
-        LIMIT_TO_0 = (1 / Number.MAX_SAFE_INTEGER)
+        LIM_TO_0 = (1 / Number.MAX_SAFE_INTEGER)
         ;
 
     return ([
         ...OrderedPair.from([
             ...setRange(...HAVER_CIRCLE).map((point) => {
                 return ({
-                    x: Math.cos( HTMLCanvas.Helpers.Trigonometry.Converters.degToRad(point) )/*  - 1 */,
-                    y: LIMIT_TO_0 * Math.sin( HTMLCanvas.Helpers.Trigonometry.Converters.degToRad(point) )
+                    // DEV_NOTE # Trigonometry co-function sin(Math.PI/2 - theta) = cos(theta)
+                    x: Math.sin( Math.PI/2 - Converters.degToRad(point) ),
+                    y: LIM_TO_0 * Math.sin( Converters.degToRad(point) )
                 });
             })
         ])

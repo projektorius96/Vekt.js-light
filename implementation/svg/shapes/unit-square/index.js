@@ -17,8 +17,8 @@ export default class {
 
                             const
                                 { setTransform } = HTMLCanvas.Helpers.Trigonometry
-                                ,
-                                { width, height } = path?.getBoundingClientRect()
+                                /* ,
+                                { width, height } = path?.getBoundingClientRect() */
                                 ;
                             
                             path.setAttribute(

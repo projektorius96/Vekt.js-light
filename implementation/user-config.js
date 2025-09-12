@@ -13,7 +13,7 @@ export
                         strokeStyle: ENUMS.COLOR.black,
                         hidden: !true,
                         dotted: /* ! */true,
-                        lineWidth: 2,
+                        lineWidth: 1,
                         opacity: 0.5
                     }
                 }

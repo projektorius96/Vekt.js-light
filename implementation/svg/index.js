@@ -1,8 +1,8 @@
-/* import './styles.css' */
+import './globals.css';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
-import { startAnimation } from '../modules/animations.js';
+import { startAnimation } from './modules/animations.js';
 
 export default class {
 
@@ -31,7 +31,9 @@ export default class {
                     id: '!!!circle',
                 }
             })
-        ])
+        ].map((container)=>{            
+            return container;
+        }))
 
     }
 
@@ -85,7 +87,7 @@ export default class {
                         ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
 
                     break;
-
+                    
                     case (ENUMS.CASE.parallelogram) :
 
                             XMLSVG.Helpers.findByID(id)
@@ -98,7 +100,7 @@ export default class {
                                         /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
                                         dashed: 0,
 
-                                        strokeWidth: 3,
+                                        strokeWidth: 1,
                                         fill: ENUMS.COLOR.grey,
                                         stroke: ENUMS.COLOR.black,
                                         stroke: 'black',
@@ -147,7 +149,7 @@ export default class {
                                         })
                                     ],
                                     /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
-                                    dashed: 0,
+                                    dashed: false,
                                     strokeWidth: 3,
                                     fillStroke: ENUMS.COLOR.magenta
                                 }
