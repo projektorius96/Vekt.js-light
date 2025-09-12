@@ -12,45 +12,27 @@ export default class {
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
     static registerContainersForSVG({XMLSVG}){
-        
-        const sharedOptions = {
-            scaling: 1,
-            id: ''
-        }
+    
         
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    ...sharedOptions,
-                    /**
-                     * @override
-                     */
                     id: 'parallelogram',
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    ...sharedOptions,
-                    /**
-                     * @override
-                     */
                     id: 'axes',
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    ...sharedOptions,
-                    /**
-                     * @override
-                     */
                     id: '!!!circle',
                 }
             })
-        ].map((container)=>{            
-            return container;
-        }))
+        ])
 
     }
 
@@ -224,11 +206,11 @@ export default class {
                                 }
                                 
                             })
-                        ], ({paths}) => {
+                        ], ({paths}, i) => {
 
                             SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
                             void function overridePaths(){
-
+                                
                                 // EXAMPLE # override direction of [paths.z_axis]
                                 // paths.z_axis.setPoints([
                                 //     ...UnitVector.drawAxis({/* count: 90, */ HTMLCanvas})
@@ -240,14 +222,14 @@ export default class {
 
                                 void function z_axis(){
 
-                                    const                                   
-                                        { e: translateX, f: translateY } = paths.z_axis.transform.baseVal.getItem(0).matrix
+                                    const
+                                        options = JSON.parse(paths.z_axis.dataset.options)
                                         ;
                                     
                                     const arrowHead
                                         = new XMLSVG.Views.Path({
                                             options: {
-                                                ...JSON.parse(paths.z_axis.dataset.options),
+                                                ...options,
                                                 /**
                                                  * @override
                                                  */
@@ -268,7 +250,7 @@ export default class {
                                                 , 
                                                 translateX: stage.grid.SVG.X_IN_MIDDLE
                                                 , 
-                                                translateY: stage.grid.SVG.Y_IN_MIDDLE - stage.grid.GRIDCELL_DIM
+                                                translateY: stage.grid.SVG.Y_IN_MIDDLE - options.scaling
                                             })
                                         ).toString()
                                     )
