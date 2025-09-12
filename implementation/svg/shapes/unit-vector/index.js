@@ -87,21 +87,18 @@ function drawAxis({HTMLCanvas, count = 90}) {
 
 }
 
-function addArrowHead({/* angleDeg,  */sharpness = 3, length = 1/4, scaling = 1}) {
-    
-    /* const angle = Converters.degToRad(angleDeg); */
+function addArrowHead({setTransform, PathBase, pathElement, arrowID, translation, sharpness = 4 /* 4 or less than 4, if you want great visual experience */, length = 4 /* 4 or greater, if you want great visual experience */}) {
 
     // Arrowhead points in *local coords* (pointing along +X axis)
     const baseShape = [
         { x: 0,    y: 0 },                       // tip of arrow
-        { x: -length, y:  length / sharpness },  // bottom wing
-        { x: -length, y: -length / sharpness },  // top wing
+        { x: -length * (1/stage.grid.GRIDCELL_DIM), y:  length * (1/stage.grid.GRIDCELL_DIM) / sharpness },  // bottom wing
+        { x: -length * (1/stage.grid.GRIDCELL_DIM), y: -length * (1/stage.grid.GRIDCELL_DIM) / sharpness },  // top wing
         { x: 0,    y: 0 },                       // explicitly closing the path
     ];
 
     // Rotate + Scale
-    return (
-        baseShape
+    const points = baseShape
         .map((point) => {
             return ({
                 // DEV_NOTE # This object of {x, y} pairs is nothing else than counter-clockwise matrix configuration for rotation transformation
@@ -110,13 +107,53 @@ function addArrowHead({/* angleDeg,  */sharpness = 3, length = 1/4, scaling = 1}
             });
         })
         .map((point) => {
+            const scaling = Number( pathElement.dataset.scaling );
             return ({
                 // DEV_NOTE # This object of {x, y} pairs is nothing else than counter-clockwise matrix configuration for rotation transformation
                 x: scaling * point.x,
                 y: scaling * point.y
             });
         })
-    )
+        
+        const 
+            options = JSON.parse(pathElement.dataset.options)
+            ,
+            // DEV_NOTE (!) # this [PathBase] will be constructed, whilst detached from DOM, so expected limited API calls support !
+            arrowHead
+            = new /* XMLSVG.Views.Path */PathBase({
+                options: {
+                    ...options,
+                    /**
+                     * @override
+                     */
+                    id: arrowID/* `z_vector` */, 
+                    points: [
+                        /* ...UnitVector.addArrowHead({scaling: Number( paths[options.id].dataset.scaling )}) */
+                        ...points
+                    ]
+                }
+                })
+            ;
+                                            
+        arrowHead.children[arrowID /* e.g. z_vector */].setAttribute(
+            'transform'
+            , 
+            new DOMMatrix(
+               /*  HTMLCanvas.Helpers.Trigonometry. */setTransform({
+                    angle: ( Number( pathElement.dataset.angle ) )
+                    ,
+                    ...translation
+                })
+            ).toString()
+        )
+        
+        pathElement.getParent().insertAdjacentHTML(
+            'beforeend'
+            ,
+            arrowHead.children[arrowID].outerHTML
+        )
+
+
 }
 
 

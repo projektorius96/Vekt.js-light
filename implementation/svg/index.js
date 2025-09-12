@@ -104,7 +104,7 @@ export default class {
                                         stroke: ENUMS.COLOR.black,
                                         stroke: 'black',
                                         opacity: 0.25,
-                                        scaling: stage?.grid.GRIDCELL_DIM * 1,
+                                        scaling: 2 * stage.grid.GRIDCELL_DIM,
                                         angle: 0,
                                         points: [
 
@@ -140,7 +140,7 @@ export default class {
 
                                 const sharedOptions = {
                                     id: '',
-                                    scaling: 1 * stage?.grid.GRIDCELL_DIM,
+                                    scaling: 2 * stage?.grid.GRIDCELL_DIM,
                                     angle: 0,
                                     points: [
                                         ...UnitVector.drawAxis({
@@ -165,7 +165,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    /* scaling: 1 * stage.grid.GRIDCELL_DIM, */
+                                                    scaling: sharedOptions.scaling,
                                                     angle: 0,
                                                 }
                                             })
@@ -181,7 +181,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.y_axis,
                                                     fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: 1 * stage?.grid.GRIDCELL_DIM * SNAP_TO_GRID,
+                                                    scaling: sharedOptions.scaling * SNAP_TO_GRID,
                                                     angle: 135
                                                 }
                                             })
@@ -197,7 +197,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.z_axis,
                                                     fillStroke: ENUMS.COLOR.red,
-                                                    scaling: 1 * stage?.grid.GRIDCELL_DIM,
+                                                    scaling: sharedOptions.scaling,
                                                     angle: -90
                                                 }
                                             })
@@ -206,63 +206,56 @@ export default class {
                                 }
                                 
                             })
-                        ], ({paths}, i) => {
+                        ], ({paths}) => {
 
                             SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
-                            void function overridePaths(){
-                                
-                                // EXAMPLE # override direction of [paths.z_axis]
-                                // paths.z_axis.setPoints([
-                                //     ...UnitVector.drawAxis({/* count: 90, */ HTMLCanvas})
-                                // ], Number( -1 * paths.z_axis.dataset.scaling ))
-                                
-                                paths.y_axis.setPoints([
-                                    ...UnitVector.drawAxis({count: 90, HTMLCanvas})
-                                ], Number( 1 * paths.y_axis.dataset.scaling ))
 
-                                void function z_axis(){
+                            /**
+                             * @override
+                             */
+                            void function (){
 
-                                    const
-                                        options = JSON.parse(paths.z_axis.dataset.options)
-                                        ;
-                                    
-                                    const arrowHead
-                                        = new XMLSVG.Views.Path({
-                                            options: {
-                                                ...options,
-                                                /**
-                                                 * @override
-                                                 */
-                                                id: `z_vector`, 
-                                                points: [
-                                                    ...UnitVector.addArrowHead({scaling: Number( paths.z_axis.dataset.scaling )})
-                                                ]
-                                            }
-                                            })
-                                        ;
-                                                                        
-                                    arrowHead.children.z_vector.setAttribute(
-                                        ENUMS.ATTRIBUTE.transform
-                                        , 
-                                        new DOMMatrix(
-                                            HTMLCanvas.Helpers.Trigonometry.setTransform({
-                                                angle: ( Number( paths.z_axis.dataset.angle ) )
-                                                , 
-                                                translateX: stage.grid.SVG.X_IN_MIDDLE
-                                                , 
-                                                translateY: stage.grid.SVG.Y_IN_MIDDLE - options.scaling
-                                            })
-                                        ).toString()
-                                    )
-                                    
-                                    paths.z_axis.getParent().insertAdjacentHTML(
-                                        'beforeend'
-                                        ,
-                                        arrowHead.children.z_vector.outerHTML
-                                    )
-                                    
-                                }();
-                                
+                                /* === VECTORS === */
+
+                                    const sharedDependencies = {
+                                        setTransform: HTMLCanvas.Helpers.Trigonometry.setTransform, 
+                                        PathBase: XMLSVG.Views.Path, 
+                                    }
+
+                                    UnitVector.addArrowHead({
+                                        ...sharedDependencies,
+                                        pathElement: paths.x_axis, 
+                                        arrowID: ENUMS.PRINT.x_vector,
+                                        translation: {
+                                            translateX: stage.grid.SVG.X_IN_MIDDLE + Number( paths.x_axis.dataset.scaling )
+                                            , 
+                                            translateY: stage.grid.SVG.Y_IN_MIDDLE
+                                        },
+                                    });
+
+                                    UnitVector.addArrowHead({
+                                        ...sharedDependencies,
+                                        pathElement: paths.y_axis, 
+                                        arrowID: ENUMS.PRINT.y_vector,
+                                        translation: {
+                                            translateX: stage.grid.SVG.X_IN_MIDDLE - Number( paths.y_axis.dataset.scaling / SNAP_TO_GRID )
+                                            , 
+                                            translateY: stage.grid.SVG.Y_IN_MIDDLE + Number( paths.y_axis.dataset.scaling / SNAP_TO_GRID )
+                                        },
+                                    });
+
+                                    UnitVector.addArrowHead({
+                                        ...sharedDependencies,
+                                        pathElement: paths.z_axis, 
+                                        arrowID: ENUMS.PRINT.z_vector,
+                                        translation: {
+                                            translateX: stage.grid.SVG.X_IN_MIDDLE
+                                            , 
+                                            translateY: stage.grid.SVG.Y_IN_MIDDLE - Number( paths.z_axis.dataset.scaling )
+                                        },
+                                    });
+
+                                /* === VECTORS === */
 
                             }();
 
