@@ -130,11 +130,11 @@ function addArrowHead({setTransform, PathBase, pathElement, arrowID, translation
                 })
             ;
                                             
-        arrowHead.children[arrowID /* e.g. z_vector */].setAttribute(
+        arrowHead.children[arrowID].setAttribute(
             'transform'
             , 
             new DOMMatrix(
-               /*  HTMLCanvas.Helpers.Trigonometry. */setTransform({
+                setTransform({
                     angle: ( Number( pathElement.dataset.angle ) )
                     ,
                     ...translation

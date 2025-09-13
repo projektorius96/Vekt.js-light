@@ -2,7 +2,7 @@ import './globals.css';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
-/* import { startAnimation } from './modules/animations.js'; */
+import { startAnimation } from './modules/animations.js';
 
 export default class {
 
@@ -225,7 +225,7 @@ export default class {
                             /**
                              * @override
                              */
-                            void function (){
+                            void function overridePaths(){
 
                                 /* === VECTORS === */
 
@@ -268,6 +268,15 @@ export default class {
                                     });
 
                                 /* === VECTORS === */
+
+                                void function overrideVectors(){
+
+                                    // paths.z_axis.dataset.scaling *= -1
+                                    // paths.z_axis.dataset.angle += -Converters.radToDeg(Math.PI/2)
+
+                                    // SVGList.from(paths.z_axis).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
+                                    
+                                }();
 
                             }();
 
