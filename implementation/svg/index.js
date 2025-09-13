@@ -127,7 +127,7 @@ export default class {
                                 })
                             ]
                             , 
-                            ({paths}) => SVGList.from(paths).on( UnitSquare.draw({HTMLCanvas, XMLSVG, ENUMS, skew: { X: { phi: -45 } }}) )
+                            ({paths}) => SVGList.from(paths).on( UnitSquare.draw( { Helpers: HTMLCanvas.Helpers, skew: { X: { phi: -45 } } } ) )
                             );
                         
                     break;
@@ -153,7 +153,7 @@ export default class {
                                         angle: 0,
                                         points: [
                                             ...UnitVector.drawAxis({
-                                                HTMLCanvas,
+                                                Helpers: HTMLCanvas.Helpers,
                                                 /* count: animationConfig.count */
                                             })
                                         ],
@@ -183,7 +183,6 @@ export default class {
                                     break;
                                     case 2:
                                         const Q3 = Converters.radToDeg(Math.PI/4);
-                                        
                                         return (
                                             axis = new axis({
                                                 options: {
@@ -200,8 +199,7 @@ export default class {
                                         )
                                     break;
                                     case 3:
-                                        
-                                        /* return ( */
+                                        return (
                                             axis = new axis({
                                                 options: {
                                                     ...sharedOptions,
@@ -214,92 +212,34 @@ export default class {
                                                     angle: -90
                                                 }
                                             })
-                                        /* ); */
-
-                                        return axis;
+                                        );
                                     break;
                                 }
                                 
                             })
                         ], ({paths}) => {
 
-                            SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
+                            const Helpers = HTMLCanvas.Helpers;
 
-                            paths.z_axis.setPoints([
-                                ...UnitVector.drawAxis({HTMLCanvas}),
-                                ...UnitVector.addArrowHead({}).map((point)=>{
-                                    return({
-                                        x: ( Number(paths.z_axis.dataset.scaling) * point.x ) + paths.z_axis.getPoints().at(0).x,
-                                        y: ( Number(paths.z_axis.dataset.scaling) * point.y ) + paths.z_axis.getPoints().at(0).y,
-                                    })
-                                })
-                            ])
+                            /**
+                             * @global
+                             */
+                            SVGList.from(paths).on( UnitVector.setTransfromPoints({Helpers}) );
 
-                            paths.z_axis.setAttribute(
-                                ENUMS.ATTRIBUTE.transform
-                                , 
-                                new DOMMatrix(
-                                    HTMLCanvas.Helpers.Trigonometry.setTransform({
-                                        angle: ( Number( /* paths.z_axis.dataset.angle */90 ) )
-                                        , 
-                                        translateX: stage.grid.SVG.X_IN_MIDDLE
-                                        , 
-                                        translateY: stage.grid.SVG.Y_IN_MIDDLE
-                                    })
-                                ).toString()
-                            )
-                            
+                            /**
+                             * @override
+                             */
+                            Array.from(paths).on((path)=>{
 
-                            // /**
-                            //  * @override
-                            //  */
-                            // void function overridePaths(){
+                                path.setPoints([
+                                    ...UnitVector.drawAxis({Helpers}),
+                                    ...UnitVector.addArrowHead({Helpers, path, angle: 0})
+                                ]);
 
-                            //     /* === VECTORS === */
-
-                            //         const sharedDependencies = {
-                            //             setTransform: HTMLCanvas.Helpers.Trigonometry.setTransform, 
-                            //             PathBase: XMLSVG.Views.Path, 
-                            //         }
-
-                            //         UnitVector.addArrowHead({
-                            //             ...sharedDependencies,
-                            //             pathElement: paths.x_axis, 
-                            //             arrowID: ENUMS.PRINT.x_vector,
-                            //             translation: {
-                            //                 translateX: stage.grid.SVG.X_IN_MIDDLE + Number( paths.x_axis.dataset.scaling )
-                            //                 , 
-                            //                 translateY: stage.grid.SVG.Y_IN_MIDDLE
-                            //             },
-                            //         });
-
-                            //         UnitVector.addArrowHead({
-                            //             ...sharedDependencies,
-                            //             pathElement: paths.y_axis, 
-                            //             arrowID: ENUMS.PRINT.y_vector,
-                            //             translation: {
-                            //                 translateX: stage.grid.SVG.X_IN_MIDDLE - Number( paths.y_axis.dataset.scaling / SNAP_TO_GRID )
-                            //                 , 
-                            //                 translateY: stage.grid.SVG.Y_IN_MIDDLE + Number( paths.y_axis.dataset.scaling / SNAP_TO_GRID )
-                            //             },
-                            //         });
-
-                            //         UnitVector.addArrowHead({
-                            //             ...sharedDependencies,
-                            //             pathElement: paths.z_axis, 
-                            //             arrowID: ENUMS.PRINT.z_vector,
-                            //             translation: {
-                            //                 translateX: stage.grid.SVG.X_IN_MIDDLE
-                            //                 , 
-                            //                 translateY: stage.grid.SVG.Y_IN_MIDDLE - Number( paths.z_axis.dataset.scaling )
-                            //             },
-                            //         });
-
-                            //     /* === VECTORS === */
-
-                            // }();
+                            })
 
                         });
+
                     break;
                 }
         

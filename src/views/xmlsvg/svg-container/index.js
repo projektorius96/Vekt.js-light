@@ -104,6 +104,7 @@ function setMixin(htmlcollection){
                             ,
                             [METHOD.setPoints](points, scalingFactor){                    
                                 this.attributes.d.value = setPoints.call(view, points, scalingFactor)
+                                return true;
                             }
                             ,
                             [METHOD.getParent](){                    

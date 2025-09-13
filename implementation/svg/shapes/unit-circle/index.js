@@ -1,43 +1,44 @@
 export default class {
 
-    static draw({HTMLCanvas, XMLSVG, ENUMS}){
+    static draw({Helpers}){
 
-            return (
+        return (
 
-                ({id})=>{
+            ({id})=>{
+                
 
-                    const path = XMLSVG.Helpers.findByID( id );
-                        
-                        void function initPoints() {
+                const path = document.getElementById( id );
+                    
+                if ( path.setPoints( path.getPoints() ) ) {
 
-                            path.setPoints( path.getPoints(), path.dataset.scaling ?? 1 );
+                    /**
+                     * @dependencies
+                     */
+                    const 
+                        { Trigonometry } = Helpers
+                        ;
 
-                        }();
-                        void function transformPoints() {
+                    const
+                        { width } = path?.getBoundingClientRect()
+                        ;
+                    
+                    path.setAttribute(
+                        'transform'
+                        ,
+                        new DOMMatrix(
+                            Trigonometry.setTransform({
+                                angle: ( path.dataset.angle || 0 )
+                                , 
+                                translateX: stage.grid.SVG.X_IN_MIDDLE + (width / 2)
+                                ,
+                                translateY: stage.grid.SVG.Y_IN_MIDDLE
+                            })
+                        ).toString()
+                    )
 
-                                const
-                                    { setTransform } = HTMLCanvas.Helpers.Trigonometry
-                                    ,
-                                    { width, height } = path?.getBoundingClientRect()
-                                    ;
-                                
-                                path.setAttribute(
-                                    ENUMS.ATTRIBUTE.transform
-                                    ,
-                                    new DOMMatrix(
-                                        setTransform({
-                                            angle: ( path.dataset.angle || 0 )
-                                            , 
-                                            translateX: stage.grid.SVG.X_IN_MIDDLE + (width / 2)
-                                            ,
-                                            translateY: stage.grid.SVG.Y_IN_MIDDLE
-                                        })
-                                    ).toString()
-                                )
-
-                        }();
+                }
             }
-        
         );
     }
+
 }
