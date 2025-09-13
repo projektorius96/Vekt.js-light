@@ -10,7 +10,7 @@ export default class {
                         
                         void function initPoints() {
 
-                            path.setPoints( path.parsePoints(), path.dataset.scaling ?? 1 );
+                            path.setPoints( path.getPoints(), path.dataset.scaling ?? 1 );
 
                         }();
                         void function transformPoints() {

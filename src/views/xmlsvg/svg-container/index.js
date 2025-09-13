@@ -82,7 +82,7 @@ function setMixin(htmlcollection){
                             /**
                              * @see `<root>\\src\\views\\xmlsvg\\svg-path\\index.js` for its getter equivalent under `this.#serializePoints` call
                              */
-                            [METHOD.parsePoints](){
+                            [METHOD.getPoints](){
                                 return (
                                     this.dataset.points
                                     .split(",")
@@ -93,13 +93,12 @@ function setMixin(htmlcollection){
                                         }
                                     })
                                     .filter(Boolean)
-                                );
-                            }
-                            ,
-                            // DEV_NOTE # can be use in tandem with [METHOD.parsePoints], the latter will convert points representation to Array.prototype, instead of String.prototype
-                            [METHOD.getPoints](){
-                                return (
-                                    this.attributes.d.value
+                                    .map((point)=>{
+                                        return({
+                                            x: Number(this.dataset.scaling) * point.x,
+                                            y: Number(this.dataset.scaling) * point.y,
+                                        })
+                                    })
                                 );
                             }
                             ,

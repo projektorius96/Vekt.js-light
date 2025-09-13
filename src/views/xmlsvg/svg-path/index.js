@@ -75,7 +75,7 @@ customElements.define(svg_path, class extends HTMLElement {
     }
 
     /**
-     * @see `<root>\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.parsePoints]` namespace
+     * @see `<root>\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.getPoints]` namespace
      */
     #serializePoints(options) {        
 

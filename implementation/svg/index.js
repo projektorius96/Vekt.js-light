@@ -154,8 +154,8 @@ export default class {
                                         points: [
                                             ...UnitVector.drawAxis({
                                                 HTMLCanvas,
-                                                count: animationConfig.count
-                                            }),
+                                                /* count: animationConfig.count */
+                                            })
                                         ],
                                         /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
                                         dashed: false,
@@ -200,7 +200,8 @@ export default class {
                                         )
                                     break;
                                     case 3:
-                                        return (
+                                        
+                                        /* return ( */
                                             axis = new axis({
                                                 options: {
                                                     ...sharedOptions,
@@ -213,7 +214,9 @@ export default class {
                                                     angle: -90
                                                 }
                                             })
-                                        );
+                                        /* ); */
+
+                                        return axis;
                                     break;
                                 }
                                 
@@ -222,63 +225,79 @@ export default class {
 
                             SVGList.from(paths).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
 
-                            /**
-                             * @override
-                             */
-                            void function overridePaths(){
+                            paths.z_axis.setPoints([
+                                ...UnitVector.drawAxis({HTMLCanvas}),
+                                ...UnitVector.addArrowHead({}).map((point)=>{
+                                    return({
+                                        x: ( Number(paths.z_axis.dataset.scaling) * point.x ) + paths.z_axis.getPoints().at(0).x,
+                                        y: ( Number(paths.z_axis.dataset.scaling) * point.y ) + paths.z_axis.getPoints().at(0).y,
+                                    })
+                                })
+                            ])
 
-                                /* === VECTORS === */
+                            paths.z_axis.setAttribute(
+                                ENUMS.ATTRIBUTE.transform
+                                , 
+                                new DOMMatrix(
+                                    HTMLCanvas.Helpers.Trigonometry.setTransform({
+                                        angle: ( Number( /* paths.z_axis.dataset.angle */90 ) )
+                                        , 
+                                        translateX: stage.grid.SVG.X_IN_MIDDLE
+                                        , 
+                                        translateY: stage.grid.SVG.Y_IN_MIDDLE
+                                    })
+                                ).toString()
+                            )
+                            
 
-                                    const sharedDependencies = {
-                                        setTransform: HTMLCanvas.Helpers.Trigonometry.setTransform, 
-                                        PathBase: XMLSVG.Views.Path, 
-                                    }
+                            // /**
+                            //  * @override
+                            //  */
+                            // void function overridePaths(){
 
-                                    UnitVector.addArrowHead({
-                                        ...sharedDependencies,
-                                        pathElement: paths.x_axis, 
-                                        arrowID: ENUMS.PRINT.x_vector,
-                                        translation: {
-                                            translateX: stage.grid.SVG.X_IN_MIDDLE + Number( paths.x_axis.dataset.scaling )
-                                            , 
-                                            translateY: stage.grid.SVG.Y_IN_MIDDLE
-                                        },
-                                    });
+                            //     /* === VECTORS === */
 
-                                    UnitVector.addArrowHead({
-                                        ...sharedDependencies,
-                                        pathElement: paths.y_axis, 
-                                        arrowID: ENUMS.PRINT.y_vector,
-                                        translation: {
-                                            translateX: stage.grid.SVG.X_IN_MIDDLE - Number( paths.y_axis.dataset.scaling / SNAP_TO_GRID )
-                                            , 
-                                            translateY: stage.grid.SVG.Y_IN_MIDDLE + Number( paths.y_axis.dataset.scaling / SNAP_TO_GRID )
-                                        },
-                                    });
+                            //         const sharedDependencies = {
+                            //             setTransform: HTMLCanvas.Helpers.Trigonometry.setTransform, 
+                            //             PathBase: XMLSVG.Views.Path, 
+                            //         }
 
-                                    UnitVector.addArrowHead({
-                                        ...sharedDependencies,
-                                        pathElement: paths.z_axis, 
-                                        arrowID: ENUMS.PRINT.z_vector,
-                                        translation: {
-                                            translateX: stage.grid.SVG.X_IN_MIDDLE
-                                            , 
-                                            translateY: stage.grid.SVG.Y_IN_MIDDLE - Number( paths.z_axis.dataset.scaling )
-                                        },
-                                    });
+                            //         UnitVector.addArrowHead({
+                            //             ...sharedDependencies,
+                            //             pathElement: paths.x_axis, 
+                            //             arrowID: ENUMS.PRINT.x_vector,
+                            //             translation: {
+                            //                 translateX: stage.grid.SVG.X_IN_MIDDLE + Number( paths.x_axis.dataset.scaling )
+                            //                 , 
+                            //                 translateY: stage.grid.SVG.Y_IN_MIDDLE
+                            //             },
+                            //         });
 
-                                /* === VECTORS === */
+                            //         UnitVector.addArrowHead({
+                            //             ...sharedDependencies,
+                            //             pathElement: paths.y_axis, 
+                            //             arrowID: ENUMS.PRINT.y_vector,
+                            //             translation: {
+                            //                 translateX: stage.grid.SVG.X_IN_MIDDLE - Number( paths.y_axis.dataset.scaling / SNAP_TO_GRID )
+                            //                 , 
+                            //                 translateY: stage.grid.SVG.Y_IN_MIDDLE + Number( paths.y_axis.dataset.scaling / SNAP_TO_GRID )
+                            //             },
+                            //         });
 
-                                void function overrideVectors(){
+                            //         UnitVector.addArrowHead({
+                            //             ...sharedDependencies,
+                            //             pathElement: paths.z_axis, 
+                            //             arrowID: ENUMS.PRINT.z_vector,
+                            //             translation: {
+                            //                 translateX: stage.grid.SVG.X_IN_MIDDLE
+                            //                 , 
+                            //                 translateY: stage.grid.SVG.Y_IN_MIDDLE - Number( paths.z_axis.dataset.scaling )
+                            //             },
+                            //         });
 
-                                    // paths.z_axis.dataset.scaling *= -1
-                                    // paths.z_axis.dataset.angle += -Converters.radToDeg(Math.PI/2)
+                            //     /* === VECTORS === */
 
-                                    // SVGList.from(paths.z_axis).on( UnitVector.setTransfromPoints({HTMLCanvas, XMLSVG, ENUMS}) );
-                                    
-                                }();
-
-                            }();
+                            // }();
 
                         });
                     break;
