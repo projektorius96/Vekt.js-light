@@ -20,7 +20,7 @@ export class XMLSVG {
         },
         findByName(svg_name, self = 0){
             return (
-                document.getElementsByName(svg_name).item(self)
+                document?.getElementsByName(svg_name)?.item(self)
             )
         }
     }

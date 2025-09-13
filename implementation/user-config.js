@@ -13,33 +13,8 @@ export
                         strokeStyle: ENUMS.COLOR.black,
                         hidden: !true,
                         dotted: /* ! */true,
-                        lineWidth: 2,
+                        lineWidth: 1,
                         opacity: 0.5
-                    }
-                }
-            }
-            ,
-            svg: {
-                paths: {
-                    unit_square: {
-                        options: {
-                            id: ENUMS.PRINT.unit_square,
-                            hidden: !true,
-                            /* herein: dashed := [1.0..10]; to disable, pass either := 0|false */
-                            dashed: 0,
-                            points: [
-                                ...[{x: 0, y: 0}],
-                                ...[{x: 1, y: 0}],
-                                ...[{x: 1, y: 0.5}],
-                                ...[{x: 0, y: 0.5}],
-                                ...[{x: 0, y: 0}],
-                            ],
-                            strokeWidth: 3,
-                            fill: ENUMS.COLOR.grey,
-                            stroke: ENUMS.COLOR.black,
-                            stroke: 'black',
-                            opacity: 0.25
-                        }
                     }
                 }
             }

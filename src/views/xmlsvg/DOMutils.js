@@ -8,5 +8,11 @@ Object.defineProperties(SVGElement.prototype, {
             return this.children
         }
     }
+    ,
+    'container' : {
+        get(){
+            return this.parentElement
+        }
+    }
 });
 

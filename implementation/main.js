@@ -15,11 +15,18 @@ export default class {
 
             if ( stage ) {
 
-                stage.append(...[
+                stage.appendChild(
                     new HTMLCanvas.ViewGroup.Layer({...userConfig.canvas.layers.grid})
-                    ,
+                );
+
+                // DEV_NOTE # checks if [Views] has the [Views.registerContainersForSVG] implemented, and only if implemented, calls
+                if ('registerContainersForSVG' in Views) {
+
+                    stage.append(
                     ...Views.registerContainersForSVG({XMLSVG})
-                ]);
+                    );
+
+                }
 
             return stage;
 
@@ -54,7 +61,14 @@ export default class {
 
         } else {
 
-            Views.drawPaths({HTMLCanvas, XMLSVG, ENUMS, userConfig});
+            // DEV_NOTE # likewise, checks if [Views] has the [Views.drawPaths] implemented, and only if implemented, calls
+            if ('drawPaths' in Views) {
+
+                Views.drawPaths({HTMLCanvas, XMLSVG, ENUMS});
+
+            }
+
+            
 
         }
 

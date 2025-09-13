@@ -22,6 +22,7 @@ customElements.define(svg_container, class extends HTMLElement {
         if ( setStyling.call( super() , options) ) {
 
             this.id = options.id;
+            this.scaling = options.scaling;
 
             /**
              * > The following line makes `options` available within life cycle methods, e.g. `connectedCallback` accessed via `this.options`
@@ -38,6 +39,10 @@ customElements.define(svg_container, class extends HTMLElement {
 
             Object.assign(this, {
 
+                [METHOD.getContainer](){
+                    return this;
+                }
+                ,
                 [METHOD.setPaths](paths, callback){
                                     
                     let interpolatedHTML = "";
@@ -77,9 +82,8 @@ function setMixin(htmlcollection){
                             /**
                              * @see `<root>\\src\\views\\xmlsvg\\svg-path\\index.js` for its getter equivalent under `this.#serializePoints` call
                              */
-                            [METHOD.parsePoints](){
-                                return(
-                                    /* this.getAttribute("data-points") */// alternatively we access via `dataset`
+                            [METHOD.getPoints](){
+                                return (
                                     this.dataset.points
                                     .split(",")
                                     .map(Number)
@@ -89,29 +93,24 @@ function setMixin(htmlcollection){
                                         }
                                     })
                                     .filter(Boolean)
+                                    .map((point)=>{
+                                        return({
+                                            x: Number(this.dataset.scaling) * point.x,
+                                            y: Number(this.dataset.scaling) * point.y,
+                                        })
+                                    })
                                 );
                             }
                             ,
-                            [METHOD.getPoints](){
-                                return(
-                                    this.attributes.d.value
-                                );
-                            }
-                            ,
-                            [METHOD.setPoints](points, scalingFactor){                      
+                            [METHOD.setPoints](points, scalingFactor){                    
                                 this.attributes.d.value = setPoints.call(view, points, scalingFactor)
+                                return true;
                             }
                             ,
-                            [METHOD.getTranslate](){
-                                    return view.getAttribute(ATTR.transform)
-                            }
-                            ,
-                            [METHOD.setTranslate]({translateX = 0, translateY = 0}){
-                                    view.setAttribute(
-                                        ATTR.transform
-                                        ,
-                                        `${ATTR.translate}(${translateX},${translateY})`
-                                    )
+                            [METHOD.getParent](){                    
+                                return (
+                                    this?.parentElement
+                                )
                             }
                         }
                     ) ;

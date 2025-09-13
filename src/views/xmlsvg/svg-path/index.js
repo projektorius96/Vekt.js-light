@@ -8,7 +8,7 @@ const COLOR = ENUM;
 export const svg_path = getNamespace(import.meta.url);
 customElements.define(svg_path, class extends HTMLElement {
     
-    constructor({options}) {
+    constructor({options = {}}) {
 
         if ( super() ) {
             [
@@ -16,7 +16,13 @@ customElements.define(svg_path, class extends HTMLElement {
                 , 
                 this.#serializePoints
             ].forEach((f)=>f.call(this, options));
-        }        
+        }
+        
+        Object.assign(SVGPathElement, {
+            store: {
+                [options.id] : options
+            }
+        })
 
     }
 
@@ -49,6 +55,7 @@ customElements.define(svg_path, class extends HTMLElement {
                         ['data-angle',    ( options.angle  || 0 )],
                         ['data-skew_x',  ( options.skew_x  || 0 )],
                         ['data-skew_y',  ( options.skew_y  || 0 )],
+                        ['data-options',  JSON.stringify(options)],
                     ])
                 }
             )
@@ -68,11 +75,11 @@ customElements.define(svg_path, class extends HTMLElement {
     }
 
     /**
-     * @see `<root>\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.parsePoints]` namespace
+     * @see `<root>\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.getPoints]` namespace
      */
-    #serializePoints(options) {
+    #serializePoints(options) {        
 
-        this.children[options.id].setAttribute("data-points", options.points.map(({x, y})=>[x, y].join(",").trim()));
+        this.children[options.id].dataset.points = options.points.map(({x, y})=>[x, y].join(",").trim());
 
         return;
 
