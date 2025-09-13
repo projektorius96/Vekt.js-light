@@ -66,7 +66,7 @@ function drawAxis({HTMLCanvas, count = 90}) {
 
     const
         // DEV_NOTE (!) # DO NOT TOUCH [HAVER_CIRCLE] configuration
-        HAVER_CIRCLE = [0, 1, count]
+        HAVER_CIRCLE = [0, 1, count/* *2 */]
         ,
         LIM_TO_0 = (1 / Number.MAX_SAFE_INTEGER)
         ;
@@ -88,24 +88,21 @@ function drawAxis({HTMLCanvas, count = 90}) {
 }
 
 function addArrowHead({setTransform, PathBase, pathElement, arrowID, translation, sharpness = 4 /* 4 or less than 4, if you want great visual experience */, length = 4 /* 4 or greater, if you want great visual experience */}) {
-
+    
+    const 
+            options = JSON.parse(pathElement.dataset.options)
+        ;
+    
     // Arrowhead points in *local coords* (pointing along +X axis)
     const baseShape = [
-        { x: 0,    y: 0 },                       // tip of arrow
+        { x: 0, y: 0 },                       // tip of arrow
         { x: -length * (1/stage.grid.GRIDCELL_DIM), y:  length * (1/stage.grid.GRIDCELL_DIM) / sharpness },  // bottom wing
         { x: -length * (1/stage.grid.GRIDCELL_DIM), y: -length * (1/stage.grid.GRIDCELL_DIM) / sharpness },  // top wing
-        { x: 0,    y: 0 },                       // explicitly closing the path
-    ];
+        { x: 0, y: 0 },                       // explicitly closing the path
+    ];    
 
-    // Rotate + Scale
+    // Scale
     const points = baseShape
-        .map((point) => {
-            return ({
-                // DEV_NOTE # This object of {x, y} pairs is nothing else than counter-clockwise matrix configuration for rotation transformation
-                x: point.x * Math.cos(/* angle */0) - point.y * Math.sin(/* angle */0),
-                y: point.x * Math.sin(/* angle */0) + point.y * Math.cos(/* angle */0)
-            });
-        })
         .map((point) => {
             const scaling = Number( pathElement.dataset.scaling );
             return ({
@@ -116,8 +113,6 @@ function addArrowHead({setTransform, PathBase, pathElement, arrowID, translation
         })
         
         const 
-            options = JSON.parse(pathElement.dataset.options)
-            ,
             // DEV_NOTE (!) # this [PathBase] will be constructed, whilst detached from DOM, so expected limited API calls support !
             arrowHead
             = new /* XMLSVG.Views.Path */PathBase({

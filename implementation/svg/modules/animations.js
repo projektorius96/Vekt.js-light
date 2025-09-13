@@ -1,5 +1,5 @@
 // CREDITS : Kudos to Copilot (ChatGPT-5) for help writing this logic
-export function startAnimation({ from = 0, to = 1, duration = 1000, iterations = 1, callback }) {
+/* export  */function startAnimation({ from = 0, to = 1, duration = 1000, iterations = 1, callback }) {
 
     const ac_namespace = 'animation-counter';
     if (!(customElements.get(ac_namespace))) {
@@ -76,6 +76,8 @@ export function startAnimation({ from = 0, to = 1, duration = 1000, iterations =
 }
 
 // let anim = startAnimation({
+//     to: 90,
+//     iterations: Infinity,
 //     callback: function({count}){
 //         console.log(count)
 //     }

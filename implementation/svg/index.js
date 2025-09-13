@@ -2,7 +2,7 @@ import './globals.css';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
-import { startAnimation } from './modules/animations.js';
+/* import { startAnimation } from './modules/animations.js'; */
 
 export default class {
 
@@ -100,11 +100,11 @@ export default class {
                                         dashed: 0,
 
                                         strokeWidth: 1,
-                                        fill: ENUMS.COLOR.grey,
+                                        fill: ENUMS.COLOR.orange,
                                         stroke: ENUMS.COLOR.black,
                                         stroke: 'black',
                                         opacity: 0.25,
-                                        scaling: 2 * stage.grid.GRIDCELL_DIM,
+                                        scaling: 2 * window.innerWidth/* stage.grid.GRIDCELL_DIM */,
                                         angle: 0,
                                         points: [
 
@@ -132,26 +132,36 @@ export default class {
                         
                     break;
 
-                    case (ENUMS.CASE.axes) :
+                    case (ENUMS.CASE.axes) :                    
                         
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
                             ...Array(3).fill(XMLSVG.Views.Path).map((axis, i)=>{
 
-                                const sharedOptions = {
-                                    id: '',
-                                    scaling: 2 * stage?.grid.GRIDCELL_DIM,
-                                    angle: 0,
-                                    points: [
-                                        ...UnitVector.drawAxis({
-                                            HTMLCanvas
-                                        }),
-                                    ],
-                                    /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
-                                    dashed: false,
-                                    strokeWidth: 3,
-                                    fillStroke: ENUMS.COLOR.magenta
-                                }
+                                const
+                                    animationConfig = {
+                                        count: 90
+                                    }
+                                    ,
+                                    scalar = 3
+                                    ,
+                                    scaling = (scalar * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( animationConfig.count ) ) )
+                                    ,
+                                    sharedOptions = {
+                                        id: '',
+                                        scaling,
+                                        angle: 0,
+                                        points: [
+                                            ...UnitVector.drawAxis({
+                                                HTMLCanvas,
+                                                count: animationConfig.count
+                                            }),
+                                        ],
+                                        /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
+                                        dashed: false,
+                                        strokeWidth: 3,
+                                        fillStroke: ENUMS.COLOR.magenta
+                                    }
                                 
                                 const step = ++i;
                                 switch (step) {
@@ -165,13 +175,15 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    scaling: sharedOptions.scaling,
+                                                    scaling: (scalar * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( 90 ) ) ),
                                                     angle: 0,
                                                 }
                                             })
                                         )
                                     break;
                                     case 2:
+                                        const Q3 = Converters.radToDeg(Math.PI/4);
+                                        
                                         return (
                                             axis = new axis({
                                                 options: {
@@ -181,8 +193,8 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.y_axis,
                                                     fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: sharedOptions.scaling * SNAP_TO_GRID,
-                                                    angle: 135
+                                                    scaling: (scalar * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( Q3 ) ) ),
+                                                    angle: Number(3 * Q3)
                                                 }
                                             })
                                         )
