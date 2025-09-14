@@ -48,7 +48,11 @@ export default class {
         const 
             [SVGList, OrderedPair] = Array(2).fill(Array);
         
-        const SNAP_TO_GRID = 1 / Math.sin(Math.PI/4);
+        const 
+            GROW_ALONG_SLOPE = 1 / Math.sin(Math.PI/4)
+            ,
+            SCALAR = 3
+            ;
 
         const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
 
@@ -99,12 +103,12 @@ export default class {
                                         /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
                                         dashed: 0,
 
-                                        strokeWidth: 1,
-                                        fill: ENUMS.COLOR.orange,
+                                        strokeWidth: 0,
+                                        fill: ENUMS.COLOR.grey,
                                         stroke: ENUMS.COLOR.black,
                                         stroke: 'black',
                                         opacity: 0.25,
-                                        scaling: 2 * window.innerWidth/* stage.grid.GRIDCELL_DIM */,
+                                        scaling: stage.grid.GRIDCELL_DIM,
                                         angle: 0,
                                         points: [
 
@@ -122,7 +126,12 @@ export default class {
                                             ...OrderedPair.from([{x: 0, y: 0}]),
                                         /* === ZERO VECTOR (closes the path) === */
                                         
-                                        ]
+                                        ].map((basis)=>{
+                                            return({
+                                                x: basis.x * SCALAR,
+                                                y: basis.y * GROW_ALONG_SLOPE,
+                                            })
+                                        })
                                     }
                                 })
                             ]
@@ -143,9 +152,7 @@ export default class {
                                         count: 90
                                     }
                                     ,
-                                    scalar = 3
-                                    ,
-                                    scaling = (scalar * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( animationConfig.count ) ) )
+                                    scaling = (SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( animationConfig.count ) ) )
                                     ,
                                     sharedOptions = {
                                         id: '',
@@ -172,7 +179,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    scaling: (scalar * stage.grid.GRIDCELL_DIM)/*  * ( Math.sin( Converters.degToRad( 90 ) ) ) */,
+                                                    scaling: (SCALAR * stage.grid.GRIDCELL_DIM)/*  * ( Math.sin( Converters.degToRad( 90 ) ) ) */,
                                                     angle: 0,
                                                 }
                                             })
@@ -189,7 +196,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.y_axis,
                                                     fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: (scalar * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( Q3 ) ) ),
+                                                    scaling: (SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.cos( Math.PI/4 ) ),
                                                     angle: Number(3 * Q3)
                                                 }
                                             })
@@ -233,7 +240,7 @@ export default class {
                             const
                                 animConfig = {
                                     from: 0,
-                                    to: 90*2,
+                                    to: 360,
                                     duration: 10,
                                     iterations: Infinity
                                 }
@@ -252,7 +259,7 @@ export default class {
                                         }
                                     }
                                                                         
-                                    if ( count === animConfig.to-1 ) {                                    
+                                    if ( count === animConfig.to-1 ) {
                                         
                                         paths.z_axis.setPoints([
                                         ...UnitVector.drawVector({
