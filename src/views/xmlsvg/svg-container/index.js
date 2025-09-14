@@ -102,7 +102,7 @@ function setMixin(htmlcollection){
                                 );
                             }
                             ,
-                            [METHOD.setPoints](points, scalingFactor){                    
+                            [METHOD.setPoints](points, scalingFactor = 1){                                                    
                                 this.attributes.d.value = setPoints.call(view, points, scalingFactor)
                                 return true;
                             }

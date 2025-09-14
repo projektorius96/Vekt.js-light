@@ -1,5 +1,5 @@
 // CREDITS : Kudos to Copilot (ChatGPT-5) for help writing this logic
-export function startAnimation({ from = 0, to = 1, duration = 1000, iterations = 1, callback }) {
+export function startAnimation({ from = 0, to = 180, duration = 100, iterations = Infinity, callback }) {
 
     const ac_namespace = 'animation-counter';
     if (!(customElements.get(ac_namespace))) {
@@ -47,7 +47,7 @@ export function startAnimation({ from = 0, to = 1, duration = 1000, iterations =
             if (tick > lastTick) {
                 lastTick = tick;
                 count++;
-                if (count === to) {
+                if (count === to) {                    
                     /* animation.cancel() */
                     /* animation.play() */
                     // DEV_NOTE # instead, do the following:..

@@ -7,8 +7,6 @@ import { startAnimation } from './modules/animations.js';
 export default class {
 
     /**
-     * **DEV_TIP**: Within `XMLSVG.ViewGroup.Container` call (see `default.registerContainersForSVG`), prefixing `options.id` value with a few exclamation mark (_one is enough, more improves readability_) will idiomatically opt-out from switch statement selection (see `default.drawPaths`)
-     * 
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
     static registerContainersForSVG({XMLSVG}){
@@ -29,7 +27,7 @@ export default class {
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: '!!!circle',
+                    id: 'hide:circle',
                 }
             })
         ])
@@ -48,7 +46,11 @@ export default class {
         const 
             [SVGList, OrderedPair] = Array(2).fill(Array);
         
-        const SNAP_TO_GRID = 1 / Math.sin(Math.PI/4);
+        const 
+            GROW_ALONG_SLOPE = 1 / Math.sin(Math.PI/4)
+            ,
+            SCALAR = 3
+            ;
 
         const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
 
@@ -83,7 +85,7 @@ export default class {
                                     stroke: ENUMS.COLOR.purple,
                                 }
                             })
-                        ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
+                        ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({Helpers: HTMLCanvas.Helpers, XMLSVG, ENUMS}) ));
 
                     break;
                     
@@ -99,12 +101,12 @@ export default class {
                                         /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
                                         dashed: 0,
 
-                                        strokeWidth: 1,
-                                        fill: ENUMS.COLOR.orange,
+                                        strokeWidth: 0,
+                                        fill: ENUMS.COLOR.grey,
                                         stroke: ENUMS.COLOR.black,
                                         stroke: 'black',
                                         opacity: 0.25,
-                                        scaling: 2 * window.innerWidth/* stage.grid.GRIDCELL_DIM */,
+                                        scaling: stage.grid.GRIDCELL_DIM,
                                         angle: 0,
                                         points: [
 
@@ -122,7 +124,12 @@ export default class {
                                             ...OrderedPair.from([{x: 0, y: 0}]),
                                         /* === ZERO VECTOR (closes the path) === */
                                         
-                                        ]
+                                        ].map((basis)=>{
+                                            return({
+                                                x: basis.x * SCALAR,
+                                                y: basis.y * GROW_ALONG_SLOPE,
+                                            })
+                                        })
                                     }
                                 })
                             ]
@@ -143,19 +150,14 @@ export default class {
                                         count: 90
                                     }
                                     ,
-                                    scalar = 3
-                                    ,
-                                    scaling = (scalar * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( animationConfig.count ) ) )
+                                    scaling = (SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( animationConfig.count ) ) )
                                     ,
                                     sharedOptions = {
                                         id: '',
                                         scaling,
                                         angle: 0,
                                         points: [
-                                            ...UnitVector.drawAxis({
-                                                Helpers: HTMLCanvas.Helpers,
-                                                /* count: animationConfig.count */
-                                            })
+                                            {x: 1, y: 0}
                                         ],
                                         /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
                                         dashed: false,
@@ -175,7 +177,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    scaling: (scalar * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( 90 ) ) ),
+                                                    scaling: (SCALAR * stage.grid.GRIDCELL_DIM)/*  * ( Math.sin( Converters.degToRad( 90 ) ) ) */,
                                                     angle: 0,
                                                 }
                                             })
@@ -192,7 +194,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.y_axis,
                                                     fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: (scalar * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( Q3 ) ) ),
+                                                    scaling: (SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.cos( Math.PI/4 ) ),
                                                     angle: Number(3 * Q3)
                                                 }
                                             })
@@ -222,21 +224,66 @@ export default class {
                             const Helpers = HTMLCanvas.Helpers;
 
                             /**
-                             * @global
-                             */
-                            SVGList.from(paths).on( UnitVector.setTransfromPoints({Helpers}) );
-
-                            /**
                              * @override
                              */
                             Array.from(paths).on((path)=>{
 
+                                // DEV_TIP # pass {0 | false} to [length] to hide arrow heads of line segment (or vector)
                                 path.setPoints([
-                                    ...UnitVector.drawAxis({Helpers}),
-                                    ...UnitVector.addArrowHead({Helpers, path, angle: 0})
-                                ]);
+                                    ...UnitVector.drawVector({Helpers, path /* , length: false */})
+                                ], 1);
 
                             })
+
+                            const
+                                animConfig = {
+                                    from: 0,
+                                    to: 360,
+                                    duration: 10,
+                                    iterations: Infinity
+                                }
+                                ,
+                                animShift = startAnimation({...animConfig, callback: function({count}) {
+                                    
+                                    const reverseCountOnCondition = (c)=>{
+                                        if (c < animConfig.to){
+                                            return ({
+                                                value: c
+                                            })
+                                        } else {
+                                            return ({
+                                                value: animConfig.to - c
+                                            })
+                                        }
+                                    }
+                                                                        
+                                    if ( count === animConfig.to-1 ) {
+                                        
+                                        paths.z_axis.setPoints([
+                                        ...UnitVector.drawVector({
+                                            /* count: reverseCountOnCondition(count).value, */
+                                            Helpers, 
+                                            path: paths.z_axis,
+                                            /* length: false */
+                                        })
+                                    ], -1 *  Math.sin( Converters.degToRad( reverseCountOnCondition(count).value ) ))
+
+                                    } else {
+
+                                        paths.z_axis.setPoints([
+                                        ...UnitVector.drawVector({
+                                            /* count: reverseCountOnCondition(count).value, */
+                                            Helpers, 
+                                            path: paths.z_axis,
+                                            /* length: false */
+                                        })
+                                    ], 1 *  Math.cos( Converters.degToRad( reverseCountOnCondition(count).value ) )) 
+
+                                    }
+
+                            }});
+                            
+                            /* animShift.pause() */// # [PASSING]
 
                         });
 
