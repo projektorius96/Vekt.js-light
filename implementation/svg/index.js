@@ -152,10 +152,7 @@ export default class {
                                         scaling,
                                         angle: 0,
                                         points: [
-                                            ...UnitVector.drawAxis({
-                                                Helpers: HTMLCanvas.Helpers,
-                                                /* count: animationConfig.count */
-                                            })
+                                            {x: 1, y: 0}
                                         ],
                                         /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
                                         dashed: false,
@@ -175,7 +172,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    scaling: (scalar * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( 90 ) ) ),
+                                                    scaling: (scalar * stage.grid.GRIDCELL_DIM)/*  * ( Math.sin( Converters.degToRad( 90 ) ) ) */,
                                                     angle: 0,
                                                 }
                                             })
@@ -222,21 +219,67 @@ export default class {
                             const Helpers = HTMLCanvas.Helpers;
 
                             /**
-                             * @global
-                             */
-                            SVGList.from(paths).on( UnitVector.setTransfromPoints({Helpers}) );
-
-                            /**
                              * @override
                              */
                             Array.from(paths).on((path)=>{
 
+                                // DEV_TIP # pass {0 | false} to [length] to hide arrow heads of line segment (or vector)
                                 path.setPoints([
-                                    ...UnitVector.drawAxis({Helpers}),
-                                    ...UnitVector.addArrowHead({Helpers, path, angle: 0})
-                                ]);
+                                    ...UnitVector.drawVector({Helpers, path /* , length: false */})
+                                ], 1);
 
                             })
+
+                            const
+                                animConfig = {
+                                    from: 0,
+                                    to: 90*2,
+                                    duration: 10,
+                                    iterations: Infinity
+                                }
+                                ,
+                                animShift = startAnimation({...animConfig, callback: function({count}) {
+                                    
+                                    const reverseCountOnCondition = (c)=>{
+                                        if (c < animConfig.to){
+                                            return ({
+                                                value: c
+                                            })
+                                        } else {
+                                            return ({
+                                                value: animConfig.to - c
+                                            })
+                                        }
+                                    }
+                                                                        
+                                    if ( count === animConfig.to-1 ) {                                    
+                                        
+                                        paths.z_axis.setPoints([
+                                        ...UnitVector.drawVector({
+                                            /* count: reverseCountOnCondition(count).value, */
+                                            Helpers, 
+                                            path: paths.z_axis,
+                                            /* length: false */
+                                        })
+                                    ], -1 *  Math.sin( Converters.degToRad( reverseCountOnCondition(count).value ) ))
+
+                                    } else {
+
+                                        paths.z_axis.setPoints([
+                                        ...UnitVector.drawVector({
+                                            /* count: reverseCountOnCondition(count).value, */
+                                            Helpers, 
+                                            path: paths.z_axis,
+                                            /* length: false */
+                                        })
+                                    ], 1 *  Math.cos( Converters.degToRad( reverseCountOnCondition(count).value ) )) 
+
+                                    }
+
+                            }});
+                            
+                            /* animShift.pause() */// # [PASSING]
+
 
                         });
 

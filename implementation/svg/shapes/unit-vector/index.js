@@ -39,73 +39,33 @@ export default class {
 
     }
 
-    static [drawAxis.name] = drawAxis;
-    static [addArrowHead.name] = addArrowHead;
+    static [drawVector.name] = drawVector;
 
 }
 
-/**
- * 
- * @param {Object} `callee` - callee is `XMLSVG.Views.Path` 
- */
-function drawAxis({Helpers, count = 90}) {
-
+function drawVector({Helpers, path, angle, count, sharpness = 6, length = 1/6}) {
+    
     /**
      * @dependencies
      */
     const 
         { Trigonometry } = Helpers
-        ,
-        { Converters, setRange } = Trigonometry
         ;
-    
-    /**
-     * @alias
-     */
-    const OrderedPair = Array;
-
-    const
-        // DEV_NOTE (!) # DO NOT TOUCH [HAVER_CIRCLE] configuration
-        HAVER_CIRCLE = [0, 1, count/* *2 */]
-        ;
-
-    return ([
-        ...OrderedPair.from([
-            ...setRange(...HAVER_CIRCLE).map((point) => {
-                return ({
-                    // DEV_NOTE # trigonometry co-function: sin(Math.PI/2 - theta) = cos(theta)
-                    x: Math.sin( Math.PI/2 - Converters.degToRad(point) ),
-                    y: 0
-                });
-            })
-        ])
-        ,
-    ]);
-
-}
-
-function addArrowHead({Helpers, path, angle, sharpness = 6, length = 1/6}) {
-    
+        
     // DEV_NOTE # arrowhead points in local coordinates system (pointing along positive X axis)
     const baseShape = [
+        {x: 1, y: 0},
         { x:0, y:0 },                            // tip of arrow
         { x: -length, y:  length / sharpness },  // bottom wing
         { x: -length, y: -length / sharpness },  // top wing
         { x:0, y:0 },                            // explicitly closing the path
     ]   // Scale + offset 
-    .map((point)=>{
+    .map((point)=>{        
             return({
-                x: ( Number( path.dataset.scaling ) * point.x ) + path.getPoints()[0]['x'],
-                y: ( Number( path.dataset.scaling ) * point.y ) + path.getPoints()[0]['y'],
+                x: (( Number( path.dataset.scaling ) * point.x ) + path.getPoints().at(-1)['x']/* + translationX */),
+                y: (( Number( path.dataset.scaling ) * point.y ) + path.getPoints().at(-1)['y']/* + translationY */),
             })
     });
-
-    /**
-     * @dependencies
-     */
-    const 
-        { Trigonometry } = Helpers
-        ;
     
     path.setAttribute(
         'transform'
