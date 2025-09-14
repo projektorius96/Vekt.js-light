@@ -7,8 +7,6 @@ import { startAnimation } from './modules/animations.js';
 export default class {
 
     /**
-     * **DEV_TIP**: Within `XMLSVG.ViewGroup.Container` call (see `default.registerContainersForSVG`), prefixing `options.id` value with a few exclamation mark (_one is enough, more improves readability_) will idiomatically opt-out from switch statement selection (see `default.drawPaths`)
-     * 
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
     static registerContainersForSVG({XMLSVG}){
@@ -29,7 +27,7 @@ export default class {
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: '!!!circle',
+                    id: 'hide:circle',
                 }
             })
         ])
@@ -87,7 +85,7 @@ export default class {
                                     stroke: ENUMS.COLOR.purple,
                                 }
                             })
-                        ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({HTMLCanvas, XMLSVG, ENUMS}) ));
+                        ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({Helpers: HTMLCanvas.Helpers, XMLSVG, ENUMS}) ));
 
                     break;
                     
@@ -286,7 +284,6 @@ export default class {
                             }});
                             
                             /* animShift.pause() */// # [PASSING]
-
 
                         });
 
