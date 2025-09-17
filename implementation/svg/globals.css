@@ -3,3 +3,10 @@ svg-container {
     scale: 1;
 
 }
+
+/* Ideally, I'd love to see this done via JavaScript */
+svg[name="circle"] {
+
+    transform: rotate(333deg)
+    
+}

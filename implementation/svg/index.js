@@ -15,7 +15,7 @@ export default class {
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'parallelogram',
+                    id: 'hide:parallelogram',
                 }
             })
             ,
@@ -27,7 +27,7 @@ export default class {
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'hide:circle',
+                    id: 'circle',
                 }
             })
         ])
@@ -69,7 +69,7 @@ export default class {
                             new XMLSVG.Views.Path({
                                 options: {
                                     id: ENUMS.PRINT.unit_circle,
-                                    scaling: stage?.grid.GRIDCELL_DIM * 2.0,
+                                    scaling: stage?.grid.GRIDCELL_DIM * 2 * GROW_ALONG_SLOPE,
                                     points: [
                                         ...setRange(0, 1, 360 * 2).map((deg)=>{
                                             return {
@@ -81,11 +81,12 @@ export default class {
                                     /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
                                     dashed: 0,
                                     strokeWidth: 3,
-                                    fill: ENUMS.COLOR.none,
-                                    stroke: ENUMS.COLOR.purple,
+                                    /* fill: ENUMS.COLOR.orange, */
+                                    stroke: ENUMS.COLOR.black,
+                                    angle: 0
                                 }
                             })
-                        ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({Helpers: HTMLCanvas.Helpers, XMLSVG, ENUMS}) ));
+                        ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({XMLSVG, ENUMS, Helpers: HTMLCanvas.Helpers, skew: { X: { phi: 55 } }}) ));
 
                     break;
                     
@@ -177,7 +178,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    scaling: (SCALAR * stage.grid.GRIDCELL_DIM)/*  * ( Math.sin( Converters.degToRad( 90 ) ) ) */,
+                                                    scaling: (2*SCALAR * stage.grid.GRIDCELL_DIM),
                                                     angle: 0,
                                                 }
                                             })
