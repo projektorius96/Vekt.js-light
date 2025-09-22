@@ -85,7 +85,14 @@ export default class {
                                     stroke: ENUMS.COLOR.purple,
                                 }
                             })
-                        ], ({paths}) => SVGList.from(paths).on( UnitCircle.draw({Helpers: HTMLCanvas.Helpers, XMLSVG, ENUMS}) ));
+                        ]
+                        , 
+                        ({paths})=>SVGList.from(paths).on((path)=>{
+
+                            UnitCircle.draw({Helpers: HTMLCanvas.Helpers, path, XMLSVG, ENUMS})
+
+                        })
+                        );
 
                     break;
                     
@@ -134,7 +141,11 @@ export default class {
                                 })
                             ]
                             , 
-                            ({paths}) => SVGList.from(paths).on( UnitSquare.draw( { Helpers: HTMLCanvas.Helpers, skew: { X: { phi: -45 } } } ) )
+                            ({paths}) => SVGList.from(paths).on((path)=>{
+
+                                UnitSquare.draw( { Helpers: HTMLCanvas.Helpers, path, skew: { X: { phi: -45 } } } )
+
+                            })
                             );
                         
                     break;
@@ -226,7 +237,7 @@ export default class {
                             /**
                              * @override
                              */
-                            Array.from(paths).on((path)=>{
+                            SVGList.from(paths).on((path)=>{
 
                                 // DEV_TIP # pass {0 | false} to [length] to hide arrow heads of line segment (or vector)
                                 path.setPoints([
