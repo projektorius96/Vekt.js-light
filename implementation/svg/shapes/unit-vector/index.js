@@ -43,7 +43,7 @@ export default class {
 
 }
 
-function drawVector({Helpers, path, angle, count, sharpness = 6, length = 1/6}) {
+function drawVector({Helpers, path, angle, sharpness = 6, length = 1/6}) {
     
     /**
      * @dependencies
