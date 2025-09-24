@@ -78,8 +78,10 @@ export default class {
                                             }
                                         })
                                     ],
-                                    /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
+
+                                    /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
                                     dashed: 0,
+
                                     strokeWidth: 3,
                                     fill: ENUMS.COLOR.none,
                                     stroke: ENUMS.COLOR.purple,
@@ -170,7 +172,9 @@ export default class {
                                         points: [
                                             {x: 1, y: 0}
                                         ],
-                                        /* DEV_NOTE # herein: dashed := [1.0..10]; to disable, pass either := 0|false */
+
+                                        /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
+
                                         dashed: false,
                                         strokeWidth: 3,
                                         fillStroke: ENUMS.COLOR.magenta
@@ -272,7 +276,6 @@ export default class {
                                         
                                         paths.z_axis.setPoints([
                                         ...UnitVector.drawVector({
-                                            /* count: reverseCountOnCondition(count).value, */
                                             Helpers, 
                                             path: paths.z_axis,
                                             /* length: false */
@@ -283,7 +286,6 @@ export default class {
 
                                         paths.z_axis.setPoints([
                                         ...UnitVector.drawVector({
-                                            /* count: reverseCountOnCondition(count).value, */
                                             Helpers, 
                                             path: paths.z_axis,
                                             /* length: false */

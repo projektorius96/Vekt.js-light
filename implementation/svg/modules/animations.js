@@ -75,10 +75,11 @@ export function startAnimation({ from = 0, to = 180, duration = 100, iterations 
 
 }
 
-// let anim = startAnimation({
-//     to: 90,
-//     iterations: Infinity,
-//     callback: function({count}){
-//         console.log(count)
-//     }
-// })
+/* // DEV_NOTE # [PASSING]
+startAnimation({
+    to: 90,
+    iterations: Infinity,
+    callback: function({count}){
+        console.log(count)
+    }
+}) */
