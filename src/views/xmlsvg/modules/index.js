@@ -60,3 +60,47 @@ export function setPoints(points = [], scalingFactor = 1) {
     return d;
 
 }
+
+/**
+ * Draw a transform-safe, baseline-aligned label on your SVG viewport.
+ *
+ * @param {SVGSVGElement} svg       The <svg> root
+ * @param {Number} x                X coordinate in your coordinate system
+ * @param {Number} y                Y coordinate in your coordinate system
+ * @param {String} text             The text to show (e.g. 'x', 'θ', 'Δv')
+ * @param {Object} [opts]           Optional style overrides
+ *   @param {String} opts.fontFamily Default: 'serif'
+ *   @param {Number} opts.fontSize   Default: 16
+ *   @param {String} opts.fontStyle  Default: 'italic'
+ *   @param {String} opts.fill       Default: 'black'
+ *   @param {Number} opts.dy         Fine-tune baseline offset (e.g. 0.1em)
+ *   @param {Number} opts.scale      Apply local scale transform (default 1)
+ */
+export function drawLabel({svg, text, x, y, scale = 1, overrides = {}}) {
+
+    const {
+        dominantBaseline = 'alphabetic',
+        textAnchor = 'middle',
+        fontFamily = 'serif',
+        fontStyle = 'italic',
+        fill = 'black',
+        fontSize = 16,
+        dy = '0em',
+    } = overrides;
+
+    // Create text element
+    const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        t.setAttribute('transform', `translate(${x}, ${y}) scale(${scale})`);
+        t.setAttribute('text-anchor', textAnchor);
+        t.setAttribute('dominant-baseline', dominantBaseline);
+        t.setAttribute('font-family', fontFamily);
+        t.setAttribute('font-size', fontSize);
+        t.setAttribute('font-style', fontStyle);
+        t.setAttribute('fill', fill);
+        t.setAttribute('dy', dy);
+        t.textContent = text;
+
+    svg.appendChild(/* g */t);
+    return /* g */t;
+
+}

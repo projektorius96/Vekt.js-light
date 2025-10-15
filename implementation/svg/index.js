@@ -49,7 +49,8 @@ export default class {
         const 
             GROW_ALONG_SLOPE = 1 / Math.sin(Math.PI/4)
             ,
-            SCALAR = 3
+            /* DEV_NOTE (!) # DO NOT change the `GLOBAL_SCALAR`, it must remain constant for `parallelogram` to outline nicely, instead scale in `globals.css` */
+            GLOBAL_SCALAR = 3
             ;
 
         const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
@@ -135,7 +136,7 @@ export default class {
                                         
                                         ].map((basis)=>{
                                             return({
-                                                x: basis.x * SCALAR,
+                                                x: basis.x * GLOBAL_SCALAR,
                                                 y: basis.y * GROW_ALONG_SLOPE,
                                             })
                                         })
@@ -163,7 +164,7 @@ export default class {
                                         count: 90
                                     }
                                     ,
-                                    scaling = (SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( animationConfig.count ) ) )
+                                    scaling = (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( animationConfig.count ) ) )
                                     ,
                                     sharedOptions = {
                                         id: '',
@@ -192,7 +193,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    scaling: (SCALAR * stage.grid.GRIDCELL_DIM)/*  * ( Math.sin( Converters.degToRad( 90 ) ) ) */,
+                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM)/*  * ( Math.sin( Converters.degToRad( 90 ) ) ) */,
                                                     angle: 0,
                                                 }
                                             })
@@ -209,7 +210,7 @@ export default class {
                                                      */
                                                     id: ENUMS.PRINT.y_axis,
                                                     fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: (SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.cos( Math.PI/4 ) ),
+                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.cos( Math.PI/4 ) ),
                                                     angle: Number(3 * Q3)
                                                 }
                                             })
@@ -247,6 +248,33 @@ export default class {
                                 path.setPoints([
                                     ...UnitVector.drawVector({Helpers, path /* , length: false */})
                                 ], 1);
+
+                                /* === LABELS === */
+
+                                        let 
+                                            TEXT_SPACING = 10
+                                            ,
+                                            { e: x, f: y } = path.getCurrentMatrix();
+
+                                        /**
+                                         * @override
+                                         */
+                                        switch (true) {
+                                            case ( path.id === ENUMS.ID.z_axis ) :
+                                                y -= Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                            break;
+                                            case ( path.id === ENUMS.ID.x_axis ) :
+                                                x += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                            break;
+                                            case ( path.id === ENUMS.ID.y_axis ) :
+                                                x -= Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING;
+                                                y += Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING;
+                                            break;
+                                        }
+                                    
+                                    path.setLabel({x, y, svg: path.getParent(), text: path.id.replace("_axis", "").toUpperCase(), overrides: { fill: path.style.stroke }})
+                                    
+                                /* === LABELS === */
 
                             })
 
