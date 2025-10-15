@@ -22,13 +22,13 @@ const
  * @alias
  */
 const
-    [COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, PRINT] = Array(6).fill(ENUM)
+    [COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, PRINT, ID] = Array(7).fill(ENUM)
     ;
 
 export
     const
         ENUMS = Object.freeze({
-            COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, PRINT
+            COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, PRINT, ID
         })
         ;
 

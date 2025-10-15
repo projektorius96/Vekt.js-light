@@ -1,5 +1,5 @@
 import setStyling from './index.css.js'
-import { ENUM, getNamespace, setCoords, setPoints } from "../modules/index.js";
+import { ENUM, getNamespace, setCoords, setPoints, drawLabel } from "../modules/index.js";
 
 /**
  * @alias
@@ -10,8 +10,6 @@ const [
     CASE
     ,
     METHOD
-    ,
-    ATTR
 ] = Array(4).fill(ENUM);
 
 export const svg_container = getNamespace(import.meta.url);
@@ -111,6 +109,22 @@ function setMixin(htmlcollection){
                                 return (
                                     this?.parentElement
                                 )
+                            }
+                            ,
+                            [METHOD.setLabel](/* arguments */){
+                                
+                                return (
+                                    drawLabel(...arguments)
+                                );
+                                
+                            }
+                            ,
+                            [METHOD.getCurrentMatrix](){
+                                
+                                return (
+                                    this.transform.baseVal.consolidate().matrix
+                                );
+                                
                             }
                         }
                     ) ;
