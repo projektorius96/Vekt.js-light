@@ -1,9 +1,9 @@
 import './globals.css';
 import { CONSTANTS } from './globals.js';
+import AnimationCounter from './modules/animations.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
-import { startAnimation } from './modules/animations.js';
 
 export default class {
 
@@ -47,9 +47,11 @@ export default class {
         const 
             [SVGList, OrderedPair] = Array(2).fill(Array);
         
-        const { SLOPE_TERSER, GLOBAL_SCALAR, GROW_ALONG_SLOPE } = CONSTANTS;
-
-        const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
+        const 
+            { SLOPE_TERSER, GLOBAL_SCALAR, GROW_ALONG_SLOPE } = CONSTANTS
+            ,
+            { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry
+            ;
 
         SVGList
         .of(...this.registerContainersForSVG({XMLSVG}))
@@ -110,7 +112,6 @@ export default class {
                                         strokeWidth: 0,
                                         fill: ENUMS.COLOR.grey,
                                         stroke: ENUMS.COLOR.black,
-                                        stroke: 'black',
                                         opacity: 0.25,
                                         scaling: stage.grid.GRIDCELL_DIM,
                                         angle: 0,
@@ -180,6 +181,7 @@ export default class {
                                 
                                 const step = ++i; // DEV_NOTE # zero+1 based "integers"
                                 switch (step) {
+
                                     case 1:
                                         return (
                                             axis = new axis({
@@ -195,8 +197,9 @@ export default class {
                                                     angle: 0,
                                                 }
                                             })
-                                        )
+                                        );
                                     break;
+
                                     case 2:
                                         const Q3 = Converters.radToDeg(Math.PI/4);
                                         return (
@@ -213,8 +216,9 @@ export default class {
                                                     angle: Number(3 * Q3)
                                                 }
                                             })
-                                        )
+                                        );
                                     break;
+
                                     case 3:
                                         return (
                                             axis = new axis({
@@ -232,6 +236,7 @@ export default class {
                                             })
                                         );
                                     break;
+
                                 }
                                 
                             })
@@ -254,8 +259,8 @@ export default class {
                                         let 
                                             TEXT_SPACING = 10
                                             ,
-                                            { e: x, f: y } = path.getCurrentMatrix();
-
+                                            { e: x, f: y } = path.getCurrentMatrix()
+                                            ;
                                         /**
                                          * @override
                                          */
@@ -268,7 +273,7 @@ export default class {
                                             break;
                                             case ( path.id === ENUMS.ID.y_axis ) :
                                                 x -= Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING;
-                                                y += Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING;
+                                                y += Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING * 2;
                                             break;
                                         }
                                     
@@ -277,7 +282,9 @@ export default class {
                                      * 
                                      * NOTE: _this is more-less de-facto (if not standardised) font size for majority of modern browser vendors._
                                      */
-                                    const defaultFontSize = 16;
+                                    const defaultVendorFontSize = window
+                                            .getComputedStyle(document.documentElement)
+                                            .getPropertyValue('font-size').replace(CSS.px.name, "");
                                     path.setLabel({
                                         x, 
                                         y, 
@@ -285,7 +292,7 @@ export default class {
                                         text: path.id.replace("_axis", "").toUpperCase(), 
                                         overrides: { 
                                             fill: path.style.stroke, 
-                                            scale: stage.grid.GRIDCELL_DIM / (2 * defaultFontSize)
+                                            scale: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize),
                                         }
                                     })
                                     
@@ -301,7 +308,7 @@ export default class {
                                     iterations: Infinity
                                 }
                                 ,
-                                animShift = startAnimation({...animConfig, callback: function({count}) {
+                                animCounter = AnimationCounter({...animConfig, callback: function({count}) {
                                     
                                     const reverseCountOnCondition = (c)=>{
                                         if (c < animConfig.to) {
@@ -339,7 +346,16 @@ export default class {
 
                             }});
                             
-                            /* animShift.pause() */// # [PASSING]
+                            /* animCounter.pause(); */// # [PASSING]
+                            /* animCounter.play(); */// # [PASSING]
+
+                            /**
+                             * > **NOTE:** Exposing [animCounter] to play|pause from DevTools with ease. 
+                             * 
+                             * @global
+                             * @var
+                             */
+                            globalThis.animCounter = animCounter;
 
                         });
 

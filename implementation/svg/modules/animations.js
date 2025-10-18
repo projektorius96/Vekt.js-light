@@ -6,7 +6,7 @@
  * 
  * @returns {Animation} animation
  */
-export function startAnimation({ from = 0, to = 180, duration = 100, iterations = Infinity, callback }) {
+export default function startAnimation({ from = 0, to = 180, duration = 100, iterations = Infinity, callback }) {
 
     const animation_counter = 'animation-counter';
 
@@ -29,7 +29,7 @@ export function startAnimation({ from = 0, to = 180, duration = 100, iterations 
         })
 
         document.body.appendChild(
-            new (customElements.get(animation_counter))
+            new ( customElements.get(animation_counter) )
         );
 
     }
