@@ -1,4 +1,5 @@
 import './globals.css';
+import { CONSTANTS } from './globals.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
@@ -46,12 +47,7 @@ export default class {
         const 
             [SVGList, OrderedPair] = Array(2).fill(Array);
         
-        const 
-            GROW_ALONG_SLOPE = 1 / Math.sin(Math.PI/4)
-            ,
-            /* DEV_NOTE (!) # DO NOT change the `GLOBAL_SCALAR`, it must remain constant for `parallelogram` to outline nicely, instead scale in `globals.css` */
-            GLOBAL_SCALAR = 3
-            ;
+        const { SLOPE_TERSER, GLOBAL_SCALAR, GROW_ALONG_SLOPE } = CONSTANTS;
 
         const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
 
@@ -137,7 +133,7 @@ export default class {
                                         ].map((basis)=>{
                                             return({
                                                 x: basis.x * GLOBAL_SCALAR,
-                                                y: basis.y * GROW_ALONG_SLOPE,
+                                                y: basis.y * GLOBAL_SCALAR * SLOPE_TERSER,
                                             })
                                         })
                                     }
@@ -171,6 +167,7 @@ export default class {
                                         scaling,
                                         angle: 0,
                                         points: [
+                                            /* DEV_NOTE # basis vectors */
                                             {x: 1, y: 0}
                                         ],
 
@@ -181,19 +178,20 @@ export default class {
                                         fillStroke: ENUMS.COLOR.magenta
                                     }
                                 
-                                const step = ++i;
+                                const step = ++i; // DEV_NOTE # zero+1 based "integers"
                                 switch (step) {
                                     case 1:
                                         return (
                                             axis = new axis({
                                                 options: {
                                                     ...sharedOptions,
+                                                    
                                                     /**
                                                      * @override
                                                      */
                                                     id: ENUMS.PRINT.x_axis,
                                                     fillStroke: ENUMS.COLOR.green,
-                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM)/*  * ( Math.sin( Converters.degToRad( 90 ) ) ) */,
+                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
                                                     angle: 0,
                                                 }
                                             })
@@ -205,12 +203,13 @@ export default class {
                                             axis = new axis({
                                                 options: {
                                                     ...sharedOptions,
+                                                    
                                                     /**
                                                      * @override
                                                      */
                                                     id: ENUMS.PRINT.y_axis,
                                                     fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.cos( Math.PI/4 ) ),
+                                                    scaling: GLOBAL_SCALAR * ((GROW_ALONG_SLOPE * SLOPE_TERSER) * stage.grid.GRIDCELL_DIM),
                                                     angle: Number(3 * Q3)
                                                 }
                                             })
@@ -221,6 +220,7 @@ export default class {
                                             axis = new axis({
                                                 options: {
                                                     ...sharedOptions,
+                                                    
                                                     /**
                                                      * @override
                                                      */
@@ -272,7 +272,22 @@ export default class {
                                             break;
                                         }
                                     
-                                    path.setLabel({x, y, svg: path.getParent(), text: path.id.replace("_axis", "").toUpperCase(), overrides: { fill: path.style.stroke }})
+                                    /**
+                                     * @arbitrary
+                                     * 
+                                     * NOTE: _this is more-less de-facto (if not standardised) font size for majority of modern browser vendors._
+                                     */
+                                    const defaultFontSize = 16;
+                                    path.setLabel({
+                                        x, 
+                                        y, 
+                                        svg: path.getParent(), 
+                                        text: path.id.replace("_axis", "").toUpperCase(), 
+                                        overrides: { 
+                                            fill: path.style.stroke, 
+                                            scale: stage.grid.GRIDCELL_DIM / (2 * defaultFontSize)
+                                        }
+                                    })
                                     
                                 /* === LABELS === */
 
@@ -289,7 +304,7 @@ export default class {
                                 animShift = startAnimation({...animConfig, callback: function({count}) {
                                     
                                     const reverseCountOnCondition = (c)=>{
-                                        if (c < animConfig.to){
+                                        if (c < animConfig.to) {
                                             return ({
                                                 value: c
                                             })

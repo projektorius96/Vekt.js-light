@@ -1,6 +1,6 @@
 export default function({opacity, hidden}) {
 
-    this.style.cssText = /* style */`
+    this.style.cssText = /* css */`
             display: inherit;
             width: 100%;
             height: 100%;

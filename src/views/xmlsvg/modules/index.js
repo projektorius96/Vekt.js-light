@@ -5,7 +5,7 @@
  * ENUM.me;    //  'me'
  * ENUM.value; //  'value'
 */
-const 
+export const 
     ENUM = 
     new Proxy( Object.create(null) , {
         get(nil, key){
@@ -14,14 +14,14 @@ const
             );
         }
     })
-    ,
-    /**
-        * @alias
-    */
-    [CASE, ATTR, UI_EVENT] = Array(3).fill(ENUM);
     ;
 
-export { ENUM }
+/**
+    * @alias
+*/
+const 
+    ATTR = ENUM
+    ;
 
 export function getNamespace(import_meta_url) {
 
@@ -38,7 +38,7 @@ export function getNamespace(import_meta_url) {
  */
 export function setCoords() {
 
-        this.setAttribute(ATTR.viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
+    this.setAttribute(ATTR.viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
     
 }
 
@@ -73,19 +73,22 @@ export function setPoints(points = [], scalingFactor = 1) {
  *   @param {Number} opts.fontSize   Default: 16
  *   @param {String} opts.fontStyle  Default: 'italic'
  *   @param {String} opts.fill       Default: 'black'
+ *   @param {Number} opts.dx         Fine-tune baseline offset (e.g. 0.1em)
  *   @param {Number} opts.dy         Fine-tune baseline offset (e.g. 0.1em)
  *   @param {Number} opts.scale      Apply local scale transform (default 1)
  */
-export function drawLabel({svg, text, x, y, scale = 1, overrides = {}}) {
+export function drawLabel({svg, text, x, y, overrides = {}}) {
 
     const {
-        dominantBaseline = 'alphabetic',
+        dominantBaseline = 'middle',
         textAnchor = 'middle',
-        fontFamily = 'serif',
+        fontFamily = 'cursive',
         fontStyle = 'italic',
         fill = 'black',
         fontSize = 16,
+        dx = '0em',
         dy = '0em',
+        scale = 1
     } = overrides;
 
     // Create text element
@@ -97,10 +100,11 @@ export function drawLabel({svg, text, x, y, scale = 1, overrides = {}}) {
         t.setAttribute('font-size', fontSize);
         t.setAttribute('font-style', fontStyle);
         t.setAttribute('fill', fill);
+        t.setAttribute('dx', dx);
         t.setAttribute('dy', dy);
         t.textContent = text;
 
-    svg.appendChild(/* g */t);
-    return /* g */t;
+    svg.appendChild(t);
+    return t;
 
 }

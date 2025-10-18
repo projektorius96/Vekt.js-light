@@ -18,19 +18,19 @@ export default class {
                             { Trigonometry } = Helpers
                         ;
                         
-                            path.setAttribute(
-                                'transform'
-                                , 
-                                new DOMMatrix(
-                                    Trigonometry.setTransform({
-                                        angle: ( path.dataset.angle || 0 )
-                                        , 
-                                        translateX: stage.grid.SVG.X_IN_MIDDLE
-                                        , 
-                                        translateY: stage.grid.SVG.Y_IN_MIDDLE
-                                    })
-                                ).toString()
-                            )
+                        path.setAttribute(
+                            'transform'
+                            , 
+                            new DOMMatrix(
+                                Trigonometry.setTransform({
+                                    angle: ( path.dataset.angle || 0 )
+                                    , 
+                                    translateX: stage.grid.SVG.X_IN_MIDDLE
+                                    , 
+                                    translateY: stage.grid.SVG.Y_IN_MIDDLE
+                                })
+                            ).toString()
+                        );
                     
                     }
 
@@ -58,13 +58,13 @@ function drawVector({Helpers, path, angle, sharpness = 6, length = 1/6}) {
         { x:0, y:0 },                            // tip of arrow
         { x: -length, y:  length / sharpness },  // bottom wing
         { x: -length, y: -length / sharpness },  // top wing
-        { x:0, y:0 },                            // explicitly closing the path
+        { x:0, y:0 },                            // MUST explicitly close the path!
     ]   // Scale + offset 
     .map((point)=>{        
-            return({
-                x: (( Number( path.dataset.scaling ) * point.x ) + path.getPoints().at(-1)['x']/* + translationX */),
-                y: (( Number( path.dataset.scaling ) * point.y ) + path.getPoints().at(-1)['y']/* + translationY */),
-            })
+        return({
+            x: (( Number( path.dataset.scaling ) * point.x ) + path.getPoints().at(-1)['x']),
+            y: (( Number( path.dataset.scaling ) * point.y ) + path.getPoints().at(-1)['y']),
+        });
     });
     
     path.setAttribute(
