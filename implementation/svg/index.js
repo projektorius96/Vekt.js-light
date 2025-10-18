@@ -272,7 +272,22 @@ export default class {
                                             break;
                                         }
                                     
-                                    path.setLabel({x, y, svg: path.getParent(), text: path.id.replace("_axis", "").toUpperCase(), overrides: { fill: path.style.stroke }})
+                                    /**
+                                     * @arbitrary
+                                     * 
+                                     * NOTE: _this is more-less de-facto (if not standardised) font size for majority of modern browser vendors._
+                                     */
+                                    const defaultFontSize = 16;
+                                    path.setLabel({
+                                        x, 
+                                        y, 
+                                        svg: path.getParent(), 
+                                        text: path.id.replace("_axis", "").toUpperCase(), 
+                                        overrides: { 
+                                            fill: path.style.stroke, 
+                                            scale: stage.grid.GRIDCELL_DIM / (2 * defaultFontSize)
+                                        }
+                                    })
                                     
                                 /* === LABELS === */
 

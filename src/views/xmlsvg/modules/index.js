@@ -5,7 +5,7 @@
  * ENUM.me;    //  'me'
  * ENUM.value; //  'value'
 */
-const 
+export const 
     ENUM = 
     new Proxy( Object.create(null) , {
         get(nil, key){
@@ -19,10 +19,9 @@ const
 /**
     * @alias
 */
-const
-    [CASE, ATTR, UI_EVENT] = Array(3).fill(ENUM);
-
-export { ENUM }
+const 
+    ATTR = ENUM
+    ;
 
 export function getNamespace(import_meta_url) {
 
@@ -39,7 +38,7 @@ export function getNamespace(import_meta_url) {
  */
 export function setCoords() {
 
-        this.setAttribute(ATTR.viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
+    this.setAttribute(ATTR.viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
     
 }
 
@@ -89,7 +88,7 @@ export function drawLabel({svg, text, x, y, overrides = {}}) {
         fontSize = 16,
         dx = '0em',
         dy = '0em',
-        scale = 2
+        scale = 1
     } = overrides;
 
     // Create text element

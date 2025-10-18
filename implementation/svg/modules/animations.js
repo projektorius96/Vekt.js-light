@@ -1,40 +1,46 @@
-// CREDITS : Kudos to Copilot (ChatGPT-5) for help writing this logic
+/**
+ * **CREDITS:** Kudos to Copilot for putting me on the right track...
+ * 
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/KeyframeEffect|KeyframeEffect}
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Animation|Animation}
+ * 
+ * @returns {Animation} animation
+ */
 export function startAnimation({ from = 0, to = 180, duration = 100, iterations = Infinity, callback }) {
 
-    const ac_namespace = 'animation-counter';
-    if (!(customElements.get(ac_namespace))) {
+    const animation_counter = 'animation-counter';
 
-        customElements.define(ac_namespace, class extends HTMLElement {
+    if ( !(customElements.get(animation_counter)) ) {
 
-        constructor(){
+        customElements.define(animation_counter, class extends HTMLElement {
 
-            if ( super() ) {
-                this.id = ac_namespace;
+            constructor() {
+
+                if ( super() ) {
+                    this.id = animation_counter;
+                }
+
+                this.style.cssText = `
+                    position: absolute;
+                `;
+
             }
-
-            this.style.cssText = `
-                position: absolute;
-            `;
-
-        }
 
         })
 
-    document.body.appendChild(
-        new (customElements.get(ac_namespace))
-    )
+        document.body.appendChild(
+            new (customElements.get(animation_counter))
+        );
 
     }
 
-    /* customElements.whenDefined(ac_namespace).then(()=>{ */
-
     let effect = new KeyframeEffect(
-        document.body.children[ac_namespace],
+        document.body.children[animation_counter],
         [{ opacity: 0 }, { opacity: 1 }],
         { duration, iterations }
     );
 
-    let animation = new Animation(effect, document.timeline);
+    const animation = new Animation(effect, document.timeline);
         animation.play();
 
     let count = from;
@@ -53,7 +59,7 @@ export function startAnimation({ from = 0, to = 180, duration = 100, iterations 
                     // DEV_NOTE # instead, do the following:..
                     count = 0; // reset count
                     effect = new KeyframeEffect(/* reset KeyframeEffect */
-                        document.body.children[ac_namespace],
+                        document.body.children[animation_counter],
                         effect.getKeyframes(),
                         effect.getTiming()
                     );
@@ -68,8 +74,6 @@ export function startAnimation({ from = 0, to = 180, duration = 100, iterations 
     }
 
     trackTime();
-
-    /* }) */
 
     return animation;
 

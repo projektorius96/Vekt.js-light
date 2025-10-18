@@ -2,13 +2,13 @@ export default function() {
 
     const styling$global = new CSSStyleSheet();
         styling$global
-        .insertRule(/* style */`
+        .insertRule(/* css */`
             :root {
                 --vertical-scrollbar-width: calc(100vw - 100%);
             }
         `);
         styling$global
-        .insertRule(/* style */`
+        .insertRule(/* css */`
             body,
             body * {
                 box-sizing: border-box;
@@ -19,7 +19,7 @@ export default function() {
         `);
     document.adoptedStyleSheets.push(styling$global)
 
-    this.style.cssText = /* style */`
+    this.style.cssText = /* css */`
             display: block;
             width: calc( 100vw - var(--vertical-scrollbar-width) );
             height: 100vh;
