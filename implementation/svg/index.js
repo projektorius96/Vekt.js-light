@@ -273,7 +273,7 @@ export default class {
                                             break;
                                             case ( path.id === ENUMS.ID.y_axis ) :
                                                 x -= Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING;
-                                                y += Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING * 2;
+                                                y += Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING * 3;
                                             break;
                                         }
                                     
