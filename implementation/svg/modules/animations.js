@@ -117,7 +117,7 @@ export const Animations = Object.freeze(
     )
 );
 
-function Crossproduct$part1({animConfig, reverseCountOnCondition, count, paths, Converters, Helpers, UnitVector}) {
+function Crossproduct$part1({animConfig, reverseCountOnCondition, count, paths, Helpers, UnitVector}) {
                                     
 // existing z-axis animation (unchanged behavior)
 if ( count === animConfig.to-1 ) {
@@ -128,7 +128,7 @@ if ( count === animConfig.to-1 ) {
             path: paths.z_axis,
             /* length: false */
         })
-    ], -1 *  Math.sin( Converters.degToRad( reverseCountOnCondition(count).value ) ))
+    ], -1 *  Math.sin( Helpers.Trigonometry.Converters.degToRad( reverseCountOnCondition(count).value ) ))
 
 } else {
 
@@ -138,12 +138,12 @@ if ( count === animConfig.to-1 ) {
             path: paths.z_axis,
             /* length: false */
         })
-    ], 1 *  Math.cos( Converters.degToRad( reverseCountOnCondition(count).value ) )) 
+    ], 1 *  Math.cos( Helpers.Trigonometry.Converters.degToRad( reverseCountOnCondition(count).value ) )) 
 
 }
     
 }
-function Crossproduct$part2({reverseCountOnCondition, count, paths, Converters, Helpers, UnitVector, GROW_ALONG_SLOPE, GLOBAL_SCALAR, XMLSVG, ENUMS}) {
+function Crossproduct$part2({reverseCountOnCondition, count, paths, Helpers, UnitVector, GROW_ALONG_SLOPE, GLOBAL_SCALAR, XMLSVG, ENUMS}) {
 
     try {
     const 
@@ -159,7 +159,7 @@ function Crossproduct$part2({reverseCountOnCondition, count, paths, Converters, 
     // compute progress in [0..1..0] with period 180° using absolute sine
     // Math.abs(Math.sin(rad(t))) yields 0 -> 1 -> 0 every 180°,
     // so progress will smoothly go toward 1 then back to 0.
-    const progress = Math.abs(Math.sin( Converters.degToRad( t ) ));
+    const progress = Math.abs(Math.sin( Helpers.Trigonometry.Converters.degToRad( t ) ));
 
     const animatedYAngle = 1 * baseYAngle * progress;
 

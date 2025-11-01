@@ -243,6 +243,7 @@ export default class {
                         ], ({paths}) => {
 
                             const Helpers = HTMLCanvas.Helpers;
+                            
 
                             /**
                              * @override
@@ -310,8 +311,10 @@ export default class {
                                 ,
                                 animCounter = AnimationCounter({...animConfig, callback: function({count}) {
                                     
-                                    Animations.Crossproduct.part1({count, paths, Converters, Helpers, UnitVector, GROW_ALONG_SLOPE, GLOBAL_SCALAR, XMLSVG, ENUMS, animConfig, reverseCountOnCondition: Animations.Helpers.reverseCountOnCondition.bind(null, animConfig)});
-                                    Animations.Crossproduct.part2({count, paths, Converters, Helpers, UnitVector, GROW_ALONG_SLOPE, GLOBAL_SCALAR, XMLSVG, ENUMS, animConfig, reverseCountOnCondition: Animations.Helpers.reverseCountOnCondition.bind(null, animConfig)});
+                                    // DEV_NOTE # it calls the following: Animations.Crossproduct.part1 && Animations.Crossproduct.part2
+                                    Array(2).fill(Animations.Crossproduct).forEach((call, index)=>{
+                                        call[`part${index+1}`]({count, paths, Helpers, UnitVector, GROW_ALONG_SLOPE, GLOBAL_SCALAR, XMLSVG, ENUMS, animConfig, reverseCountOnCondition: Animations.Helpers.reverseCountOnCondition.bind(null, animConfig)});
+                                    })
 
                             }});
                             
