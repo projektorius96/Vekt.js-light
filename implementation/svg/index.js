@@ -28,7 +28,8 @@ export default class {
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'hide:circle',
+                    /* DEV_NOTE (!) # adding random prefix such as "HIDE:", it will opt-out from control flow in switch block (see `default.drawPaths`) */
+                    id: 'HIDE:circle',
                 }
             })
         ])
@@ -90,7 +91,7 @@ export default class {
                         , 
                         ({paths})=>SVGList.from(paths).on((path)=>{
 
-                            UnitCircle.draw({Helpers: HTMLCanvas.Helpers, path, XMLSVG, ENUMS})
+                            UnitCircle.draw({Helpers: HTMLCanvas.Helpers, path, XMLSVG, ENUMS});
 
                         })
                         );
@@ -242,9 +243,43 @@ export default class {
                             })
                         ], ({paths}) => {
 
-                            const Helpers = HTMLCanvas.Helpers;
-                            
+                            /* === ANIMATIONS === */
 
+                                    void function draw_animations(vectors) {
+
+                                        const
+                                            animConfig = {
+                                                from: 0,
+                                                to: 360,
+                                                duration: 1,
+                                                iterations: Infinity
+                                            }
+                                            ,
+                                            animCounter = AnimationCounter({...animConfig, callback: function({count}) {
+                                                
+                                                // DEV_NOTE # it calls the following: Animations.Crossproduct.part1 && Animations.Crossproduct.part2
+                                                Array(2).fill(Animations.Crossproduct).forEach((call, index)=>{
+                                                    call[`part${index+1}`]({count, paths: vectors, Helpers: HTMLCanvas.Helpers, UnitVector, GROW_ALONG_SLOPE, GLOBAL_SCALAR, XMLSVG, ENUMS, animConfig, reverseCountOnCondition: Animations.Helpers.reverseCountOnCondition.bind(null, animConfig)});
+                                                })
+
+                                            }})
+                                        ;
+                                    
+                                        /* animCounter.pause(); */// # [PASSING]
+                                        /* animCounter.play(); */// # [PASSING]
+
+                                        /**
+                                         * > **NOTE:** Exposing [animCounter] to play|pause from DevTools with ease. 
+                                         * 
+                                         * @global
+                                         * @var
+                                         */
+                                        globalThis.animCounter1 = animCounter;
+                                        
+                                    }(paths);
+
+                                /* === ANIMATIONS === */
+                            
                             /**
                              * @override
                              */
@@ -252,19 +287,26 @@ export default class {
 
                                 // DEV-TIP # pass {0 | false} to [length] to hide arrow heads of line segment (or vector)
                                 path.setPoints([
-                                    ...UnitVector.drawVector({Helpers, path /* , length: false */})
+                                    ...UnitVector.drawVector({Helpers: HTMLCanvas.Helpers, path /* , length: false */})
                                 ], 1);
 
                                 /* === LABELS === */
 
-                                        let 
+                                    void function draw_labels() {
+
+                                        const 
                                             TEXT_SPACING = 10
-                                            ,
+                                            ;
+
+                                        let
                                             { e: x, f: y } = path.getCurrentMatrix()
                                             ;
+                                        
                                         /**
                                          * @override
+                                         * @type text positioning
                                          */
+                                        let text_labels;
                                         switch (true) {
                                             case ( path.id === ENUMS.ID.z_axis ) :
                                                 y -= Math.ceil(path.dataset.scaling) + TEXT_SPACING;
@@ -273,61 +315,37 @@ export default class {
                                                 x += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
                                             break;
                                             case ( path.id === ENUMS.ID.y_axis ) :
-                                                x -= Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING;
-                                                y += Math.ceil(path.dataset.scaling) / GROW_ALONG_SLOPE + TEXT_SPACING * 3;
+                                                x -= Math.ceil(path.dataset.scaling) + (TEXT_SPACING * GROW_ALONG_SLOPE);
+                                                y += Math.ceil(path.dataset.scaling) + (TEXT_SPACING * GROW_ALONG_SLOPE);
                                             break;
                                         }
-                                    
-                                    /**
-                                     * @arbitrary
-                                     * 
-                                     * NOTE: _this is more-less de-facto (if not standardised) font size for majority of modern browser vendors._
-                                     */
-                                    const defaultVendorFontSize = window
-                                            .getComputedStyle(document.documentElement)
-                                            .getPropertyValue('font-size').replace(CSS.px.name, "");
-                                    path.setLabel({
-                                        x, 
-                                        y, 
-                                        svg: path.getParent(), 
-                                        text: path.id.replace("_axis", "").toUpperCase(), 
-                                        overrides: { 
-                                            fill: path.style.stroke, 
-                                            scale: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize),
+                                        
+                                        /**
+                                         * @arbitrary
+                                         * 
+                                         * NOTE: _this is more-less de-facto (if not standardised) font size for majority of modern browser vendors._
+                                         */
+                                        const defaultVendorFontSize = window
+                                                .getComputedStyle(document.documentElement)
+                                                .getPropertyValue('font-size').replace(CSS.px.name, "");
+                                        if (defaultVendorFontSize) {
+                                            path.setLabel({
+                                                x, 
+                                                y, 
+                                                svg: path.getParent(), 
+                                                text: path.id.replace("_axis", "").toUpperCase(), 
+                                                overrides: { 
+                                                    fill: path.style.stroke, 
+                                                    scale: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize),
+                                                }
+                                            });
                                         }
-                                    })
+
+                                    }();
                                     
                                 /* === LABELS === */
 
-                            })
-
-                            const
-                                animConfig = {
-                                    from: 0,
-                                    to: 360,
-                                    duration: 1,
-                                    iterations: Infinity
-                                }
-                                ,
-                                animCounter = AnimationCounter({...animConfig, callback: function({count}) {
-                                    
-                                    // DEV_NOTE # it calls the following: Animations.Crossproduct.part1 && Animations.Crossproduct.part2
-                                    Array(2).fill(Animations.Crossproduct).forEach((call, index)=>{
-                                        call[`part${index+1}`]({count, paths, Helpers, UnitVector, GROW_ALONG_SLOPE, GLOBAL_SCALAR, XMLSVG, ENUMS, animConfig, reverseCountOnCondition: Animations.Helpers.reverseCountOnCondition.bind(null, animConfig)});
-                                    })
-
-                            }});
-                            
-                            /* animCounter.pause(); */// # [PASSING]
-                            /* animCounter.play(); */// # [PASSING]
-
-                            /**
-                             * > **NOTE:** Exposing [animCounter] to play|pause from DevTools with ease. 
-                             * 
-                             * @global
-                             * @var
-                             */
-                            globalThis.animCounter1 = animCounter;
+                            });
 
                         });
 
