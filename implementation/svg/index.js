@@ -303,9 +303,9 @@ export default class {
 
                             const
                                 animConfig = {
-                                    from: -90,
+                                    from: 0,
                                     to: 360,
-                                    duration: 10,
+                                    duration: 1,
                                     iterations: Infinity
                                 }
                                 ,
@@ -327,7 +327,7 @@ export default class {
                              * @global
                              * @var
                              */
-                            globalThis.animCounter = animCounter;
+                            globalThis.animCounter1 = animCounter;
 
                         });
 
