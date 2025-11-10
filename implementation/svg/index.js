@@ -1,5 +1,5 @@
 import './globals.css';
-import { CONSTANTS } from './globals.js';
+import { CONSTANTS, MAPPING } from './globals.js';
 import AnimationCounter from './modules/animations.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
@@ -12,7 +12,6 @@ export default class {
      */
     static registerContainersForSVG({XMLSVG}){
     
-        
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
@@ -264,47 +263,52 @@ export default class {
                             })
                         ], ({paths}) => {
 
+                            const pathsPalette = SVGList.from(paths).map((path)=>{
+                                return path = path.style.stroke;
+                            });
+                            
+
                             /* === ANIMATIONS === */
 
-                                    void function draw_animations() {
+                                    // void function draw_animations() {
 
-                                        const
-                                            animConfig = {
-                                                from: 0,
-                                                to: 360,
-                                                duration: 1,
-                                                iterations: Infinity
-                                            }
-                                            ,
-                                            animCounter = AnimationCounter({...animConfig, callback: function({count}) {
+                                    //     const
+                                    //         animConfig = {
+                                    //             from: 0,
+                                    //             to: 360,
+                                    //             duration: 1,
+                                    //             iterations: Infinity
+                                    //         }
+                                    //         ,
+                                    //         animCounter = AnimationCounter({...animConfig, callback: function({count}) {
                                                 
-                                                /* Use the `{count}` as the animation primitive to implement the progressing animation */
+                                    //             /* Use the `{count}` as the animation primitive to implement the progressing animation */
 
-                                            }})
-                                        ;
+                                    //         }})
+                                    //     ;
                                     
-                                        /**
-                                         * @test
-                                         */
-                                        /* animCounter.pause(); */// # [PASSING]
-                                        /* animCounter.play(); */// # [PASSING]
+                                    //     /**
+                                    //      * @test
+                                    //      */
+                                    //     /* animCounter.pause(); */// # [PASSING]
+                                    //     /* animCounter.play(); */// # [PASSING]
 
-                                        /**
-                                         * > **NOTE:** Exposing [animCounter] to play|pause from DevTools with ease. 
-                                         * 
-                                         * @global
-                                         * @var
-                                         */
-                                        globalThis.animCounter1 = animCounter;
+                                    //     /**
+                                    //      * > **NOTE:** Exposing [animCounter] to play|pause from DevTools with ease. 
+                                    //      * 
+                                    //      * @global
+                                    //      * @var
+                                    //      */
+                                    //     globalThis.animCounter1 = animCounter;
                                         
-                                    }();
+                                    // }();
 
-                                /* === ANIMATIONS === */
+                            /* === ANIMATIONS === */
                             
                             /**
                              * @override
                              */
-                            SVGList.from(paths).on((path)=>{
+                            SVGList.from(paths).on((path, step)=>{
 
                                 // DEV-TIP # pass {0 | false} to [length] to hide arrow heads of line segment (or vector)
                                 path.setPoints([
@@ -313,56 +317,69 @@ export default class {
 
                                 /* === LABELS === */
 
-                                    // void function draw_labels() {
+                                    void function draw_labels() {
 
-                                    //     const 
-                                    //         TEXT_SPACING = 10
-                                    //         ;
+                                        const 
+                                            TEXT_SPACING = 10
+                                            ;
 
-                                    //     let
-                                    //         { e: x, f: y } = path.getCurrentMatrix()
-                                    //         ;
+                                        let
+                                            { e: x, f: y } = path.getCurrentMatrix()
+                                            ;
                                         
-                                    //     /**
-                                    //      * @override
-                                    //      * @type text positioning
-                                    //      */
-                                    //     let text_labels;
-                                    //     switch (true) {
-                                    //         case ( path.id === ENUMS.ID.z_axis ) :
-                                    //             y -= Math.ceil(path.dataset.scaling) + TEXT_SPACING;
-                                    //         break;
-                                    //         case ( path.id === ENUMS.ID.x_axis ) :
-                                    //             x += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
-                                    //         break;
-                                    //         case ( path.id === ENUMS.ID.y_axis ) :
-                                    //             x -= Math.ceil(path.dataset.scaling) + (TEXT_SPACING * GROW_ALONG_SLOPE);
-                                    //             y += Math.ceil(path.dataset.scaling) + (TEXT_SPACING * GROW_ALONG_SLOPE);
-                                    //         break;
-                                    //     }
+                                        /**
+                                         * @override
+                                         * @type text positioning
+                                         */
+                                        switch (true) {
+                                            case ( path.id === ENUMS.ID.north ) :
+                                                x += 0;
+                                                y += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                            break;
+                                            case ( path.id === ENUMS.ID.south ) :
+                                                x += 0;
+                                                y -= Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                            break;
+                                            case ( path.id === ENUMS.ID.west ) :
+                                                x -= Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                                y += 0;
+                                            break;
+                                            case ( path.id === ENUMS.ID.east ) :
+                                                x += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                                y += 0;
+                                            break;
+                                        }
                                         
-                                    //     /**
-                                    //      * @arbitrary
-                                    //      * 
-                                    //      * NOTE: _this is more-less de-facto (if not standardised) font size for majority of modern browser vendors._
-                                    //      */
-                                    //     const defaultVendorFontSize = window
-                                    //             .getComputedStyle(document.documentElement)
-                                    //             .getPropertyValue('font-size').replace(CSS.px.name, "");
-                                    //     if (defaultVendorFontSize) {
-                                    //         path.setLabel({
-                                    //             x, 
-                                    //             y, 
-                                    //             svg: path.getParent(), 
-                                    //             text: "Text placeholder...", 
-                                    //             overrides: { 
-                                    //                 fill: path.style.stroke, 
-                                    //                 scale: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize),
-                                    //             }
-                                    //         });
-                                    //     }
+                                        /**
+                                         * @arbitrary
+                                         * 
+                                         * NOTE: _this is more-less de-facto (if not standardised) font size for majority of modern browser vendors._
+                                         */
+                                        const defaultVendorFontSize = window
+                                                .getComputedStyle(document.documentElement)
+                                                .getPropertyValue('font-size').replace(CSS.px.name, "");
+                                        if (defaultVendorFontSize) {
 
-                                    // }();
+                                            /**
+                                             * **DEV_NOTE**: apparently labels are drawn counter-clockwise, compared to arrow stroke clockwise direction...
+                                             * 
+                                             * @debugger
+                                             */
+                                            let color_culprit;
+                                            /* console.log(path.style.stroke); */                                            
+                                            path.setLabel({
+                                                x, 
+                                                y, 
+                                                svg: path.getParent(), 
+                                                text: MAPPING.labels.compass.get(path.id), 
+                                                overrides: {
+                                                    fill: pathsPalette.at(-step)/* instead of ==> path.style.stroke */, 
+                                                    scale: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize),
+                                                }
+                                            });
+                                        }
+
+                                    }();
                                     
                                 /* === LABELS === */
 
