@@ -1,6 +1,6 @@
 import './globals.css';
-import { CONSTANTS } from './globals.js';
-import AnimationCounter, { Animations } from './modules/animations.js';
+import { CONSTANTS, MAPPING } from './globals.js';
+import AnimationCounter from './modules/animations.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
@@ -12,11 +12,10 @@ export default class {
      */
     static registerContainersForSVG({XMLSVG}){
     
-        
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'parallelogram',
+                    id: 'unit_square',
                 }
             })
             ,
@@ -48,10 +47,12 @@ export default class {
         const 
             [SVGList, OrderedPair] = Array(2).fill(Array);
         
-        const 
-            { SLOPE_TERSER, GLOBAL_SCALAR, GROW_ALONG_SLOPE } = CONSTANTS
-            ,
+        const
             { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry
+            ,
+            { GLOBAL_SCALAR } = CONSTANTS
+            ,
+            QUADRANT = Converters.radToDeg(Math.PI/2)
             ;
 
         SVGList
@@ -98,7 +99,7 @@ export default class {
 
                     break;
                     
-                    case (ENUMS.CASE.parallelogram) :
+                    case (ENUMS.CASE.unit_square) :
 
                             XMLSVG.Helpers.findByID(id)
                             .setPaths([
@@ -110,12 +111,13 @@ export default class {
                                         /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
                                         dashed: 0,
 
-                                        strokeWidth: 0,
-                                        fill: ENUMS.COLOR.grey,
-                                        stroke: ENUMS.COLOR.black,
+                                        strokeWidth: 1,
+                                        /* fill: ENUMS.COLOR.magenta,
+                                        stroke: ENUMS.COLOR.magenta, */
+                                        fillStroke: ENUMS.COLOR.magenta,
                                         opacity: 0.25,
                                         scaling: stage.grid.GRIDCELL_DIM,
-                                        angle: 0,
+                                        angle: -1 * QUADRANT,
                                         points: [
 
                                         /* === ZERO VECTOR (opens the path) === */
@@ -135,7 +137,7 @@ export default class {
                                         ].map((basis)=>{
                                             return({
                                                 x: basis.x * GLOBAL_SCALAR,
-                                                y: basis.y * GLOBAL_SCALAR * SLOPE_TERSER,
+                                                y: basis.y * GLOBAL_SCALAR,
                                             })
                                         })
                                     }
@@ -143,8 +145,9 @@ export default class {
                             ]
                             , 
                             ({paths}) => SVGList.from(paths).on((path)=>{
-
-                                UnitSquare.draw( { Helpers: HTMLCanvas.Helpers, path, skew: { X: { phi: -45 } } } )
+                                
+                                // DEV_NOTE [CULPRIT-SOLVED] # matrix transformation cannot happen in homogeneous fashion, it must be separate matrix multiplication operation, with skew angle (rotation) would be disregarded (ignored)
+                                UnitSquare.draw( { Helpers: HTMLCanvas.Helpers, path/* , skew: { X: { phi: -0 } } */ } )
 
                             })
                             );
@@ -153,23 +156,22 @@ export default class {
 
                     case (ENUMS.CASE.axes) :                    
                         
+                    const NUMBER_OF_AXIS = 4;
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
-                            ...Array(3).fill(XMLSVG.Views.Path).map((axis, i)=>{
+                            ...Array(NUMBER_OF_AXIS).fill(XMLSVG.Views.Path).map((axis, i)=>{
 
                                 const
                                     animationConfig = {
                                         count: 90
                                     }
                                     ,
-                                    scaling = (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM) * ( Math.sin( Converters.degToRad( animationConfig.count ) ) )
-                                    ,
                                     sharedOptions = {
                                         id: '',
-                                        scaling,
+                                        scaling: 0,
                                         angle: 0,
                                         points: [
-                                            /* DEV_NOTE # basis vectors */
+                                            /* DEV_NOTE (!) # mandatory basis vectors */
                                             {x: 1, y: 0}
                                         ],
 
@@ -180,9 +182,26 @@ export default class {
                                         fillStroke: ENUMS.COLOR.magenta
                                     }
                                 
-                                const step = ++i; // DEV_NOTE # zero+1 based "integers"
+                                const step = i;
                                 switch (step) {
 
+                                    case 0:
+                                        return (
+                                            axis = new axis({
+                                                options: {
+                                                    ...sharedOptions,
+                                                    
+                                                    /**
+                                                     * @override
+                                                     */
+                                                    id: ENUMS.PRINT.east,
+                                                    fillStroke: ENUMS.COLOR.green,
+                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
+                                                    angle: step * QUADRANT,
+                                                }
+                                            })
+                                        );
+                                    break;
                                     case 1:
                                         return (
                                             axis = new axis({
@@ -192,29 +211,30 @@ export default class {
                                                     /**
                                                      * @override
                                                      */
-                                                    id: ENUMS.PRINT.x_axis,
-                                                    fillStroke: ENUMS.COLOR.green,
+                                                    id: ENUMS.PRINT.south,
+                                                    fillStroke: ENUMS.COLOR.black,
                                                     scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
-                                                    angle: 0,
+                                                    angle: step * QUADRANT,
                                                 }
                                             })
                                         );
                                     break;
 
                                     case 2:
-                                        const Q3 = Converters.radToDeg(Math.PI/4);
                                         return (
                                             axis = new axis({
                                                 options: {
+
                                                     ...sharedOptions,
                                                     
                                                     /**
                                                      * @override
                                                      */
-                                                    id: ENUMS.PRINT.y_axis,
+                                                    id: ENUMS.PRINT.west,
                                                     fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: GLOBAL_SCALAR * ((GROW_ALONG_SLOPE * SLOPE_TERSER) * stage.grid.GRIDCELL_DIM),
-                                                    angle: Number(3 * Q3)
+                                                    scaling: GLOBAL_SCALAR *stage.grid.GRIDCELL_DIM,
+                                                    angle: step * QUADRANT
+                                                    
                                                 }
                                             })
                                         );
@@ -229,10 +249,10 @@ export default class {
                                                     /**
                                                      * @override
                                                      */
-                                                    id: ENUMS.PRINT.z_axis,
+                                                    id: ENUMS.PRINT.north,
                                                     fillStroke: ENUMS.COLOR.red,
-                                                    scaling: sharedOptions.scaling,
-                                                    angle: -90
+                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
+                                                    angle: step * QUADRANT
                                                 }
                                             })
                                         );
@@ -243,47 +263,52 @@ export default class {
                             })
                         ], ({paths}) => {
 
+                            const pathsPalette = SVGList.from(paths).map((path)=>{
+                                return path = path.style.stroke;
+                            });
+                            
+
                             /* === ANIMATIONS === */
 
-                                    void function draw_animations(vectors) {
+                                    // void function draw_animations() {
 
-                                        const
-                                            animConfig = {
-                                                from: 0,
-                                                to: 360,
-                                                duration: 1,
-                                                iterations: Infinity
-                                            }
-                                            ,
-                                            animCounter = AnimationCounter({...animConfig, callback: function({count}) {
+                                    //     const
+                                    //         animConfig = {
+                                    //             from: 0,
+                                    //             to: 360,
+                                    //             duration: 1,
+                                    //             iterations: Infinity
+                                    //         }
+                                    //         ,
+                                    //         animCounter = AnimationCounter({...animConfig, callback: function({count}) {
                                                 
-                                                // DEV_NOTE # it calls the following: Animations.Crossproduct.part1 && Animations.Crossproduct.part2
-                                                Array(2).fill(Animations.Crossproduct).forEach((call, index)=>{
-                                                    call[`part${index+1}`]({count, paths: vectors, Helpers: HTMLCanvas.Helpers, UnitVector, GROW_ALONG_SLOPE, GLOBAL_SCALAR, XMLSVG, ENUMS, animConfig, reverseCountOnCondition: Animations.Helpers.reverseCountOnCondition.bind(null, animConfig)});
-                                                })
+                                    //             /* Use the `{count}` as the animation primitive to implement the progressing animation */
 
-                                            }})
-                                        ;
+                                    //         }})
+                                    //     ;
                                     
-                                        /* animCounter.pause(); */// # [PASSING]
-                                        /* animCounter.play(); */// # [PASSING]
+                                    //     /**
+                                    //      * @test
+                                    //      */
+                                    //     /* animCounter.pause(); */// # [PASSING]
+                                    //     /* animCounter.play(); */// # [PASSING]
 
-                                        /**
-                                         * > **NOTE:** Exposing [animCounter] to play|pause from DevTools with ease. 
-                                         * 
-                                         * @global
-                                         * @var
-                                         */
-                                        globalThis.animCounter1 = animCounter;
+                                    //     /**
+                                    //      * > **NOTE:** Exposing [animCounter] to play|pause from DevTools with ease. 
+                                    //      * 
+                                    //      * @global
+                                    //      * @var
+                                    //      */
+                                    //     globalThis.animCounter1 = animCounter;
                                         
-                                    }(paths);
+                                    // }();
 
-                                /* === ANIMATIONS === */
+                            /* === ANIMATIONS === */
                             
                             /**
                              * @override
                              */
-                            SVGList.from(paths).on((path)=>{
+                            SVGList.from(paths).on((path, step)=>{
 
                                 // DEV-TIP # pass {0 | false} to [length] to hide arrow heads of line segment (or vector)
                                 path.setPoints([
@@ -306,17 +331,22 @@ export default class {
                                          * @override
                                          * @type text positioning
                                          */
-                                        let text_labels;
                                         switch (true) {
-                                            case ( path.id === ENUMS.ID.z_axis ) :
+                                            case ( path.id === ENUMS.ID.north ) :
+                                                x += 0;
+                                                y += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                            break;
+                                            case ( path.id === ENUMS.ID.south ) :
+                                                x += 0;
                                                 y -= Math.ceil(path.dataset.scaling) + TEXT_SPACING;
                                             break;
-                                            case ( path.id === ENUMS.ID.x_axis ) :
-                                                x += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                            case ( path.id === ENUMS.ID.west ) :
+                                                x -= Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                                y += 0;
                                             break;
-                                            case ( path.id === ENUMS.ID.y_axis ) :
-                                                x -= Math.ceil(path.dataset.scaling) + (TEXT_SPACING * GROW_ALONG_SLOPE);
-                                                y += Math.ceil(path.dataset.scaling) + (TEXT_SPACING * GROW_ALONG_SLOPE);
+                                            case ( path.id === ENUMS.ID.east ) :
+                                                x += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
+                                                y += 0;
                                             break;
                                         }
                                         
@@ -329,13 +359,21 @@ export default class {
                                                 .getComputedStyle(document.documentElement)
                                                 .getPropertyValue('font-size').replace(CSS.px.name, "");
                                         if (defaultVendorFontSize) {
+
+                                            /**
+                                             * **DEV_NOTE**: apparently labels are drawn counter-clockwise, compared to arrow stroke clockwise direction...
+                                             * 
+                                             * @debugger
+                                             */
+                                            let color_culprit;
+                                            /* console.log(path.style.stroke); */                                            
                                             path.setLabel({
                                                 x, 
                                                 y, 
                                                 svg: path.getParent(), 
-                                                text: path.id.replace("_axis", "").toUpperCase(), 
-                                                overrides: { 
-                                                    fill: path.style.stroke, 
+                                                text: MAPPING.labels.compass.get(path.id), 
+                                                overrides: {
+                                                    fill: pathsPalette.at(-step)/* instead of ==> path.style.stroke */, 
                                                     scale: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize),
                                                 }
                                             });
