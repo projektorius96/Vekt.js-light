@@ -70,7 +70,7 @@ export function setPoints(points = [], scalingFactor = 1) {
  * @param {String} text             The text to show (e.g. 'x', 'θ', 'Δv')
  * @param {Object} [opts]           Optional style overrides
  *   @param {String} opts.fontFamily Default: 'serif'
- *   @param {Number} opts.fontSize   Default: 16
+ *   @param {Number} opts.fontSize   Default: 16 (de-facto standard among common browser vendors)
  *   @param {String} opts.fontStyle  Default: 'italic'
  *   @param {String} opts.fill       Default: 'black'
  *   @param {Number} opts.dx         Fine-tune baseline offset (e.g. 0.1em)
