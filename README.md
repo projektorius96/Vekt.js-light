@@ -7,9 +7,9 @@
 > The annotations you may have stumbled upon by examining the source code, as follows:..
 
 ```diff
-DEV_NOTE # ... : a note left by author developer
-DEV_NOTE (!) # ... : the IMPORTANT note left by author developer
-EXAMPLE # ... : in-code example next to parameter (option) explaining its usage
+    DEV_NOTE # a note left by author developer
+    DEV_NOTE (!) # the IMPORTANT note left by author developer
+    EXAMPLE # in-code example next to parameter (option) explaining its usage
 ```
 
 ### Table of contents
@@ -20,7 +20,7 @@ EXAMPLE # ... : in-code example next to parameter (option) explaining its usage
 
 #### **PREREQUISITES**:
 
-1) Make sure you got the latest `Node.js` and `npm` on your machine, as well as the dependency of `Vite.js-light`;
+1) Make sure you got the latest `Node.js`, as well as the dependency of `Vite.js`;
 
 #### **REMARKS**:
 
