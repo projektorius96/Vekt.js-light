@@ -24,10 +24,10 @@
 
 #### **REMARKS**:
 
-Most of the time you will be coding under the following paths (_notice, the paths are given in diomatic, Unix-like format_):
+Most of the time you will be coding under the following paths:
 
-- `<root>/implementation/user-config.js`;
-- `<root>/implementation/svg/index.js` (including the paths below `/svg/`, e.g. `/svg/shapes/`).
+- `<root>/implementation/user-config.js`; (used mainly for HTMLCanvas-based grid settings, etc.)
+- `<root>/implementation/svg/index.js`; (including the paths below `/svg/`, e.g. `/svg/shapes/`).
 
 ---
 

@@ -117,7 +117,7 @@ export default class {
                                         fillStroke: ENUMS.COLOR.magenta,
                                         opacity: 0.25,
                                         scaling: stage.grid.GRIDCELL_DIM,
-                                        angle: -1 * QUADRANT,
+                                        angle: -3 * QUADRANT,
                                         points: [
 
                                         /* === ZERO VECTOR (opens the path) === */
@@ -147,7 +147,7 @@ export default class {
                             ({paths}) => SVGList.from(paths).on((path)=>{
                                 
                                 // DEV_NOTE [CULPRIT-SOLVED] # matrix transformation cannot happen in homogeneous fashion, it must be separate matrix multiplication operation, with skew angle (rotation) would be disregarded (ignored)
-                                UnitSquare.draw( { Helpers: HTMLCanvas.Helpers, path/* , skew: { X: { phi: -0 } } */ } )
+                                UnitSquare.draw( { Helpers: HTMLCanvas.Helpers, path, skew: { X: { phi: -15 } } } )
 
                             })
                             );
@@ -267,7 +267,6 @@ export default class {
                                 return path = path.style.stroke;
                             });
                             
-
                             /* === ANIMATIONS === */
 
                                     // void function draw_animations() {

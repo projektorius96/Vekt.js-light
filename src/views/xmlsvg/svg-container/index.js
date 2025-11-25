@@ -10,7 +10,7 @@ const [
     CASE
     ,
     METHOD
-] = Array(4).fill(ENUM);
+] = Array(3).fill(ENUM);
 
 export const svg_container = getNamespace(import.meta.url);
 customElements.define(svg_container, class extends HTMLElement {

@@ -36,29 +36,43 @@ export function setTransform({angle = 0, translateX = 0, translateY = 0, skew = 
 
     const homogeneousCoords = [x11, y12, x21, y22, z31, z32];
 
-    if ( homogeneousCoords && skew ) {
+    // Create a DOMMatrix for the base rotation + translation
+    const baseMatrix = new DOMMatrix(homogeneousCoords);
 
-        let transformedMatrix = new DOMMatrix();
-            // DEV_NOTE (!) # under the hood SKIA follows column-vector multiplication conventional rule, thus following .multiply call will rotate first, then skew, as follows:
-            if ( skew?.X ) transformedMatrix = (new DOMMatrix( skewXMatrix( degToRad( skew?.X?.phi ), z31, z32 ) )).multiply(homogeneousCoords) ;
-            if ( skew?.Y ) transformedMatrix = (new DOMMatrix( skewYMatrix( degToRad( skew?.Y?.phi ), z31, z32 ) )).multiply(homogeneousCoords) ;        
-        
-        return (
-
-            [...transformedMatrix.toString().replace(/^matrix\((.*)\)$/, '$1').split(', ')]
-
-        );
-
-    } else {
-
-        return (
-
-            [...homogeneousCoords]
-
-        );
-
+    // If no skew (or skew is falsy), just return the base components
+    if (!skew) {
+        return [...homogeneousCoords];
     }
 
+    // GOAL: Compose skew matrices with the base so rotation is preserved.
+    /* MEMO: 
+    - use zero translation in skew matrices here to avoid doubling translation that may impact orientation of pivot for rotation.
+    - order matters, meaning apply base (rotation+translation) first, then skew-X, then skew-Y (if provided).
+    - With DOMMatrix.multiply: newSkew.multiply(current) -> newSkew * current 
+    */
+    let resultMatrix;
+
+    if (skew?.X) {
+        const phiX = degToRad( skew?.X?.phi || 0 );
+        const skewX = new DOMMatrix(skewXMatrix(phiX, 0, 0));
+        resultMatrix = skewX.multiply(baseMatrix);
+    }
+
+    if (skew?.Y) {
+        const phiY = degToRad( skew?.Y?.phi || 0 );
+        const skewY = new DOMMatrix(skewYMatrix(phiY, 0, 0));
+        resultMatrix = skewY.multiply(baseMatrix);
+    }
+
+    // Return in the same ordering you used before
+    return [
+        resultMatrix.a,
+        resultMatrix.b,
+        resultMatrix.c,
+        resultMatrix.d,
+        baseMatrix.e,
+        baseMatrix.f
+    ];
 }
 
 /**

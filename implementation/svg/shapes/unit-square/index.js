@@ -1,6 +1,6 @@
 export default class {
 
-    static draw({Helpers, path/* , skew = { X: { phi: 0 } } */}) {
+    static draw({Helpers, path, skew = { Y: { phi: 0 } }}) {
                                                 
         if ( path.setPoints( path.getPoints() ) ) {
 
@@ -21,13 +21,14 @@ export default class {
                         translateX: stage.grid.SVG.X_IN_MIDDLE
                         , 
                         translateY: stage.grid.SVG.Y_IN_MIDDLE
-                        /* ,
-                        skew */
+                        ,
+                        skew
                     })
                 ).toString()
             );
         
         }
+        
     }
 
 }
