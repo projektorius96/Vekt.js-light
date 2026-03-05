@@ -1,5 +1,7 @@
-import { ENUM, ATTR } from '../../../../implementation/enums.js';
-export { ENUM, ATTR };
+import { ENUM } from '../../../../implementation/utils.js';
+export { ENUM };
+
+const { viewBox } = ENUM;
 
 export function getNamespace(import_meta_url) {
 
@@ -16,7 +18,7 @@ export function getNamespace(import_meta_url) {
  */
 export function setCoords() {
 
-    this.setAttribute(ATTR.viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
+    this.setAttribute(viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
     
 }
 
