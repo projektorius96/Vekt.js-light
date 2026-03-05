@@ -1,16 +1,17 @@
-import { ENUMS } from "./utils.js";
+import Views from './svg/entry.js';
+import { ENUMS, PRINT as STATIC_FIELD } from "./utils.js";
 import { userConfig } from "./user-config.js";
-import Views from './svg/index.js';
 
 export default class {
 
     /**
-     * > IMPORTANT: `default.init` MUST be called before `default.draw`, otherwise expect an error `"ReferenceError: stage is not defined"`
-     * @see default.draw
+     * > IMPORTANT: `default.init` MUST be called before `default.render`, otherwise expect an error `"ReferenceError: stage is not defined"`
+     * @see default.render
      * @static
      */
     static init({HTMLCanvas, XMLSVG}) {
 
+        const { setup } = STATIC_FIELD;
         const stage = new HTMLCanvas.ViewGroup.Stage({...userConfig.canvas.stage});
 
             if ( stage ) {
@@ -19,11 +20,11 @@ export default class {
                     new HTMLCanvas.ViewGroup.Layer({...userConfig.canvas.layers.grid})
                 );
 
-                // DEV_NOTE # checks if [Views] has the [Views.registerContainersForSVG] implemented, and only if implemented, calls
-                if ('registerContainersForSVG' in Views) {
+                // DEV_NOTE # checks if [Views] has the [Views.setup] implemented, and only if implemented, calls
+                if (setup in Views) {
 
                     stage.append(
-                    ...Views.registerContainersForSVG({XMLSVG})
+                    ...Views.setup({XMLSVG})
                     );
 
                 }
@@ -35,11 +36,13 @@ export default class {
     }
 
     /**
-     * > `default.draw` MUST be called after `default.init`
+     * > `default.render` MUST be called after `default.init`
      * @see default.init
      * @static
      */
-    static draw({HTMLCanvas, XMLSVG}, context) {
+    static render({HTMLCanvas, XMLSVG}, context) {
+
+        const { render } = STATIC_FIELD;
     
         // DEV_NOTE # because we mix HTML Canvas (i.e. Canvas API) together with XML SVG (i.e. SVG) web technologies, we must do the following `context` check:..
         if ( context instanceof CanvasRenderingContext2D ) {
@@ -61,10 +64,10 @@ export default class {
 
         } else {
 
-            // DEV_NOTE # likewise, checks if [Views] has the [Views.drawPaths] implemented, and only if implemented, calls
-            if ('drawPaths' in Views) {
+            // DEV_NOTE # likewise, checks if [Views] has the [Views.render] implemented, and only if implemented, calls
+            if (render in Views) {
 
-                Views.drawPaths({HTMLCanvas, XMLSVG, ENUMS});
+                Views.render({HTMLCanvas, XMLSVG, ENUMS});
 
             }
 

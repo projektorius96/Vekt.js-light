@@ -24,11 +24,14 @@
 
 #### **REMARKS**:
 
-Most of the time you will be coding under the following paths:
+Most of the time you will be tinkering the code under the following paths:
 
-- `<root>/implementation/user-config.js`; (used mainly for HTMLCanvas-based grid settings, etc.)
-- `<root>/implementation/svg/index.js`; (including the paths below `/svg/`, e.g. `/svg/shapes/`).
+- `<root>/implementation/user-config.js`: _at the time of writing this, the "user-config" file holds the HTMLCanvas-based grid settings_;
+- `<root>/implementation/svg/entry.js`: _including the paths under the `/svg/` itself, e.g. `/svg/shapes/`_; this file in truns holds two static fields:
+- the `setup` static field used to register `svg-container`
+- the `render` static field used to mount custom "shape" implemenation onto `svg-path` to be rendered (_once rendered, you will see the shape visible on your browser's viewport_);
+- Happy coding!
 
 ---
 
-> Made with ♥ by [**projektorius96**](https://github.com/projektorius96).
+> Made with ♥ by [**projektorius96**](https://github.com/projektorius96) | 2026

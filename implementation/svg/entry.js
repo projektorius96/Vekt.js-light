@@ -1,16 +1,16 @@
 import './globals.css';
-import { CONSTANTS, MAPPING, PRINT } from './globals.js';
-import AnimationCounter from './modules/animations.js';
+/* import AnimationCounter from './modules/animations.js'; */
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
+import { CONSTANTS, MAPPING, PRINT } from './globals.js';
 
 export default class {
 
     /**
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
-    static registerContainersForSVG({XMLSVG}) {
+    static setup({XMLSVG}) {
     
         return([
             new XMLSVG.ViewGroup.Container({
@@ -35,13 +35,14 @@ export default class {
     }
 
     /**
-     * @returns {void} Instantiates `SVGPathElement`, each internally presented as `<svg-path>` nested under top-level XML-namespaced `<svg-container>`
-     * @see {@link `default.registerContainersForSVG`}
+     * @returns {void} Instantiates `SVGPathElement`, each internally presented as `<svg-path>` nested under top-level XML-namespaced `<svg-container>` web component
+     * @see {@link `default.setup`}
      */
-    static drawPaths({HTMLCanvas, XMLSVG, ENUMS}) {
+    static render({HTMLCanvas, XMLSVG, ENUMS}) {
 
         /**
          * @alias
+         * @type {Array<SVGElement>}
          */
         const 
             [SVGList, OrderedPair] = Array(2).fill(Array);
@@ -55,7 +56,7 @@ export default class {
             ;
 
         SVGList
-        .of(...this.registerContainersForSVG({XMLSVG}))
+        .of(...this.setup({XMLSVG}))
         .on(
             
             ({id})=>{

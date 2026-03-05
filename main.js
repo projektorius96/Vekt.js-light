@@ -14,7 +14,7 @@ document.on('DOMContentLoaded', ()=>{
 
             HTMLCanvas
                 .init({stage})
-                    .on( Implementation.draw.bind(null, {HTMLCanvas, XMLSVG}) );
+                    .on( Implementation.render.bind(null, {HTMLCanvas, XMLSVG}) );
         
     })
 
