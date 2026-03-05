@@ -1,40 +1,5 @@
-/* === PATTERNS === */
-
-/**
- * @example
- * 
- * ENUM.give;  //  'give'
- * ENUM.me;    //  'me'
- * ENUM.value; //  'value'
-*/
-export const 
-    ENUM = 
-    new Proxy( Object.create(null) , {
-        get(nil, key){
-            return (
-                key = `${key}`
-            );
-        }
-    })
-    ;
-
-/**
- * @alias
-*/
-const 
-    ENUMS = Object.freeze(
-        Object.assign(
-            Object.create(null)
-            ,
-            {
-                [ENUM.PRINT]: ENUM,
-                [ENUM.ID]: ENUM
-            }
-        )
-    )
-    ;
-
-/* === PATTERNS === */
+import { PRINT, ENUMS } from '../utils.js';
+export { PRINT, ENUMS }
 
 /* === CONSTANTS === */
 
@@ -69,10 +34,10 @@ export
             {
                 labels: {
                     compass: new Map([
-                        [ENUMS.ID.east, ENUMS.PRINT.X.replace(/^/, '+')],
-                        [ENUMS.ID.south, ENUMS.PRINT.Y.replace(/^/, '+')],
-                        [ENUMS.ID.west, ENUMS.PRINT.X.replace(/^/, '-')],
-                        [ENUMS.ID.north, ENUMS.PRINT.Y.replace(/^/, '-')],
+                        [ENUMS.ID.east, ENUMS.ID.X.replace(/^/, '+')],
+                        [ENUMS.ID.south, ENUMS.ID.Y.replace(/^/, '+')],
+                        [ENUMS.ID.west, ENUMS.ID.X.replace(/^/, '-')],
+                        [ENUMS.ID.north, ENUMS.ID.Y.replace(/^/, '-')],
                     ])
                 }
             }

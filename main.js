@@ -14,9 +14,9 @@ document.on('DOMContentLoaded', ()=>{
 
             HTMLCanvas
                 .init({stage})
-                    .on( Implementation.draw.bind(null, {HTMLCanvas, XMLSVG}) );
+                    .on( Implementation.render.bind(null, {HTMLCanvas, XMLSVG}) );
         
-    })
+    });
 
     // DEV_NOTE (!) # This allows to initiate `<canvas>` hosted "bitmap" with internal context without waiting `window.onresize` to be triggered by end-user
     window.dispatch( new Event('resize') );

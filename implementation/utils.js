@@ -1,37 +1,26 @@
-/* === enum === */
-
 /**
+ * Single enum module: Proxy-based ENUM returns property name as string.
+ * ENUMS aggregates all logical groups used across the codebase.
+ *
  * @example
- * 
- * ENUM.give; // 'give'
- * ENUM.me; // 'me'
- * ENUM.value; // 'value'
-*/
-const
-    ENUM = 
-        new Proxy( Object.create(null) , {
-            get(nil, key){
-                return (
-                    key = `${key}`
-                );
-            }
-        })
-    ;
-
-/**
- * @alias
+ * ENUM.give;  // 'give'
+ * ENUM.me;    // 'me'
+ * ENUMS.COLOR.black; // 'black'
  */
-const
-    [COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, PRINT, ID] = Array(7).fill(ENUM)
-    ;
+const PRINT = new Proxy(Object.create(null), {
+    get(_nil, key) {
+        return `${key}`;
+    },
+});
 
-export
-    const
-        ENUMS = Object.freeze({
-            COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, PRINT, ID
-        })
-        ;
+const [COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, ID] = Array(7).fill(PRINT);
+const ENUMS = Object.freeze({
+    COLOR,
+    SHAPE,
+    UI_EVENT,
+    CASE,
+    ATTRIBUTE,
+    ID,
+});
 
-/* === enum === */
-
-
+export { PRINT, ENUMS };

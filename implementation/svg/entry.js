@@ -1,48 +1,48 @@
 import './globals.css';
-import { CONSTANTS, MAPPING } from './globals.js';
-import AnimationCounter from './modules/animations.js';
+/* import AnimationCounter from './modules/animations.js'; */
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
+import { CONSTANTS, MAPPING, ENUMS } from './globals.js';
 
 export default class {
 
     /**
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
-    static registerContainersForSVG({XMLSVG}){
+    static setup({XMLSVG}) {
     
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'unit_square',
+                    id: /* ENUMS.ID.HIDE ||  */ENUMS.ID.unit_square,
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'axes',
+                    id: /* ENUMS.ID.HIDE ||  */ENUMS.ID.axes,
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    /* DEV_NOTE (!) # adding random prefix such as "HIDE:", it will opt-out from control flow in switch block (see `default.drawPaths`) */
-                    id: 'HIDE:circle',
+                    id: ENUMS.ID.HIDE || ENUMS.ID.circle,
                 }
             })
-        ])
+        ]);
 
     }
 
     /**
-     * @returns {void} Instantiates `SVGPathElement`, each internally presented as `<svg-path>` nested under top-level XML-namespaced `<svg-container>`
-     * @see {@link `default.registerContainersForSVG`}
+     * @returns {void} Instantiates `SVGPathElement`, each internally presented as `<svg-path>` nested under top-level XML-namespaced `<svg-container>` web component
+     * @see {@link `default.setup`}
      */
-    static drawPaths({HTMLCanvas, XMLSVG, ENUMS}) {
+    static render({HTMLCanvas, XMLSVG, ENUMS}) {
 
         /**
          * @alias
+         * @type {Array<SVGElement>}
          */
         const 
             [SVGList, OrderedPair] = Array(2).fill(Array);
@@ -56,11 +56,12 @@ export default class {
             ;
 
         SVGList
-        .of(...this.registerContainersForSVG({XMLSVG}))
+        .of(...this.setup({XMLSVG}))
         .on(
             
-            ({id})=>{
+            (element)=>{
 
+                const { id } = element;
                 switch (id) {
 
                     case (ENUMS.CASE.circle) :
@@ -69,7 +70,7 @@ export default class {
                         .setPaths([
                             new XMLSVG.Views.Path({
                                 options: {
-                                    id: ENUMS.PRINT.unit_circle,
+                                    id: ENUMS.ID.unit_circle,
                                     scaling: stage?.grid.GRIDCELL_DIM * 2.0,
                                     points: [
                                         ...setRange(0, 1, 360 * 2).map((deg)=>{
@@ -101,166 +102,96 @@ export default class {
                     
                     case (ENUMS.CASE.unit_square) :
 
-                            XMLSVG.Helpers.findByID(id)
-                            .setPaths([
-                                new XMLSVG.Views.Path({
-                                    options: {
-                                        id: ENUMS.PRINT.unit_square,
-                                        hidden: !true,
-                                        
-                                        /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
-                                        dashed: 0,
+                        XMLSVG.Helpers.findByID(id)
+                        .setPaths([
+                            new XMLSVG.Views.Path({
+                                options: {
+                                    id: ENUMS.ID.unit_square,
+                                    hidden: !true,
+                                    
+                                    /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
+                                    dashed: 0,
 
-                                        strokeWidth: 1,
-                                        /* fill: ENUMS.COLOR.magenta,
-                                        stroke: ENUMS.COLOR.magenta, */
-                                        fillStroke: ENUMS.COLOR.magenta,
-                                        opacity: 0.25,
-                                        scaling: stage.grid.GRIDCELL_DIM,
-                                        angle: -3 * QUADRANT,
-                                        points: [
+                                    strokeWidth: 1,
+                                    /* fill: ENUMS.COLOR.magenta,
+                                    stroke: ENUMS.COLOR.magenta, */
+                                    fillStroke: ENUMS.COLOR.magenta,
+                                    opacity: 0.25,
+                                    scaling: stage.grid.GRIDCELL_DIM,
+                                    angle: -3 * QUADRANT,
+                                    points: [
 
-                                        /* === ZERO VECTOR (opens the path) === */
-                                            ...OrderedPair.from([{x: 0, y: 0}]),
-                                        /* === ZERO VECTOR (opens the path) === */
+                                    /* === ZERO VECTOR (opens the path) === */
+                                        ...OrderedPair.from([{x: 0, y: 0}]),
+                                    /* === ZERO VECTOR (opens the path) === */
 
-                                        /* === BASIS === */
-                                            ...OrderedPair.from([{x: 1, y: 0}]),
-                                            ...OrderedPair.from([{x: 1, y: 1}]),
-                                            ...OrderedPair.from([{x: 0, y: 1}]),
-                                        /* === BASIS === */
+                                    /* === BASIS === */
+                                        ...OrderedPair.from([{x: 1, y: 0}]),
+                                        ...OrderedPair.from([{x: 1, y: 1}]),
+                                        ...OrderedPair.from([{x: 0, y: 1}]),
+                                    /* === BASIS === */
 
-                                        /* === ZERO VECTOR (closes the path) === */
-                                            ...OrderedPair.from([{x: 0, y: 0}]),
-                                        /* === ZERO VECTOR (closes the path) === */
-                                        
-                                        ].map((basis)=>{
-                                            return({
-                                                x: basis.x * GLOBAL_SCALAR,
-                                                y: basis.y * GLOBAL_SCALAR,
-                                            })
+                                    /* === ZERO VECTOR (closes the path) === */
+                                        ...OrderedPair.from([{x: 0, y: 0}]),
+                                    /* === ZERO VECTOR (closes the path) === */
+                                    
+                                    ].map((basis)=>{
+                                        return({
+                                            x: basis.x * GLOBAL_SCALAR,
+                                            y: basis.y * GLOBAL_SCALAR,
                                         })
-                                    }
-                                })
-                            ]
-                            , 
-                            ({paths}) => SVGList.from(paths).on((path)=>{
-                                
-                                // DEV_NOTE [CULPRIT-SOLVED] # matrix transformation cannot happen in homogeneous fashion, it must be separate matrix multiplication operation, with skew angle (rotation) would be disregarded (ignored)
-                                UnitSquare.draw( { Helpers: HTMLCanvas.Helpers, path, skew: { X: { phi: -15 } } } )
-
+                                    })
+                                }
                             })
-                            );
+                        ]
+                        , 
+                        ({paths}) => SVGList.from(paths).on((path)=>{
+                            
+                            // DEV_NOTE [CULPRIT-SOLVED] # matrix transformation cannot happen in homogeneous fashion, it must be separate matrix multiplication operation, with skew angle (rotation) would be disregarded (ignored)
+                            UnitSquare.draw( { Helpers: HTMLCanvas.Helpers, path, skew: { X: { phi: -15 } } } )
+
+                        })
+                        );
                         
                     break;
 
-                    case (ENUMS.CASE.axes) :                    
-                        
-                    const NUMBER_OF_AXIS = 4;
+                    case (ENUMS.CASE.axes): {
+
+                        const 
+                            PathView = XMLSVG.Views.Path
+                            ,
+                            sharedOptions = {
+                                id: '',
+                                scaling: 0,
+                                angle: 0,
+                                points: [{ x: 1, y: 0 }],
+                                dashed: false,
+                                strokeWidth: 3,
+                                fillStroke: ENUMS.COLOR.magenta,
+                            }
+                            ,
+                            AXES_CONFIG = [
+                                { id: ENUMS.ID.east, fillStroke: ENUMS.COLOR.green, angleMultiplier: 0 },
+                                { id: ENUMS.ID.south, fillStroke: ENUMS.COLOR.black, angleMultiplier: 1 },
+                                { id: ENUMS.ID.west, fillStroke: ENUMS.COLOR.blue, angleMultiplier: 2 },
+                                { id: ENUMS.ID.north, fillStroke: ENUMS.COLOR.red, angleMultiplier: 3 },
+                            ]
+                        ;
+
+                        const scaling = GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM;
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
-                            ...Array(NUMBER_OF_AXIS).fill(XMLSVG.Views.Path).map((axis, i)=>{
-
-                                const
-                                    animationConfig = {
-                                        count: 90
-                                    }
-                                    ,
-                                    sharedOptions = {
-                                        id: '',
-                                        scaling: 0,
-                                        angle: 0,
-                                        points: [
-                                            /* DEV_NOTE (!) # mandatory basis vectors */
-                                            {x: 1, y: 0}
-                                        ],
-
-                                        /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
-
-                                        dashed: false,
-                                        strokeWidth: 3,
-                                        fillStroke: ENUMS.COLOR.magenta
-                                    }
-                                
-                                const step = i;
-                                switch (step) {
-
-                                    case 0:
-                                        return (
-                                            axis = new axis({
-                                                options: {
-                                                    ...sharedOptions,
-                                                    
-                                                    /**
-                                                     * @override
-                                                     */
-                                                    id: ENUMS.PRINT.east,
-                                                    fillStroke: ENUMS.COLOR.green,
-                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
-                                                    angle: step * QUADRANT,
-                                                }
-                                            })
-                                        );
-                                    break;
-                                    case 1:
-                                        return (
-                                            axis = new axis({
-                                                options: {
-                                                    ...sharedOptions,
-                                                    
-                                                    /**
-                                                     * @override
-                                                     */
-                                                    id: ENUMS.PRINT.south,
-                                                    fillStroke: ENUMS.COLOR.black,
-                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
-                                                    angle: step * QUADRANT,
-                                                }
-                                            })
-                                        );
-                                    break;
-
-                                    case 2:
-                                        return (
-                                            axis = new axis({
-                                                options: {
-
-                                                    ...sharedOptions,
-                                                    
-                                                    /**
-                                                     * @override
-                                                     */
-                                                    id: ENUMS.PRINT.west,
-                                                    fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: GLOBAL_SCALAR *stage.grid.GRIDCELL_DIM,
-                                                    angle: step * QUADRANT
-                                                    
-                                                }
-                                            })
-                                        );
-                                    break;
-
-                                    case 3:
-                                        return (
-                                            axis = new axis({
-                                                options: {
-                                                    ...sharedOptions,
-                                                    
-                                                    /**
-                                                     * @override
-                                                     */
-                                                    id: ENUMS.PRINT.north,
-                                                    fillStroke: ENUMS.COLOR.red,
-                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
-                                                    angle: step * QUADRANT
-                                                }
-                                            })
-                                        );
-                                    break;
-
-                                }
-                                
-                            })
+                            ...AXES_CONFIG.map(({ id, fillStroke, angleMultiplier }) =>
+                                new PathView({
+                                    options: {
+                                        ...sharedOptions,
+                                        id,
+                                        fillStroke,
+                                        scaling,
+                                        angle: angleMultiplier * QUADRANT,
+                                    },
+                                })
+                            ),
                         ], ({paths}) => {
 
                             const pathsPalette = SVGList.from(paths).map((path)=>{
@@ -357,6 +288,7 @@ export default class {
                                         const defaultVendorFontSize = window
                                                 .getComputedStyle(document.documentElement)
                                                 .getPropertyValue('font-size').replace(CSS.px.name, "");
+
                                         if (defaultVendorFontSize) {
 
                                             /**
@@ -384,12 +316,14 @@ export default class {
 
                             });
 
-                        });
+                            });
 
-                    break;
-                }
+                        break;
+                    /* endcase */}
+                /* endswitch */}
         
         });
         
     }
+    
 }

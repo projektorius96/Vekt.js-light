@@ -1,57 +1,20 @@
+import { applyShapeTransform } from '../../modules/transform-utils.js';
+
 export default class {
 
-    static setTransfromPoints({Helpers}) {
+  static setTransfromPoints({ Helpers }) {
+    return ({ id }) => {
+      const path = document.getElementById(id);
+      applyShapeTransform(path, Helpers, {});
+    };
+  }
 
-            return (
-
-                ({id})=>{
-                    
-                    const path = document.getElementById( id );
-
-                    if( path.setPoints( path.getPoints() ) ) {
-
-                        /**
-                         * @dependencies
-                         */
-                        const 
-                            { Trigonometry } = Helpers
-                        ;
-                        
-                        path.setAttribute(
-                            'transform'
-                            , 
-                            new DOMMatrix(
-                                Trigonometry.setTransform({
-                                    angle: ( path.dataset.angle || 0 )
-                                    , 
-                                    translateX: stage.grid.SVG.X_IN_MIDDLE
-                                    , 
-                                    translateY: stage.grid.SVG.Y_IN_MIDDLE
-                                })
-                            ).toString()
-                        );
-                    
-                    }
-
-                }
-            );
-
-    }
-
-    static [drawVector.name] = drawVector;
+  static [drawVector.name] = drawVector;
 
 }
 
-function drawVector({Helpers, path, angle, sharpness = 6, length = 1/6}) {
-    
-    /**
-     * @dependencies
-     */
-    const 
-        { Trigonometry } = Helpers
-        ;
-        
-    // DEV_NOTE # arrowhead points in local coordinates system (pointing along positive X axis)
+function drawVector({ Helpers, path, angle, sharpness = 6, length = 1 / 6 }) {
+  // DEV_NOTE # arrowhead points in local coordinates system (pointing along positive X axis)
     const baseShape = [
         {x: 1, y: 0},
         { x:0, y:0 },                            // tip of arrow
@@ -66,19 +29,7 @@ function drawVector({Helpers, path, angle, sharpness = 6, length = 1/6}) {
         });
     });
     
-    path.setAttribute(
-        'transform'
-        , 
-        new DOMMatrix(
-            Trigonometry.setTransform({
-                angle: angle || Number( path.dataset.angle )
-                , 
-                translateX: stage.grid.SVG.X_IN_MIDDLE
-                , 
-                translateY: stage.grid.SVG.Y_IN_MIDDLE
-            })
-        ).toString()
-    )
+    applyShapeTransform(path, Helpers, { angle: angle ?? Number(path.dataset.angle) });
 
     return baseShape;
 

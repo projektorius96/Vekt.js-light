@@ -1,27 +1,7 @@
-/**
- * @example
- * 
- * ENUM.give;  //  'give'
- * ENUM.me;    //  'me'
- * ENUM.value; //  'value'
-*/
-export const 
-    ENUM = 
-    new Proxy( Object.create(null) , {
-        get(nil, key){
-            return (
-                key = `${key}`
-            );
-        }
-    })
-    ;
+import { PRINT } from '../../../../implementation/utils.js';
+export { PRINT };
 
-/**
-    * @alias
-*/
-const 
-    ATTR = ENUM
-    ;
+const { viewBox } = PRINT;
 
 export function getNamespace(import_meta_url) {
 
@@ -38,7 +18,7 @@ export function getNamespace(import_meta_url) {
  */
 export function setCoords() {
 
-    this.setAttribute(ATTR.viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
+    this.setAttribute(viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
     
 }
 
