@@ -1,9 +1,9 @@
-import { ENUM, getNamespace, setPoints } from "../modules/index.js";
+import { PRINT, getNamespace, setPoints } from "../modules/index.js";
 
 /**
  * @alias
  */
-const COLOR = ENUM;
+const COLOR = PRINT;
 
 export const svg_path = getNamespace(import.meta.url);
 customElements.define(svg_path, class extends HTMLElement {

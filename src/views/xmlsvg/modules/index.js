@@ -1,7 +1,7 @@
-import { ENUM } from '../../../../implementation/utils.js';
-export { ENUM };
+import { PRINT } from '../../../../implementation/utils.js';
+export { PRINT };
 
-const { viewBox } = ENUM;
+const { viewBox } = PRINT;
 
 export function getNamespace(import_meta_url) {
 

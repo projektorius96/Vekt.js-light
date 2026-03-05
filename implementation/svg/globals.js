@@ -1,4 +1,5 @@
-import { ENUMS } from '../utils.js';
+import { PRINT, ENUMS } from '../utils.js';
+export { PRINT }
 
 /* === CONSTANTS === */
 
@@ -33,10 +34,10 @@ export
             {
                 labels: {
                     compass: new Map([
-                        [ENUMS.ID.east, ENUMS.PRINT.X.replace(/^/, '+')],
-                        [ENUMS.ID.south, ENUMS.PRINT.Y.replace(/^/, '+')],
-                        [ENUMS.ID.west, ENUMS.PRINT.X.replace(/^/, '-')],
-                        [ENUMS.ID.north, ENUMS.PRINT.Y.replace(/^/, '-')],
+                        [ENUMS.ID.east, ENUMS.ID.X.replace(/^/, '+')],
+                        [ENUMS.ID.south, ENUMS.ID.Y.replace(/^/, '+')],
+                        [ENUMS.ID.west, ENUMS.ID.X.replace(/^/, '-')],
+                        [ENUMS.ID.north, ENUMS.ID.Y.replace(/^/, '-')],
                     ])
                 }
             }

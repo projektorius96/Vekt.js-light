@@ -1,5 +1,5 @@
 import setStyling from './index.css.js';
-import { ENUM, getNamespace, setCoords, setPoints, drawLabel } from '../modules/index.js';
+import { PRINT, getNamespace, setCoords, setPoints, drawLabel } from '../modules/index.js';
 import { getScaledPointsFromDataset } from '../svg-path-geometry.js';
 
 /**
@@ -11,7 +11,7 @@ const [
     CASE
     ,
     METHOD
-] = Array(3).fill(ENUM);
+] = Array(3).fill(PRINT);
 
 export const svg_container = getNamespace(import.meta.url);
 customElements.define(svg_container, class extends HTMLElement {

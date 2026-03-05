@@ -1,5 +1,5 @@
 import './globals.css';
-import { CONSTANTS, MAPPING } from './globals.js';
+import { CONSTANTS, MAPPING, PRINT } from './globals.js';
 import AnimationCounter from './modules/animations.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
@@ -10,28 +10,27 @@ export default class {
     /**
      * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
      */
-    static registerContainersForSVG({XMLSVG}){
+    static registerContainersForSVG({XMLSVG}) {
     
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'unit_square',
+                    id: /* PRINT.HIDE ||  */PRINT.unit_square,
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: 'axes',
+                    id: /* PRINT.HIDE ||  */PRINT.axes,
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    /* DEV_NOTE (!) # adding random prefix such as "HIDE:", it will opt-out from control flow in switch block (see `default.drawPaths`) */
-                    id: 'HIDE:circle',
+                    id: PRINT.HIDE || PRINT.circle,
                 }
             })
-        ])
+        ]);
 
     }
 
@@ -69,7 +68,7 @@ export default class {
                         .setPaths([
                             new XMLSVG.Views.Path({
                                 options: {
-                                    id: ENUMS.PRINT.unit_circle,
+                                    id: ENUMS.ID.unit_circle,
                                     scaling: stage?.grid.GRIDCELL_DIM * 2.0,
                                     points: [
                                         ...setRange(0, 1, 360 * 2).map((deg)=>{
@@ -105,7 +104,7 @@ export default class {
                             .setPaths([
                                 new XMLSVG.Views.Path({
                                     options: {
-                                        id: ENUMS.PRINT.unit_square,
+                                        id: ENUMS.ID.unit_square,
                                         hidden: !true,
                                         
                                         /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
@@ -166,10 +165,10 @@ export default class {
                             fillStroke: ENUMS.COLOR.magenta,
                         };
                         const AXES_CONFIG = [
-                            { id: ENUMS.PRINT.east, fillStroke: ENUMS.COLOR.green, angleMultiplier: 0 },
-                            { id: ENUMS.PRINT.south, fillStroke: ENUMS.COLOR.black, angleMultiplier: 1 },
-                            { id: ENUMS.PRINT.west, fillStroke: ENUMS.COLOR.blue, angleMultiplier: 2 },
-                            { id: ENUMS.PRINT.north, fillStroke: ENUMS.COLOR.red, angleMultiplier: 3 },
+                            { id: ENUMS.ID.east, fillStroke: ENUMS.COLOR.green, angleMultiplier: 0 },
+                            { id: ENUMS.ID.south, fillStroke: ENUMS.COLOR.black, angleMultiplier: 1 },
+                            { id: ENUMS.ID.west, fillStroke: ENUMS.COLOR.blue, angleMultiplier: 2 },
+                            { id: ENUMS.ID.north, fillStroke: ENUMS.COLOR.red, angleMultiplier: 3 },
                         ];
                         const scaling = GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM;
                         XMLSVG.Helpers.findByID(id)
