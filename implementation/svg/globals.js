@@ -1,5 +1,5 @@
 import { PRINT, ENUMS } from '../utils.js';
-export { PRINT }
+export { PRINT, ENUMS }
 
 /* === CONSTANTS === */
 

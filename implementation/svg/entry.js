@@ -3,7 +3,7 @@ import './globals.css';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
-import { CONSTANTS, MAPPING, PRINT } from './globals.js';
+import { CONSTANTS, MAPPING, ENUMS } from './globals.js';
 
 export default class {
 
@@ -15,19 +15,19 @@ export default class {
         return([
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: /* PRINT.HIDE ||  */PRINT.unit_square,
+                    id: /* ENUMS.ID.HIDE ||  */ENUMS.ID.unit_square,
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: /* PRINT.HIDE ||  */PRINT.axes,
+                    id: /* ENUMS.ID.HIDE ||  */ENUMS.ID.axes,
                 }
             })
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: PRINT.HIDE || PRINT.circle,
+                    id: ENUMS.ID.HIDE || ENUMS.ID.circle,
                 }
             })
         ]);
@@ -59,8 +59,9 @@ export default class {
         .of(...this.setup({XMLSVG}))
         .on(
             
-            ({id})=>{
+            (element)=>{
 
+                const { id } = element;
                 switch (id) {
 
                     case (ENUMS.CASE.circle) :
@@ -155,6 +156,7 @@ export default class {
                     break;
 
                     case (ENUMS.CASE.axes): {
+
                         const PathView = XMLSVG.Views.Path;
                         const sharedOptions = {
                             id: '',
@@ -174,11 +176,11 @@ export default class {
                         const scaling = GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM;
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
-                            ...AXES_CONFIG.map(({ id: printId, fillStroke, angleMultiplier }) =>
+                            ...AXES_CONFIG.map(({ id, fillStroke, angleMultiplier }) =>
                                 new PathView({
                                     options: {
                                         ...sharedOptions,
-                                        id: printId,
+                                        id,
                                         fillStroke,
                                         scaling,
                                         angle: angleMultiplier * QUADRANT,
@@ -281,6 +283,7 @@ export default class {
                                         const defaultVendorFontSize = window
                                                 .getComputedStyle(document.documentElement)
                                                 .getPropertyValue('font-size').replace(CSS.px.name, "");
+
                                         if (defaultVendorFontSize) {
 
                                             /**
@@ -311,8 +314,8 @@ export default class {
                             });
 
                         break;
-                    }
-                }
+                /* endcase */}
+            /* endswitch */}
         
         });
         
