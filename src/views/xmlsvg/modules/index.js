@@ -1,27 +1,5 @@
-/**
- * @example
- * 
- * ENUM.give;  //  'give'
- * ENUM.me;    //  'me'
- * ENUM.value; //  'value'
-*/
-export const 
-    ENUM = 
-    new Proxy( Object.create(null) , {
-        get(nil, key){
-            return (
-                key = `${key}`
-            );
-        }
-    })
-    ;
-
-/**
-    * @alias
-*/
-const 
-    ATTR = ENUM
-    ;
+import { ENUM, ATTR } from '../../../../implementation/enums.js';
+export { ENUM, ATTR };
 
 export function getNamespace(import_meta_url) {
 

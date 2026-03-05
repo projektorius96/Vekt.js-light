@@ -1,33 +1,7 @@
-export default function() {
+import { initGlobalLayoutStyles, getViewportFillStyle } from '../../layout.css.js';
 
-    const styling$global = new CSSStyleSheet();
-        styling$global
-        .insertRule(/* css */`
-            :root {
-                --vertical-scrollbar-width: calc(100vw - 100%);
-            }
-        `);
-        styling$global
-        .insertRule(/* css */`
-            body,
-            body * {
-                box-sizing: border-box;
-                padding: 0;
-                margin: 0;
-                overflow: hidden;
-            }
-        `);
-    document.adoptedStyleSheets.push(styling$global)
-
-    this.style.cssText = /* css */`
-            display: block;
-            width: calc( 100vw - var(--vertical-scrollbar-width) );
-            height: 100vh;
-            position: relative;
-            top: 0px;
-            left: 0px;
-        `;
-
-    return true;
-
+export default function () {
+  initGlobalLayoutStyles();
+  this.style.cssText = getViewportFillStyle({ position: 'relative' });
+  return true;
 }

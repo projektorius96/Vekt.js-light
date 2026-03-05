@@ -1,5 +1,6 @@
-import setStyling from './index.css.js'
-import { ENUM, getNamespace, setCoords, setPoints, drawLabel } from "../modules/index.js";
+import setStyling from './index.css.js';
+import { ENUM, getNamespace, setCoords, setPoints, drawLabel } from '../modules/index.js';
+import { getScaledPointsFromDataset } from '../svg-path-geometry.js';
 
 /**
  * @alias
@@ -80,26 +81,9 @@ function setMixin(htmlcollection){
                             /**
                              * @see `<root>\\src\\views\\xmlsvg\\svg-path\\index.js` for its getter equivalent under `this.#serializePoints` call
                              */
-                            [METHOD.getPoints](){
-                                return (
-                                    this.dataset.points
-                                    .split(",")
-                                    .map(Number)
-                                    .map((vec2, i, attr)=>{
-                                        if (i % 2 === 0) {
-                                            return vec2 = {x: attr[i], y: attr[i+1]}
-                                        }
-                                    })
-                                    .filter(Boolean)
-                                    .map((point)=>{
-                                        return({
-                                            x: Number(this.dataset.scaling) * point.x,
-                                            y: Number(this.dataset.scaling) * point.y,
-                                        })
-                                    })
-                                );
-                            }
-                            ,
+                            [METHOD.getPoints]() {
+                                return getScaledPointsFromDataset(this);
+                            },
                             [METHOD.setPoints](points, scalingFactor = 1){                                                    
                                 this.attributes.d.value = setPoints.call(view, points, scalingFactor)
                                 return true;

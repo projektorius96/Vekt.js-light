@@ -154,113 +154,37 @@ export default class {
                         
                     break;
 
-                    case (ENUMS.CASE.axes) :                    
-                        
-                    const NUMBER_OF_AXIS = 4;
+                    case (ENUMS.CASE.axes): {
+                        const PathView = XMLSVG.Views.Path;
+                        const sharedOptions = {
+                            id: '',
+                            scaling: 0,
+                            angle: 0,
+                            points: [{ x: 1, y: 0 }],
+                            dashed: false,
+                            strokeWidth: 3,
+                            fillStroke: ENUMS.COLOR.magenta,
+                        };
+                        const AXES_CONFIG = [
+                            { id: ENUMS.PRINT.east, fillStroke: ENUMS.COLOR.green, angleMultiplier: 0 },
+                            { id: ENUMS.PRINT.south, fillStroke: ENUMS.COLOR.black, angleMultiplier: 1 },
+                            { id: ENUMS.PRINT.west, fillStroke: ENUMS.COLOR.blue, angleMultiplier: 2 },
+                            { id: ENUMS.PRINT.north, fillStroke: ENUMS.COLOR.red, angleMultiplier: 3 },
+                        ];
+                        const scaling = GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM;
                         XMLSVG.Helpers.findByID(id)
                         .setPaths([
-                            ...Array(NUMBER_OF_AXIS).fill(XMLSVG.Views.Path).map((axis, i)=>{
-
-                                const
-                                    animationConfig = {
-                                        count: 90
-                                    }
-                                    ,
-                                    sharedOptions = {
-                                        id: '',
-                                        scaling: 0,
-                                        angle: 0,
-                                        points: [
-                                            /* DEV_NOTE (!) # mandatory basis vectors */
-                                            {x: 1, y: 0}
-                                        ],
-
-                                        /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
-
-                                        dashed: false,
-                                        strokeWidth: 3,
-                                        fillStroke: ENUMS.COLOR.magenta
-                                    }
-                                
-                                const step = i;
-                                switch (step) {
-
-                                    case 0:
-                                        return (
-                                            axis = new axis({
-                                                options: {
-                                                    ...sharedOptions,
-                                                    
-                                                    /**
-                                                     * @override
-                                                     */
-                                                    id: ENUMS.PRINT.east,
-                                                    fillStroke: ENUMS.COLOR.green,
-                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
-                                                    angle: step * QUADRANT,
-                                                }
-                                            })
-                                        );
-                                    break;
-                                    case 1:
-                                        return (
-                                            axis = new axis({
-                                                options: {
-                                                    ...sharedOptions,
-                                                    
-                                                    /**
-                                                     * @override
-                                                     */
-                                                    id: ENUMS.PRINT.south,
-                                                    fillStroke: ENUMS.COLOR.black,
-                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
-                                                    angle: step * QUADRANT,
-                                                }
-                                            })
-                                        );
-                                    break;
-
-                                    case 2:
-                                        return (
-                                            axis = new axis({
-                                                options: {
-
-                                                    ...sharedOptions,
-                                                    
-                                                    /**
-                                                     * @override
-                                                     */
-                                                    id: ENUMS.PRINT.west,
-                                                    fillStroke: ENUMS.COLOR.blue,
-                                                    scaling: GLOBAL_SCALAR *stage.grid.GRIDCELL_DIM,
-                                                    angle: step * QUADRANT
-                                                    
-                                                }
-                                            })
-                                        );
-                                    break;
-
-                                    case 3:
-                                        return (
-                                            axis = new axis({
-                                                options: {
-                                                    ...sharedOptions,
-                                                    
-                                                    /**
-                                                     * @override
-                                                     */
-                                                    id: ENUMS.PRINT.north,
-                                                    fillStroke: ENUMS.COLOR.red,
-                                                    scaling: (GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM),
-                                                    angle: step * QUADRANT
-                                                }
-                                            })
-                                        );
-                                    break;
-
-                                }
-                                
-                            })
+                            ...AXES_CONFIG.map(({ id: printId, fillStroke, angleMultiplier }) =>
+                                new PathView({
+                                    options: {
+                                        ...sharedOptions,
+                                        id: printId,
+                                        fillStroke,
+                                        scaling,
+                                        angle: angleMultiplier * QUADRANT,
+                                    },
+                                })
+                            ),
                         ], ({paths}) => {
 
                             const pathsPalette = SVGList.from(paths).map((path)=>{
@@ -384,9 +308,10 @@ export default class {
 
                             });
 
-                        });
+                            });
 
-                    break;
+                        break;
+                    }
                 }
         
         });

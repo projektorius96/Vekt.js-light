@@ -1,37 +1,5 @@
-/* === enum === */
+import { ENUMS } from './enums.js';
 
-/**
- * @example
- * 
- * ENUM.give; // 'give'
- * ENUM.me; // 'me'
- * ENUM.value; // 'value'
-*/
-const
-    ENUM = 
-        new Proxy( Object.create(null) , {
-            get(nil, key){
-                return (
-                    key = `${key}`
-                );
-            }
-        })
-    ;
-
-/**
- * @alias
- */
-const
-    [COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, PRINT, ID] = Array(7).fill(ENUM)
-    ;
-
-export
-    const
-        ENUMS = Object.freeze({
-            COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, PRINT, ID
-        })
-        ;
-
-/* === enum === */
+export { ENUMS };
 
 
