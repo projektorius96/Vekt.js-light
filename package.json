@@ -1,8 +1,8 @@
 {
     "name": "vekt.js-light",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "type": "module",
     "devDependencies": {
-        "vite": "^7.2.2"
+        "vite": "^7.3.1"
     }
 }
