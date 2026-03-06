@@ -26,23 +26,4 @@ export const CONSTANTS = Object.freeze(
     )
 );
 
-export 
-    const MAPPING = Object.freeze(
-        Object.assign(
-            Object.create(null)
-            ,
-            {
-                labels: {
-                    compass: new Map([
-                        [ENUMS.ID.east, ENUMS.ID.X.replace(/^/, '+')],
-                        [ENUMS.ID.south, ENUMS.ID.Y.replace(/^/, '+')],
-                        [ENUMS.ID.west, ENUMS.ID.X.replace(/^/, '-')],
-                        [ENUMS.ID.north, ENUMS.ID.Y.replace(/^/, '-')],
-                    ])
-                }
-            }
-        )
-    )
-    ;
-
 /* === CONSTANTS === */
