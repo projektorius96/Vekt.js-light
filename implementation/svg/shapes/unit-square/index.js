@@ -1,12 +1,6 @@
-import { applyShapeTransform } from '../../modules/transform-utils.js';
+import { transformPath } from '../../modules/transform-utils.js';
 
 export default class {
-
-  static draw({ Helpers, path, skew = { Y: { phi: 0 } } }) {
-
-    applyShapeTransform(path, Helpers, { skew });
-
-  }
 
   static init(id, {HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR, OrderedPair, SVGList}) {
         
@@ -55,8 +49,7 @@ export default class {
     , 
     ({paths}) => SVGList.from(paths).on((path)=>{
         
-        // DEV_NOTE [CULPRIT-SOLVED] # matrix transformation cannot happen in homogeneous fashion, it must be separate matrix multiplication operation, with skew angle (rotation) would be disregarded (ignored)
-        this.draw( { Helpers: HTMLCanvas.Helpers, path, skew: { X: { phi: -15 } } } )
+        transformPath(path, HTMLCanvas.Helpers, { skew: { X: { phi: -15 } } });
 
     })
     );

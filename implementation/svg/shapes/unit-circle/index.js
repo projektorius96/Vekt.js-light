@@ -1,13 +1,6 @@
-import { applyShapeTransform } from '../../modules/transform-utils.js';
+import { transformPath } from '../../modules/transform-utils.js';
 
 export default class {
-
-  static draw({ Helpers, path }) {
-
-    const { width } = path?.getBoundingClientRect() ?? {};
-      applyShapeTransform(path, Helpers, { offsetX: width / 2 });
-
-  }
 
   static init(id, {HTMLCanvas, XMLSVG, ENUMS, SVGList}) {
 
@@ -39,7 +32,13 @@ export default class {
     , 
     ({paths})=>SVGList.from(paths).on((path)=>{
 
-      this.draw({Helpers: HTMLCanvas.Helpers, path, XMLSVG, ENUMS});
+      // this.transform({Helpers: HTMLCanvas.Helpers, path, XMLSVG, ENUMS});
+      void function transform(){
+
+      const { width } = path?.getBoundingClientRect() ?? {};
+        transformPath(path, HTMLCanvas.Helpers, { offsetX: width / 2 });
+
+      }()
 
     })
     );
