@@ -9,7 +9,7 @@ import { refreshPathFromCurrentPoints } from '../../../src/views/xmlsvg/svg-path
  * @param {{ angle?: number, offsetX?: number, offsetY?: number, skew?: object }} options
  * @returns {boolean} true if transform was applied
  */
-export function applyShapeTransform(path, Helpers, { angle, offsetX = 0, offsetY = 0, skew } = {}) {
+export function transformPath(path, Helpers, { angle, offsetX = 0, offsetY = 0, skew } = {}) {
   if (!refreshPathFromCurrentPoints(path)) return false;
   const center = typeof stage !== 'undefined' && stage?.grid?.SVG;
   if (!center) return false;
