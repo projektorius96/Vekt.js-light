@@ -1,5 +1,4 @@
 import { transformPath } from '../../modules/transform-utils.js';
-import AnimationCounter from '../../modules/animations.js';
 
 export default class {
 
@@ -14,7 +13,7 @@ export default class {
 
     }
 
-    static init(id, { HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR, SVGList }) {
+    static init(id, { HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR, SVGList, AnimationCounter }) {
 
         const
             PathView = XMLSVG.Views.Path
@@ -111,9 +110,17 @@ export default class {
                     void function draw_labels() {
 
                         const
-                            TEXT_SPACING = 10
+                            DEFAULT_FONT_SIZE = Number( getComputedStyle(document.body).fontSize.replace(CSS.px(0).unit, "") )
+                            ,
+                            kRES = Math.ceil(window.innerWidth / window.innerHeight)
+                            , 
+                            TEXT_SPACING = kRES * DEFAULT_FONT_SIZE
                             ;
 
+                        /**
+                         * @mutable
+                         * @var
+                         */
                         let
                             { e: x, f: y } = path.getCurrentMatrix()
                             ;

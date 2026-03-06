@@ -27,7 +27,7 @@ export default class {
             ,
             new XMLSVG.ViewGroup.Container({
                 options: {
-                    id: /* ENUMS.ID.HIDE ||  */ENUMS.ID.circle,
+                    id: ENUMS.ID.HIDE || ENUMS.ID.circle,
                 }
             })
         ]);
@@ -60,7 +60,7 @@ export default class {
             ,
             constants = { ENUMS, GLOBAL_SCALAR, QUADRANT: Converters.radToDeg(Math.PI/2) }
             ,
-            dependencies = { HTMLCanvas, XMLSVG, ...constants, ...aliases }
+            dependencies = { HTMLCanvas, XMLSVG, AnimationCounter, ...constants, ...aliases }
             ;
 
         /**
