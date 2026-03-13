@@ -1,4 +1,5 @@
 import { transformPath } from '../../modules/transform-utils.js';
+import { defaultVendorFontSize } from '../../modules/vendor-utils.js';
 
 export default class {
 
@@ -147,15 +148,6 @@ export default class {
                                 y += 0;
                                 break;
                         }
-
-                        /**
-                          * @arbitrary
-                          * 
-                          * NOTE: _this is more-less de-facto (if not standardised) font size for majority of modern browser vendors._
-                          */
-                        const defaultVendorFontSize = window
-                            .getComputedStyle(document.documentElement)
-                            .getPropertyValue('font-size').replace(CSS.px.name, "");
 
                         if (defaultVendorFontSize) {
 

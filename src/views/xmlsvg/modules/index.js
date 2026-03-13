@@ -68,7 +68,8 @@ export function drawLabel({svg, text, x, y, overrides = {}}) {
         fontSize = 16,
         dx = '0em',
         dy = '0em',
-        scale = 1
+        scale = 1,
+        opacity = 1
     } = overrides;
 
     // Create text element
@@ -79,6 +80,7 @@ export function drawLabel({svg, text, x, y, overrides = {}}) {
         t.setAttribute('font-family', fontFamily);
         t.setAttribute('font-size', fontSize);
         t.setAttribute('font-style', fontStyle);
+        t.setAttribute('opacity', opacity);
         t.setAttribute('fill', fill);
         t.setAttribute('dx', dx);
         t.setAttribute('dy', dy);
