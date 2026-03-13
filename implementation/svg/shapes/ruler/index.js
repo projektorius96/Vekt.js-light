@@ -1,4 +1,5 @@
 import { transformPath } from '../../modules/transform-utils.js';
+import { defaultVendorFontSize } from '../../modules/vendor-utils.js';
 
 /**
  * SVG-first grid grading implementation — Desmos-style coordinate plane.
@@ -15,7 +16,7 @@ import { transformPath } from '../../modules/transform-utils.js';
  */
 export default class {
 
-    static init(id, { HTMLCanvas, XMLSVG, ENUMS, SVGList }) {
+    static init(id, { HTMLCanvas, XMLSVG, ENUMS, SVGList, overrides }) {
 
         const
             PathView = XMLSVG.Views.Path
@@ -39,7 +40,7 @@ export default class {
 
         const gridPaths = [];
 
-        // ── Horizontal lines ──────────────────────────────────────────────────
+        // ──────────────────────────────────────────────────── Horizontal lines ──────────────────────────────────────────────────
         for (let r = -rows; r <= rows; r++) {
 
             const isXAxis = r === 0;
@@ -52,9 +53,9 @@ export default class {
                         // with { length: false } — see callback below.
                         id:          `grid_h_${ r < 0 ? 'n' + Math.abs(r) : r }`,
                         scaling:     2 * X_IN_MIDDLE,
-                        strokeWidth: isXAxis ? 2 : 1,
-                        stroke:      isXAxis ? ENUMS.COLOR.black : ENUMS.COLOR.grey,
-                        opacity:     isXAxis ? 0.8 : 0.25,
+                        strokeWidth: isXAxis ? overrides.lineScaling : 1,
+                        stroke:      isXAxis ? overrides.lineColor : ENUMS.COLOR.grey,
+                        opacity:     isXAxis ? overrides.lineOpacity : 1,
                         angle:       0,
                     },
                 })
@@ -62,7 +63,7 @@ export default class {
 
         }
 
-        // ── Vertical lines ────────────────────────────────────────────────────
+        // ──────────────────────────────────────────────────── Vertical lines ────────────────────────────────────────────────────
         for (let c = -cols; c <= cols; c++) {
 
             const isYAxis = c === 0;
@@ -73,9 +74,9 @@ export default class {
                         ...sharedLine,
                         id:          `grid_v_${ c < 0 ? 'n' + Math.abs(c) : c }`,
                         scaling:     2 * Y_IN_MIDDLE,
-                        strokeWidth: isYAxis ? 2 : 1,
-                        stroke:      isYAxis ? ENUMS.COLOR.black : ENUMS.COLOR.grey,
-                        opacity:     isYAxis ? 0.8 : 0.25,
+                        strokeWidth: isYAxis ? overrides.lineScaling : 1,
+                        stroke:      isYAxis ? overrides.lineColor : ENUMS.COLOR.grey,
+                        opacity:     isYAxis ? overrides.lineOpacity : 1,
                         angle:       90,
                     },
                 })
@@ -87,17 +88,6 @@ export default class {
 
         XMLSVG.Helpers.findByID(id)
             .setPaths(gridPaths, ({ paths }) => {
-
-                /**
-                 * @arbitrary
-                 * NOTE: de-facto font-size for majority of modern browser vendors.
-                 */
-                const defaultVendorFontSize = Number(
-                    window
-                        .getComputedStyle(document.documentElement)
-                        .getPropertyValue('font-size')
-                        .replace(CSS.px.name, '')
-                );
 
                 SVGList.from(paths).on((path) => {
 
@@ -127,9 +117,10 @@ export default class {
                                 x:    X_IN_MIDDLE - GRIDCELL_DIM / 4,
                                 y:    Y_IN_MIDDLE + row * GRIDCELL_DIM,
                                 overrides: {
-                                    textAnchor: 'end',
-                                    scale:      GRIDCELL_DIM / (2 * defaultVendorFontSize),
-                                    fill:       ENUMS.COLOR.grey,
+                                    textAnchor: overrides.label$textAnchor || 'end',
+                                    opacity: overrides.labelOpacity || 1,
+                                    scale: overrides.labelScaling || GRIDCELL_DIM / (2 * defaultVendorFontSize),
+                                    fill:  overrides.labelColor   || ENUMS.COLOR.grey,
                                 },
                             });
 
@@ -160,8 +151,9 @@ export default class {
                                 x:    X_IN_MIDDLE + col * GRIDCELL_DIM,
                                 y:    Y_IN_MIDDLE + GRIDCELL_DIM / 4,
                                 overrides: {
-                                    scale: GRIDCELL_DIM / (2 * defaultVendorFontSize),
-                                    fill:  ENUMS.COLOR.grey,
+                                    opacity: overrides.labelOpacity || 1,
+                                    scale: overrides.labelScaling || GRIDCELL_DIM / (2 * defaultVendorFontSize),
+                                    fill:  overrides.labelColor   || ENUMS.COLOR.grey,
                                 },
                             });
 

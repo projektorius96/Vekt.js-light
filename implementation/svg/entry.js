@@ -1,10 +1,11 @@
 import './globals.css';
 import AnimationCounter from './modules/animations.js';
-import Grid from './shapes/grid/index.js';
+import Ruler from './shapes/ruler/index.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
 import { CONSTANTS, ENUMS } from './globals.js';
+import { defaultVendorFontSize } from './modules/vendor-utils.js';
 
 // Example: EventTarget + grouping approach for render()
 export default class {
@@ -12,7 +13,7 @@ export default class {
     static setup({ XMLSVG }) {
         return ([
             new XMLSVG.ViewGroup.Container({
-                options: { id: ENUMS.ID.svg_grid }
+                options: { id: ENUMS.ID.ruler }
             }),
             new XMLSVG.ViewGroup.Container({
                 options: { id: ENUMS.ID.unit_square } 
@@ -62,17 +63,26 @@ export default class {
         const dispatcher = new EventTarget();
             if (dispatcher) {
 
-                dispatcher.addEventListener(ENUMS.CASE.svg_grid, ({type: id}) => {
-                    Grid.init(id, { ...dependencies })
-                });
-                dispatcher.addEventListener(ENUMS.CASE.circle, ({type: id}) => {
+                dispatcher.addEventListener(!!!ENUMS.CASE.circle, ({type: id}) => {
                     UnitCircle.init(id, { ...dependencies })
                 });
                 dispatcher.addEventListener(ENUMS.CASE.unit_square, ({type: id}) => {
                     UnitSquare.init(id, { ...dependencies })
                 });
-                dispatcher.addEventListener(ENUMS.CASE.axes, ({type: id}) => {
+                dispatcher.addEventListener(!!!ENUMS.CASE.axes, ({type: id}) => {
                     UnitVector.init(id, { ...dependencies })
+                });
+
+                const rulerOverrides = { 
+                    labelScaling: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize), 
+                    labelColor: ENUMS.COLOR.black, 
+                    labelOpacity: 0.5, 
+                    lineScaling: 4, 
+                    lineColor: ENUMS.COLOR.red, 
+                    lineOpacity: 0.5  
+                }
+                dispatcher.addEventListener(ENUMS.CASE.ruler, ({type: id}) => {
+                    Ruler.init(id, { ...dependencies, overrides: rulerOverrides })
                 });
 
             }
