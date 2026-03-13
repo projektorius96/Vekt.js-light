@@ -5,89 +5,76 @@ import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
 import { CONSTANTS, ENUMS } from './globals.js';
 
+// Example: EventTarget + grouping approach for render()
 export default class {
 
-    /**
-     * @returns Instantiates `SVGSVGElement`, each internally presented as top-level `<svg-container>` web component
-     */
-    static setup({XMLSVG}) {
-    
-        return([
+    static setup({ XMLSVG }) {
+        return ([
             new XMLSVG.ViewGroup.Container({
-                options: {
-                    id: /* ENUMS.ID.HIDE ||  */ENUMS.ID.unit_square,
-                }
-            })
-            ,
+                options: { id: ENUMS.ID.unit_square } 
+            }),
             new XMLSVG.ViewGroup.Container({
-                options: {
-                    id: /* ENUMS.ID.HIDE ||  */ENUMS.ID.axes,
-                }
-            })
-            ,
+                options: { id: ENUMS.ID.axes } 
+            }),
             new XMLSVG.ViewGroup.Container({
-                options: {
-                    id: ENUMS.ID.HIDE || ENUMS.ID.circle,
-                }
+                options: { id: ENUMS.ID.circle } 
             })
         ]);
-
     }
 
-    /**
-     * @returns {void} Instantiates `SVGPathElement`, each internally presented as `<svg-path>` nested under top-level XML-namespaced `<svg-container>` web component
-     * @see {@link `default.setup`}
-     */
-    static render({HTMLCanvas, XMLSVG, ENUMS}) {
+    static render({ HTMLCanvas, XMLSVG, ENUMS }) {
 
         /**
          * @alias
-         * @type {Array<SVGElement>}
          */
         const 
             [SVGList, OrderedPair] = Array(2).fill(Array)
             ,
             aliases = { SVGList, OrderedPair }
             ;
-        
+
         /**
-         * @dependencies
+         * @deps
          */
-        const
-            { Converters } = HTMLCanvas.Helpers.Trigonometry
+        const { Converters } = HTMLCanvas.Helpers.Trigonometry
             ,
             { GLOBAL_SCALAR } = CONSTANTS
-            ,
-            constants = { ENUMS, GLOBAL_SCALAR, QUADRANT: Converters.radToDeg(Math.PI/2) }
+            ;
+
+        const 
+            constants = { ENUMS, GLOBAL_SCALAR, QUADRANT: Converters.radToDeg(Math.PI / 2) }
             ,
             dependencies = { HTMLCanvas, XMLSVG, AnimationCounter, ...constants, ...aliases }
             ;
 
-        /**
-         * @implementation
-         */
-        SVGList
-        .of(...this.setup({XMLSVG}))
-        .on(({id})=>{
+        const containers = SVGList.of(...this.setup({ XMLSVG }));
 
-                switch (id) {
+        const groups = containers.reduce((map, container) => {
+            if (!map.has(container.id)) map.set(container.id, container);
+            return map;
+        }, new Map());
 
-                    case (ENUMS.CASE.circle) :
-                        UnitCircle.init(id, {...dependencies});
-                    break;
-                    
-                    case (ENUMS.CASE.unit_square) :
-                        UnitSquare.init(id, {...dependencies})
-                    break;
-                        
-                    case (ENUMS.CASE.axes) : 
-                        UnitVector.init(id, {...dependencies})
-                    break;
+        // 3) central dispatcher and handlers
+        const dispatcher = new EventTarget();
+            if (dispatcher) {
 
-                }
-        
+                dispatcher.addEventListener(ENUMS.CASE.circle, ({type: id}) => {
+                    UnitCircle.init(id, { ...dependencies })
+                });
+                dispatcher.addEventListener(ENUMS.CASE.unit_square, ({type: id}) => {
+                    UnitSquare.init(id, { ...dependencies })
+                });
+                dispatcher.addEventListener(ENUMS.CASE.axes, ({type: id}) => {
+                    UnitVector.init(id, { ...dependencies })
+                });
+
+            }
+
+        // 4) dispatch once per unique id with grouped elements
+        groups.forEach((container) => {
+            dispatcher.dispatchEvent(new Event(container.id));
         });
-        
+
     }
-    
+
 }
