@@ -89,7 +89,8 @@ export default class {
         XMLSVG.Helpers.findByID(id)
             .setPaths(gridPaths, ({ paths }) => {
 
-                SVGList.from(paths).on((path) => {
+                let iterationDone = false;
+                SVGList.from(paths).on((path, i) => {
 
                     const { id: pathId } = path;
 
@@ -127,7 +128,8 @@ export default class {
                         }
 
                     /* ── vertical line (incl. y-axis at col 0) ── */
-                    } else if (pathId.startsWith('grid_v_')) {
+                    } 
+                    else if (pathId.startsWith('grid_v_')) {
 
                         const tag = pathId.replace('grid_v_', '');
                         const col = tag.startsWith('n')
@@ -160,6 +162,9 @@ export default class {
                         }
 
                     }
+
+                    // DEV_NOTE # this is not the cleanest solution, but consider I am cleaning myself after GitHub Copilot left mess
+                    if ( pathId !== 'grid_h_0' && pathId !== 'grid_v_0' ) path.remove();
 
                 });
 

@@ -6,6 +6,7 @@ import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
 import { CONSTANTS, ENUMS } from './globals.js';
 import { defaultVendorFontSize } from './modules/vendor-utils.js';
+import { userConfig } from '../user-config.js';
 
 // Example: EventTarget + grouping approach for render()
 export default class {
@@ -72,17 +73,8 @@ export default class {
                 dispatcher.addEventListener(!!!ENUMS.CASE.axes, ({type: id}) => {
                     UnitVector.init(id, { ...dependencies })
                 });
-
-                const rulerOverrides = { 
-                    labelScaling: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize), 
-                    labelColor: ENUMS.COLOR.black, 
-                    labelOpacity: 0.5, 
-                    lineScaling: 4, 
-                    lineColor: ENUMS.COLOR.red, 
-                    lineOpacity: 0.5  
-                }
                 dispatcher.addEventListener(ENUMS.CASE.ruler, ({type: id}) => {
-                    Ruler.init(id, { ...dependencies, overrides: rulerOverrides })
+                    Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize), } })
                 });
 
             }
