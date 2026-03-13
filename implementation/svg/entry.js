@@ -1,5 +1,6 @@
 import './globals.css';
 import AnimationCounter from './modules/animations.js';
+import Grid from './shapes/grid/index.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
@@ -10,6 +11,9 @@ export default class {
 
     static setup({ XMLSVG }) {
         return ([
+            new XMLSVG.ViewGroup.Container({
+                options: { id: ENUMS.ID.svg_grid }
+            }),
             new XMLSVG.ViewGroup.Container({
                 options: { id: ENUMS.ID.unit_square } 
             }),
@@ -58,6 +62,9 @@ export default class {
         const dispatcher = new EventTarget();
             if (dispatcher) {
 
+                dispatcher.addEventListener(ENUMS.CASE.svg_grid, ({type: id}) => {
+                    Grid.init(id, { ...dependencies })
+                });
                 dispatcher.addEventListener(ENUMS.CASE.circle, ({type: id}) => {
                     UnitCircle.init(id, { ...dependencies })
                 });
