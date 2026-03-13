@@ -13,7 +13,7 @@ const PRINT = new Proxy(Object.create(null), {
     },
 });
 
-const [COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, ID] = Array(7).fill(PRINT);
+const [COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, ID] = Array(8).fill(PRINT);
 const ENUMS = Object.freeze({
     COLOR,
     SHAPE,
