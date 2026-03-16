@@ -1,9 +1,6 @@
 import { transformPath } from '../../modules/transform-utils.js';
-import { defaultVendorFontSize } from '../../modules/vendor-utils.js';
 
 export default class {
-
-    static [drawVector.name] = drawVector;
 
     static setTransfromPoints({ Helpers }) {
 
@@ -14,7 +11,14 @@ export default class {
 
     }
 
-    static init(id, { HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR, SVGList, AnimationCounter }) {
+    static init(id, { HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR }) {
+
+        /**
+         * @alias
+         */
+        const [
+            SVGList
+        ] = [Array];
 
         const
             PathView = XMLSVG.Views.Path
@@ -37,7 +41,7 @@ export default class {
             ]
             ;
 
-        const scaling = GLOBAL_SCALAR * stage.grid.GRIDCELL_DIM;
+        const scaling = Math.floor((window.innerHeight/2)) * GLOBAL_SCALAR;
         XMLSVG.Helpers.findByID(id)
             .setPaths([
                 ...AXES_CONFIG.map(({ id, fillStroke, angleMultiplier }) =>
@@ -53,143 +57,15 @@ export default class {
                 ),
             ], ({ paths }) => {
 
-                const pathsPalette = SVGList.from(paths).map((path) => {
-                    return path = path.style.stroke;
-                });
-
-                /* === ANIMATIONS === */
-
-                void function draw_animations() {
-
-                    const
-                        animConfig = {
-                            from: 0,
-                            to: 360,
-                            duration: 1,
-                            iterations: Infinity
-                        }
-                        ,
-                        animCounter = AnimationCounter({
-                            ...animConfig, callback: function ({ count }) {
-
-                                /* Use the `{count}` as the animation primitive to implement the progressing animation */
-
-                            }
-                        })
-                        ;
-
-                    /**
-                     * @test
-                     */
-                    /* animCounter.pause(); */// # [PASSING]
-                    /* animCounter.play(); */// # [PASSING]
-
-                    /**
-                     * > **NOTE:** Exposing [animCounter] to play|pause from DevTools with ease. 
-                     * 
-                     * @global
-                     * @var
-                     */
-                    globalThis.animCounter1 = animCounter;
-
-                }();
-
-                /* === ANIMATIONS === */
-
                 /**
                   * @override
                   */
-                SVGList.from(paths).on((path, step) => {
+                SVGList.from(paths).on((path) => {
 
                     // DEV-TIP # pass {0 | false} to [length] to hide arrow heads of line segment (or vector)
                     path.setPoints([
-                        ...this.drawVector({ Helpers: HTMLCanvas.Helpers, path /* , length: false */ })
+                        drawVector({ Helpers: HTMLCanvas.Helpers, path /* , length: false */ })
                     ], 1);
-
-                    /* === LABELS === */
-
-                    void function draw_labels() {
-
-                        const
-                            DEFAULT_FONT_SIZE = Number( getComputedStyle(document.body).fontSize.replace(CSS.px(0).unit, "") )
-                            ,
-                            kRES = Math.ceil(window.innerWidth / window.innerHeight)
-                            , 
-                            TEXT_SPACING = kRES * DEFAULT_FONT_SIZE
-                            ;
-
-                        /**
-                         * @mutable
-                         * @var
-                         */
-                        let
-                            { e: x, f: y } = path.getCurrentMatrix()
-                            ;
-
-                        /**
-                          * @override
-                          * @type text positioning
-                          */
-                        switch (true) {
-                            case (path.id === ENUMS.ID.north):
-                                x += 0;
-                                y += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
-                                break;
-                            case (path.id === ENUMS.ID.south):
-                                x += 0;
-                                y -= Math.ceil(path.dataset.scaling) + TEXT_SPACING;
-                                break;
-                            case (path.id === ENUMS.ID.west):
-                                x -= Math.ceil(path.dataset.scaling) + TEXT_SPACING;
-                                y += 0;
-                                break;
-                            case (path.id === ENUMS.ID.east):
-                                x += Math.ceil(path.dataset.scaling) + TEXT_SPACING;
-                                y += 0;
-                                break;
-                        }
-
-                        if (defaultVendorFontSize) {
-
-                            const MAPPING = Object.freeze(
-                                Object.assign(
-                                    Object.create(null)
-                                    ,
-                                    {
-                                        labels: {
-                                            compass: new Map([
-                                                [ENUMS.ID.east, ENUMS.ID.X.replace(/^/, '+')],
-                                                [ENUMS.ID.south, ENUMS.ID.Y.replace(/^/, '+')],
-                                                [ENUMS.ID.west, ENUMS.ID.X.replace(/^/, '-')],
-                                                [ENUMS.ID.north, ENUMS.ID.Y.replace(/^/, '-')],
-                                            ])
-                                        }
-                                    }
-                                )
-                            )
-
-                            /**
-                              * **DEV_NOTE**: apparently labels are drawn counter-clockwise, compared to arrow stroke clockwise direction...
-                              * 
-                              * @debugger
-                              */
-                            let color_culprit;
-                            /* console.log(path.style.stroke); */
-                            path.setLabel({
-                                x,
-                                y,
-                                svg: path.getParent(),
-                                text: MAPPING.labels.compass.get(path.id),
-                                overrides: {
-                                    fill: pathsPalette.at(-step)/* instead of ==> path.style.stroke */,
-                                    scale: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize),
-                                }
-                            });
-                        }
-
-                    }();
-
-                    /* === LABELS === */
 
                 });
 
@@ -199,7 +75,7 @@ export default class {
 
 }
 
-function drawVector({ Helpers, path, angle, sharpness = 6, length = 1 / 6 }) {
+function drawVector({ Helpers, path, angle, sharpness = 4, length = 2 }) {
     // DEV_NOTE # arrowhead points in local coordinates system (pointing along positive X axis)
     const baseShape = [
         { x: 1, y: 0 },
@@ -210,8 +86,8 @@ function drawVector({ Helpers, path, angle, sharpness = 6, length = 1 / 6 }) {
     ]   // Scale + offset 
         .map((point) => {
             return ({
-                x: ((Number(path.dataset.scaling) * point.x) + path.getPoints().at(-1)['x']),
-                y: ((Number(path.dataset.scaling) * point.y) + path.getPoints().at(-1)['y']),
+                x: ((Number(path.dataset.scaling/stage.grid.GRIDCELL_DIM) * point.x) + path.getPoints().at(-1)['x']),
+                y: ((Number(path.dataset.scaling/stage.grid.GRIDCELL_DIM) * point.y) + path.getPoints().at(-1)['y']),
             });
         });
 
@@ -220,5 +96,4 @@ function drawVector({ Helpers, path, angle, sharpness = 6, length = 1 / 6 }) {
     return baseShape;
 
 }
-
 

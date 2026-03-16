@@ -31,15 +31,6 @@ export default class {
     static render({ HTMLCanvas, XMLSVG, ENUMS }) {
 
         /**
-         * @alias
-         */
-        const 
-            [SVGList, OrderedPair] = Array(2).fill(Array)
-            ,
-            aliases = { SVGList, OrderedPair }
-            ;
-
-        /**
          * @deps
          */
         const { Converters } = HTMLCanvas.Helpers.Trigonometry
@@ -50,10 +41,10 @@ export default class {
         const 
             constants = { ENUMS, GLOBAL_SCALAR, QUADRANT: Converters.radToDeg(Math.PI / 2) }
             ,
-            dependencies = { HTMLCanvas, XMLSVG, AnimationCounter, ...constants, ...aliases }
+            dependencies = { HTMLCanvas, XMLSVG, AnimationCounter, ...constants }
             ;
 
-        const containers = SVGList.of(...this.setup({ XMLSVG }));
+        const containers = Array.of(...this.setup({ XMLSVG }));
 
         const groups = containers.reduce((map, container) => {
             if (!map.has(container.id)) map.set(container.id, container);
@@ -64,17 +55,17 @@ export default class {
         const dispatcher = new EventTarget();
             if (dispatcher) {
 
-                dispatcher.addEventListener(!!!ENUMS.CASE.circle, ({type: id}) => {
-                    UnitCircle.init(id, { ...dependencies })
+                dispatcher.addEventListener(ENUMS.CASE.circle, ({type: id}) => {
+                    UnitCircle.init(id, { ...dependencies, overrides: { dashed: 10, stroke: ENUMS.COLOR.red, strokeWidth: 2 } })
                 });
-                dispatcher.addEventListener(ENUMS.CASE.unit_square, ({type: id}) => {
+                dispatcher.addEventListener(!!!ENUMS.CASE.unit_square, ({type: id}) => {
                     UnitSquare.init(id, { ...dependencies })
                 });
                 dispatcher.addEventListener(!!!ENUMS.CASE.axes, ({type: id}) => {
-                    UnitVector.init(id, { ...dependencies })
+                    UnitVector.init(id, { ...dependencies, showLabels: false })
                 });
                 dispatcher.addEventListener(ENUMS.CASE.ruler, ({type: id}) => {
-                    Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize), } })
+                    Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize), } })
                 });
 
             }

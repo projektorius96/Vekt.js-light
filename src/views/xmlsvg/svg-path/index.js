@@ -37,7 +37,7 @@ customElements.define(svg_path, class extends HTMLElement {
                             d="${ setPoints.call(this, options.points) }"
                             stroke-dasharray="${ options.dashed  || 0 }"
                             stroke-width="${ options.strokeWidth || 0 }"
-                            style="opacity:${ options.opacity || 1 }; stroke:${ (options.stroke || options.fillStroke ) || COLOR.black }; fill:${ (options.fill || options.fillStroke) || COLOR.none };"
+                            style="opacity:${ options.opacity }; stroke:${ (options.stroke || options.fillStroke ) || COLOR.black }; fill:${ (options.fill || options.fillStroke) || COLOR.none };"
                         />
                     `)
                 )

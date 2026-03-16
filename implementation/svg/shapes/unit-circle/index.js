@@ -2,8 +2,18 @@ import { transformPath } from '../../modules/transform-utils.js';
 
 export default class {
 
-  static init(id, {HTMLCanvas, XMLSVG, ENUMS, SVGList}) {
+  static init(id, {HTMLCanvas, XMLSVG, ENUMS, overrides = {}}) {
 
+    const {
+      fill
+      ,
+      dashed
+      , 
+      stroke
+      ,
+      strokeWidth
+    } = overrides;
+    
     const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
     XMLSVG.Helpers.findByID(id)
     .setPaths([
@@ -14,29 +24,32 @@ export default class {
                 points: [
                     ...setRange(0, 1, 360 * 2).map((deg)=>{
                         return {
-                            x: 1 * Math.cos( Converters.degToRad( deg ) ) - 1 /* <== removes the radius, when the shape is not filled */,
+                            x: 1 * Math.cos( Converters.degToRad( deg ) ) - 1 /* <== removes the annoying radius visible, when the shape is not filled */,
                             y: 1 * Math.sin( Converters.degToRad( deg ) ) - 0,
                         }
                     })
                 ],
 
                 /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
-                dashed: 0,
-
-                strokeWidth: 3,
-                fill: ENUMS.COLOR.none,
-                stroke: ENUMS.COLOR.purple,
+                dashed: dashed ?? 1,
+                strokeWidth: strokeWidth ?? 1,
+                fill: fill || ENUMS.COLOR.none,
+                stroke: stroke || ENUMS.COLOR.black,
+                // /**
+                //  * @override
+                //  */
+                // ...overrideOptions
             }
         })
     ]
     , 
-    ({paths})=>SVGList.from(paths).on((path)=>{
+    ({paths})=>Array.from(paths).on((path)=>{
 
       // this.transform({Helpers: HTMLCanvas.Helpers, path, XMLSVG, ENUMS});
       void function transform(){
 
       const { width } = path?.getBoundingClientRect() ?? {};
-        transformPath(path, HTMLCanvas.Helpers, { offsetX: width / 2 });
+        transformPath(path, HTMLCanvas.Helpers, { offsetX: width * stage.grid.GRIDCELL_DIM });
 
       }()
 

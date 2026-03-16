@@ -35,7 +35,7 @@ export function initGlobalLayoutStyles() {
  */
 export function getViewportFillStyle(opts = {}) {
   const { position = 'relative', background } = opts;
-  const base = `
+  const base = /* css */`
     display: block;
     width: calc(100vw - var(--vertical-scrollbar-width));
     height: 100vh;
@@ -53,7 +53,7 @@ export function getViewportFillStyle(opts = {}) {
  */
 export function getLayerOverlayStyle(opts = {}) {
   const { opacity = 1, hidden = false } = opts;
-  return `
+  return /* css */`
     display: inherit;
     width: 100%;
     height: 100%;

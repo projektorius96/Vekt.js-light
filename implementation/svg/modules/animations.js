@@ -20,7 +20,7 @@ export default function startAnimation({ from = 0, to = 180, duration = 100, ite
                     this.id = animation_counter;
                 }
 
-                this.style.cssText = `
+                this.style.cssText = /* css */`
                     position: absolute;
                 `;
 

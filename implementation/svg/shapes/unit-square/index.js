@@ -2,58 +2,65 @@ import { transformPath } from '../../modules/transform-utils.js';
 
 export default class {
 
-  static init(id, {HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR, OrderedPair, SVGList}) {
-        
-    XMLSVG.Helpers.findByID(id)
-    .setPaths([
-        new XMLSVG.Views.Path({
-            options: {
-                id: ENUMS.ID.unit_square,
-                hidden: !true,
-                
-                /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
-                dashed: 0,
+    static init(id, {HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR}) {
 
-                strokeWidth: 1,
-                /* fill: ENUMS.COLOR.magenta,
-                stroke: ENUMS.COLOR.magenta, */
-                fillStroke: ENUMS.COLOR.magenta,
-                opacity: 0.25,
-                scaling: stage.grid.GRIDCELL_DIM,
-                angle: -3 * QUADRANT,
-                points: [
+        /**
+         * @alias
+         */
+        const [
+            OrderedPair
+        ] = [Array];
+            
+        XMLSVG.Helpers.findByID(id)
+        .setPaths([
+            new XMLSVG.Views.Path({
+                options: {
+                    id: ENUMS.ID.unit_square,
+                    hidden: !true,
+                    
+                    /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
+                    dashed: 0,
 
-                /* === ZERO VECTOR (opens the path) === */
-                    ...OrderedPair.from([{x: 0, y: 0}]),
-                /* === ZERO VECTOR (opens the path) === */
+                    strokeWidth: 1,
+                    /* fill: ENUMS.COLOR.magenta,
+                    stroke: ENUMS.COLOR.magenta, */
+                    fillStroke: ENUMS.COLOR.magenta,
+                    opacity: 0.25,
+                    scaling: stage.grid.GRIDCELL_DIM,
+                    angle: -3 * QUADRANT,
+                    points: [
 
-                /* === BASIS === */
-                    ...OrderedPair.from([{x: 1, y: 0}]),
-                    ...OrderedPair.from([{x: 1, y: 1}]),
-                    ...OrderedPair.from([{x: 0, y: 1}]),
-                /* === BASIS === */
+                    /* === ZERO VECTOR (opens the path) === */
+                        ...OrderedPair.from([{x: 0, y: 0}]),
+                    /* === ZERO VECTOR (opens the path) === */
 
-                /* === ZERO VECTOR (closes the path) === */
-                    ...OrderedPair.from([{x: 0, y: 0}]),
-                /* === ZERO VECTOR (closes the path) === */
-                
-                ].map((basis)=>{
-                    return({
-                        x: basis.x * GLOBAL_SCALAR,
-                        y: basis.y * GLOBAL_SCALAR,
+                    /* === BASIS === */
+                        ...OrderedPair.from([{x: 1, y: 0}]),
+                        ...OrderedPair.from([{x: 1, y: 1}]),
+                        ...OrderedPair.from([{x: 0, y: 1}]),
+                    /* === BASIS === */
+
+                    /* === ZERO VECTOR (closes the path) === */
+                        ...OrderedPair.from([{x: 0, y: 0}]),
+                    /* === ZERO VECTOR (closes the path) === */
+                    
+                    ].map((basis)=>{
+                        return({
+                            x: basis.x * GLOBAL_SCALAR,
+                            y: basis.y * GLOBAL_SCALAR,
+                        })
                     })
-                })
-            }
-        })
-    ]
-    , 
-    ({paths}) => SVGList.from(paths).on((path)=>{
-        
-        transformPath(path, HTMLCanvas.Helpers, { skew: { X: { phi: -15 } } });
+                }
+            })
+        ]
+        , 
+        ({paths}) => Array.from(paths).on((path)=>{
+            
+            transformPath(path, HTMLCanvas.Helpers, { skew: { X: { phi: -15 } } });
 
-    })
-    );
-        
-  }
+        })
+        );
+            
+    }
 
 }
