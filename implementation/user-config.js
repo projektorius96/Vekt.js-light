@@ -5,7 +5,7 @@ export
         userConfig = {
             canvas: {
                 stage: {
-                    scale: 30
+                    scale: 20
                 },
                 layers: {
                     grid: {
@@ -21,13 +21,13 @@ export
             ,
             ruler: {
                 overrides: {
-                    labelScaling: 1, 
+                    labelScaling: 1, /* NOTE (!) # this may be overriden in `implementation/svg/entry.js` */
                     labelColor: ENUMS.COLOR.black, 
                     labelOpacity: 1,
                     
                     lineScaling: 2, 
-                    lineColor: ENUMS.COLOR.red, 
-                    lineOpacity: 1  
+                    lineColor: ENUMS.COLOR.grey, 
+                    lineOpacity: 1 /* passing false | 0 - hides the abscissa (X) and ordinate (Y) */  
                 }
             }
         }

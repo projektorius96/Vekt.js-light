@@ -4,7 +4,7 @@ import Ruler from './shapes/ruler/index.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
-import { CONSTANTS, ENUMS } from './globals.js';
+import { CONSTANTS, ENUMS, PRINT } from './globals.js';
 import { defaultVendorFontSize } from './modules/vendor-utils.js';
 import { userConfig } from '../user-config.js';
 
@@ -31,15 +31,6 @@ export default class {
     static render({ HTMLCanvas, XMLSVG, ENUMS }) {
 
         /**
-         * @alias
-         */
-        const 
-            [SVGList, OrderedPair] = Array(2).fill(Array)
-            ,
-            aliases = { SVGList, OrderedPair }
-            ;
-
-        /**
          * @deps
          */
         const { Converters } = HTMLCanvas.Helpers.Trigonometry
@@ -50,10 +41,10 @@ export default class {
         const 
             constants = { ENUMS, GLOBAL_SCALAR, QUADRANT: Converters.radToDeg(Math.PI / 2) }
             ,
-            dependencies = { HTMLCanvas, XMLSVG, AnimationCounter, ...constants, ...aliases }
+            dependencies = { HTMLCanvas, XMLSVG, AnimationCounter, ...constants }
             ;
 
-        const containers = SVGList.of(...this.setup({ XMLSVG }));
+        const containers = Array.of(...this.setup({ XMLSVG }));
 
         const groups = containers.reduce((map, container) => {
             if (!map.has(container.id)) map.set(container.id, container);
@@ -63,20 +54,40 @@ export default class {
         // 3) central dispatcher and handlers
         const dispatcher = new EventTarget();
             if (dispatcher) {
-
-                dispatcher.addEventListener(!!!ENUMS.CASE.circle, ({type: id}) => {
-                    UnitCircle.init(id, { ...dependencies })
+                dispatcher.addEventListener(ENUMS.CASE.circle, ({type: id}) => {
+                    UnitCircle.init(id, { ...dependencies,
+                        overrides: {
+                            view: {
+                                id: id || ENUMS.CASE.square,
+                                dashed: 0, 
+                                stroke: ENUMS.COLOR.red,
+                                strokeWidth: 4, 
+                                transformations: {
+                                    skew: ( id === ENUMS.CASE.circle ? null : { X: { phi: -45 } } ),
+                                }
+                            }
+                            , 
+                            animation: (
+                                true 
+                                ?
+                                {
+                                    sense: PRINT./* COUNTER_ */CLOCKWISE
+                                } 
+                                : 
+                                false
+                            )
+                        } 
+                    })
                 });
-                dispatcher.addEventListener(ENUMS.CASE.unit_square, ({type: id}) => {
+                dispatcher.addEventListener(!!!ENUMS.CASE.unit_square, ({type: id}) => {
                     UnitSquare.init(id, { ...dependencies })
                 });
                 dispatcher.addEventListener(!!!ENUMS.CASE.axes, ({type: id}) => {
                     UnitVector.init(id, { ...dependencies })
                 });
                 dispatcher.addEventListener(ENUMS.CASE.ruler, ({type: id}) => {
-                    Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (2 * defaultVendorFontSize), } })
+                    Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize), } })
                 });
-
             }
 
         // 4) dispatch once per unique id with grouped elements

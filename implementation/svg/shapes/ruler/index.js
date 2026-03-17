@@ -16,7 +16,14 @@ import { defaultVendorFontSize } from '../../modules/vendor-utils.js';
  */
 export default class {
 
-    static init(id, { HTMLCanvas, XMLSVG, ENUMS, SVGList, overrides }) {
+    static init(id, { HTMLCanvas, XMLSVG, ENUMS, overrides }) {
+
+        /**
+         * @alias
+         */
+        const [
+            SVGList
+        ] = [Array];
 
         const
             PathView = XMLSVG.Views.Path
@@ -55,7 +62,7 @@ export default class {
                         scaling:     2 * X_IN_MIDDLE,
                         strokeWidth: isXAxis ? overrides.lineScaling : 1,
                         stroke:      isXAxis ? overrides.lineColor : ENUMS.COLOR.grey,
-                        opacity:     isXAxis ? overrides.lineOpacity : 1,
+                        opacity:     isXAxis ? overrides.lineOpacity : 0,
                         angle:       0,
                     },
                 })
@@ -76,7 +83,7 @@ export default class {
                         scaling:     2 * Y_IN_MIDDLE,
                         strokeWidth: isYAxis ? overrides.lineScaling : 1,
                         stroke:      isYAxis ? overrides.lineColor : ENUMS.COLOR.grey,
-                        opacity:     isYAxis ? overrides.lineOpacity : 1,
+                        opacity:     isYAxis ? overrides.lineOpacity : 0,
                         angle:       90,
                     },
                 })
@@ -89,8 +96,7 @@ export default class {
         XMLSVG.Helpers.findByID(id)
             .setPaths(gridPaths, ({ paths }) => {
 
-                let iterationDone = false;
-                SVGList.from(paths).on((path, i) => {
+                SVGList.from(paths).on((path) => {
 
                     const { id: pathId } = path;
 
@@ -114,14 +120,14 @@ export default class {
 
                             path.setLabel({
                                 svg:  path.getParent(),
-                                text: String(-row),  // negate: SVG y↓ vs. math y↑
-                                x:    X_IN_MIDDLE - GRIDCELL_DIM / 4,
-                                y:    Y_IN_MIDDLE + row * GRIDCELL_DIM,
+                                text: String(-row * Math.ceil( stage?.grid.GRIDCELL_DIM )),  // negate: SVG y↓ vs. math y↑
+                                x:    (X_IN_MIDDLE - defaultVendorFontSize),
+                                y:    (Y_IN_MIDDLE + row * GRIDCELL_DIM) - (defaultVendorFontSize/2),
                                 overrides: {
-                                    textAnchor: overrides.label$textAnchor || 'end',
-                                    opacity: overrides.labelOpacity || 1,
-                                    scale: overrides.labelScaling || GRIDCELL_DIM / (2 * defaultVendorFontSize),
-                                    fill:  overrides.labelColor   || ENUMS.COLOR.grey,
+                                    textAnchor: overrides.label$textAnchor,
+                                    opacity: overrides.labelOpacity,
+                                    scale: overrides.labelScaling,
+                                    fill:  overrides.labelColor,
                                 },
                             });
 
@@ -149,13 +155,14 @@ export default class {
 
                             path.setLabel({
                                 svg:  path.getParent(),
-                                text: String(col),
-                                x:    X_IN_MIDDLE + col * GRIDCELL_DIM,
-                                y:    Y_IN_MIDDLE + GRIDCELL_DIM / 4,
+                                text: String(col * Math.ceil( stage?.grid.GRIDCELL_DIM )),
+                                x:    X_IN_MIDDLE + col * GRIDCELL_DIM  + (defaultVendorFontSize/2),
+                                y:    Y_IN_MIDDLE + defaultVendorFontSize,
                                 overrides: {
-                                    opacity: overrides.labelOpacity || 1,
-                                    scale: overrides.labelScaling || GRIDCELL_DIM / (2 * defaultVendorFontSize),
-                                    fill:  overrides.labelColor   || ENUMS.COLOR.grey,
+                                    textAnchor: overrides.label$textAnchor,
+                                    opacity: overrides.labelOpacity,
+                                    scale: overrides.labelScaling,
+                                    fill:  overrides.labelColor,
                                 },
                             });
 
@@ -163,7 +170,7 @@ export default class {
 
                     }
 
-                    // DEV_NOTE # this is not the cleanest solution, but consider I am cleaning myself after GitHub Copilot left mess
+                    // DEV_NOTE # this is not the cleanest solution, but consider I am cleaning myself after GitHub Copilot mess it left...
                     if ( pathId !== 'grid_h_0' && pathId !== 'grid_v_0' ) path.remove();
 
                 });
