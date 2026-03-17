@@ -22,10 +22,18 @@ export default class {
       strokeWidth
     } = view;
 
+    /**
+     * @type
+     */
     const 
       shapeType = new Map([
         [ENUMS.SHAPE.circle, [0, 1, 360]],
         [ENUMS.SHAPE.square, [0, 90, 360]],
+      ])
+      ,
+      rotationType = new Map([
+        [ENUMS.ATTRIBUTE.CCW,  1],
+        [ENUMS.ATTRIBUTE.CW,  -1],
       ])
       ;
 
@@ -41,10 +49,13 @@ export default class {
      *   them, producing ~361 edge points — identical cycle length to circle so
      *   the reset frame is imperceptible (< 0.3 %).
      */
-    const cornerPoints = setRange(...shapeType.get(animation?.type || ENUMS.SHAPE.circle)).map((deg) => ({
-        x: Math.cos( Converters.degToRad( deg ) ) - 1 /* <== removes the annoying radius visible, when the shape is not filled */,
-        y: Math.sin( Converters.degToRad( deg ) ),
-    }));
+    const cornerPoints = 
+      setRange(...shapeType.get(animation?.type || ENUMS.SHAPE.circle)).map((deg, i, points) => {        
+        return({
+              x:                                         1 * Math.cos( Converters.degToRad( deg ) ) - 1  /* <== removes the annoying radius visible, when the shape is not filled */,
+              y: -1 * Number(rotationType.get(animation.sense)) * Math.sin( Converters.degToRad( deg ) ),
+        });
+      });
 
     const allPoints = animation?.type === ENUMS.SHAPE.square
         ? interpolateCorners(cornerPoints)

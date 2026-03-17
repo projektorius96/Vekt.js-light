@@ -6,7 +6,7 @@
  * 
  * @returns {Animation} animation
  */
-export default function startAnimation({ from = 0, to = 180, duration = 100, iterations = Infinity, callback }) {
+export default function startAnimation({ from = 0, to = 180, duration = 1, iterations = Infinity, callback }) {
 
     const animation_counter = 'animation-counter';
 

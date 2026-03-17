@@ -58,12 +58,12 @@ export default class {
                 dispatcher.addEventListener(ENUMS.CASE.circle, ({type}) => {
                     UnitCircle.init(type, { ...dependencies, 
                         overrides: {
-                            view: { dashed: false, stroke: ENUMS.COLOR.red, strokeWidth: 2 }
+                            view: { dashed: false, stroke: ENUMS.COLOR.red, strokeWidth: 4 }
                             , 
                             animation: {
-                                type/* : ENUMS.SHAPE.square */
-                                , 
-                                duration: 1
+                                type: type || ENUMS.SHAPE.square
+                                ,
+                                sense: 'CW'
                             } 
                         } 
                     })
