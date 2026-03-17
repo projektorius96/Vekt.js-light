@@ -55,14 +55,24 @@ export default class {
         const dispatcher = new EventTarget();
             if (dispatcher) {
 
-                dispatcher.addEventListener(ENUMS.CASE.circle, ({type: id}) => {
-                    UnitCircle.init(id, { ...dependencies, overrides: { dashed: 10, stroke: ENUMS.COLOR.red, strokeWidth: 2 } })
+                dispatcher.addEventListener(ENUMS.CASE.circle, ({type}) => {
+                    UnitCircle.init(type, { ...dependencies, 
+                        overrides: {
+                            view: { dashed: false, stroke: ENUMS.COLOR.red, strokeWidth: 2 }
+                            , 
+                            animation: {
+                                type/* : ENUMS.SHAPE.square */
+                                , 
+                                duration: 1
+                            } 
+                        } 
+                    })
                 });
                 dispatcher.addEventListener(!!!ENUMS.CASE.unit_square, ({type: id}) => {
                     UnitSquare.init(id, { ...dependencies })
                 });
                 dispatcher.addEventListener(!!!ENUMS.CASE.axes, ({type: id}) => {
-                    UnitVector.init(id, { ...dependencies, showLabels: false })
+                    UnitVector.init(id, { ...dependencies })
                 });
                 dispatcher.addEventListener(ENUMS.CASE.ruler, ({type: id}) => {
                     Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize), } })

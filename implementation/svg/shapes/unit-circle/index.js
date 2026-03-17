@@ -4,6 +4,14 @@ export default class {
 
   static init(id, {HTMLCanvas, XMLSVG, ENUMS, AnimationCounter, overrides = {}}) {
 
+    const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
+
+    const {
+      view
+      ,
+      animation
+    } = overrides;
+
     const {
       fill
       ,
@@ -12,20 +20,25 @@ export default class {
       stroke
       ,
       strokeWidth
-    } = overrides;
-    
-    const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
+    } = view;
+
+    const 
+      shapeType = new Map([
+        [ENUMS.SHAPE.circle, [0, 1, 360]],
+        [ENUMS.SHAPE.square, [0, 90, 360]],
+      ])
+      ;
 
     /**
      * Case B: pre-compute all circle points once (0°..360°, inclusive) so the
      * animation callback only needs to slice this array — no trigonometry
      * recalculation on every tick.
      */
-    const allPoints = setRange(0, 1, 360).map((deg) => ({
+    const allPoints = setRange(...shapeType.get(animation?.type || ENUMS.SHAPE.circle)).map((deg) => ({
         x: Math.cos( Converters.degToRad( deg ) ) - 1 /* <== removes the annoying radius visible, when the shape is not filled */,
         y: Math.sin( Converters.degToRad( deg ) ),
     }));
-
+    
     XMLSVG.Helpers.findByID(id)
     .setPaths([
         new XMLSVG.Views.Path({
@@ -54,7 +67,14 @@ export default class {
 
       }()
 
-      animate({ AnimationCounter, path, allPoints });
+      animate({ 
+        AnimationCounter, 
+        path, 
+        allPoints, 
+        overrides: {
+          ...animation
+        } 
+      });
 
     })
     );
@@ -64,7 +84,7 @@ export default class {
 }
 
 
-function animate({AnimationCounter, path, allPoints}) {
+function animate({AnimationCounter, path, allPoints, overrides}) {
 
   const scalingFactor = Number(path.dataset.scaling) || 1;
 
@@ -79,12 +99,13 @@ function animate({AnimationCounter, path, allPoints}) {
          */
         to: allPoints.length,
         duration: 1,
-        iterations: Infinity
+        iterations: Infinity,
+        ...overrides
     }
     ,
     animCounter = AnimationCounter({
-        ...animConfig, callback: function ({ count }) {
-
+        ...animConfig, callback: function ({ count }) {          
+          
             /**
              * Case B: reveal one more point per tick by slicing the
              * pre-computed allPoints array.  This avoids recreating 360
