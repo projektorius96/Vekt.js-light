@@ -64,8 +64,8 @@ export default class {
 
                     // DEV-TIP # pass {0 | false} to [length] to hide arrow heads of line segment (or vector)
                     path.setPoints([
-                        drawVector({ Helpers: HTMLCanvas.Helpers, path /* , length: false */ })
-                    ], 1);
+                        ...drawVector({ Helpers: HTMLCanvas.Helpers, path , length: false })
+                    ], Number(path.dataset.scaling));
 
                 });
 
