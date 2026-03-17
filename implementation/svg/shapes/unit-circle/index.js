@@ -93,9 +93,8 @@ function animate({AnimationCounter, path, allPoints, overrides}) {
         from: 0,
         /**
          * AnimationCounter increments count before invoking the callback, so
-         * the callback receives count = 1, 2, …, allPoints.length − 1.
-         * When count would reach allPoints.length the counter resets to 0
-         * (no callback), restarting the draw-and-loop cycle.
+         * the callback receives count = 1, 2, …, allPoints.length − 1, then
+         * count=0 at the cycle boundary (path reset to invisible), then 1 again.
          */
         to: allPoints.length,
         duration: 1,

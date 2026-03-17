@@ -63,9 +63,11 @@ export default function startAnimation({ from = 0, to = 180, duration = 100, ite
                         effect.getKeyframes(),
                         effect.getTiming()
                     );
-                } else {
-                    callback({count})
                 }
+                // DEV_NOTE # fire callback unconditionally so consumers can reset their
+                // rendered state when count=0 (cycle boundary), preventing visible flicker
+                // between the last fully-drawn frame and the first segment of the new cycle.
+                callback({count});
             }
         }
 
