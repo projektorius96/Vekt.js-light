@@ -6,10 +6,9 @@
  * 
  * @returns {Animation} animation
  */
-export default function startAnimation({ from = 0, to = 180, duration = 100, iterations = Infinity, callback }) {
+export default function startAnimation({ id = 'animation-counter', from = 0, to = 180, duration = 1, iterations = Infinity, callback }) {
 
-    const animation_counter = 'animation-counter';
-
+    const animation_counter = id;
     if ( !(customElements.get(animation_counter)) ) {
 
         customElements.define(animation_counter, class extends HTMLElement {
@@ -63,9 +62,11 @@ export default function startAnimation({ from = 0, to = 180, duration = 100, ite
                         effect.getKeyframes(),
                         effect.getTiming()
                     );
-                } else {
-                    callback({count})
                 }
+                // DEV_NOTE # fire callback unconditionally so consumers can reset their
+                // rendered state when count=0 (cycle boundary), preventing visible flicker
+                // between the last fully-drawn frame and the first segment of the new cycle.
+                callback({count});
             }
         }
 
