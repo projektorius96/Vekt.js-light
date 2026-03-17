@@ -6,10 +6,9 @@
  * 
  * @returns {Animation} animation
  */
-export default function startAnimation({ from = 0, to = 180, duration = 1, iterations = Infinity, callback }) {
+export default function startAnimation({ id = 'animation-counter', from = 0, to = 180, duration = 1, iterations = Infinity, callback }) {
 
-    const animation_counter = 'animation-counter';
-
+    const animation_counter = id;
     if ( !(customElements.get(animation_counter)) ) {
 
         customElements.define(animation_counter, class extends HTMLElement {

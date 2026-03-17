@@ -4,7 +4,7 @@ import Ruler from './shapes/ruler/index.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
-import { CONSTANTS, ENUMS } from './globals.js';
+import { CONSTANTS, ENUMS, PRINT } from './globals.js';
 import { defaultVendorFontSize } from './modules/vendor-utils.js';
 import { userConfig } from '../user-config.js';
 
@@ -54,17 +54,28 @@ export default class {
         // 3) central dispatcher and handlers
         const dispatcher = new EventTarget();
             if (dispatcher) {
-
-                dispatcher.addEventListener(ENUMS.CASE.circle, ({type}) => {
-                    UnitCircle.init(type, { ...dependencies, 
+                dispatcher.addEventListener(ENUMS.CASE.circle, ({type: id}) => {
+                    UnitCircle.init(id, { ...dependencies,
                         overrides: {
-                            view: { dashed: false, stroke: ENUMS.COLOR.red, strokeWidth: 4 }
+                            view: {
+                                id: id || ENUMS.CASE.square,
+                                dashed: 0, 
+                                stroke: ENUMS.COLOR.red,
+                                strokeWidth: 4, 
+                                transformations: {
+                                    skew: ( id === ENUMS.CASE.circle ? null : { X: { phi: -45 } } ),
+                                }
+                            }
                             , 
-                            animation: {
-                                type: type || ENUMS.SHAPE.square
-                                ,
-                                sense: 'CW'
-                            } 
+                            animation: (
+                                true 
+                                ?
+                                {
+                                    sense: PRINT./* COUNTER_ */CLOCKWISE
+                                } 
+                                : 
+                                false
+                            )
                         } 
                     })
                 });
@@ -77,7 +88,6 @@ export default class {
                 dispatcher.addEventListener(ENUMS.CASE.ruler, ({type: id}) => {
                     Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize), } })
                 });
-
             }
 
         // 4) dispatch once per unique id with grouped elements

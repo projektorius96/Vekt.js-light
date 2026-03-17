@@ -20,6 +20,8 @@ export default class {
       stroke
       ,
       strokeWidth
+      ,
+      transformations
     } = view;
 
     /**
@@ -32,8 +34,8 @@ export default class {
       ])
       ,
       rotationType = new Map([
-        [ENUMS.ATTRIBUTE.CCW,  1],
-        [ENUMS.ATTRIBUTE.CW,  -1],
+        [ENUMS.ATTRIBUTE.COUNTER_CLOCKWISE,  1],
+        [ENUMS.ATTRIBUTE.CLOCKWISE,  -1],
       ])
       ;
 
@@ -49,23 +51,27 @@ export default class {
      *   them, producing ~361 edge points — identical cycle length to circle so
      *   the reset frame is imperceptible (< 0.3 %).
      */
-    const cornerPoints = 
-      setRange(...shapeType.get(animation?.type || ENUMS.SHAPE.circle)).map((deg, i, points) => {        
-        return({
-              x:                                         1 * Math.cos( Converters.degToRad( deg ) ) - 1  /* <== removes the annoying radius visible, when the shape is not filled */,
-              y: -1 * Number(rotationType.get(animation.sense)) * Math.sin( Converters.degToRad( deg ) ),
-        });
-      });
+    const 
+      tearoff$setRange = 
+        (deg)=>{          
+          return({
+                x: /* ____________________________________________ */ 1   * Math.cos( Converters.degToRad( deg ) ) - 1  /* <== removes the annoying radius visible, when the shape is not filled */,
+                y: -1 * Number( rotationType.get(animation?.sense) || 1 ) * Math.sin( Converters.degToRad( deg ) ),
+          });
+        }
+      ,
+      cornerPoints = 
+        setRange(...shapeType.get(overrides.view.id ?? id)).map(tearoff$setRange);
 
-    const allPoints = animation?.type === ENUMS.SHAPE.square
+    const allPoints = (overrides.view.id ?? id === ENUMS.SHAPE.square)
         ? interpolateCorners(cornerPoints)
         : cornerPoints;
-    
-    XMLSVG.Helpers.findByID(id)
+        
+    XMLSVG.Helpers.findByID(/* overrides.view.id ??  */id)
     .setPaths([
         new XMLSVG.Views.Path({
             options: {
-                id: ENUMS.ID.unit_circle,
+                id: /* overrides.view.id ??  */id,
                 scaling: stage?.grid.GRIDCELL_DIM * 2.0,
                 /* Start with a single invisible point; the animation progressively
                    reveals the rest of the circle on each AnimationCounter tick. */
@@ -82,21 +88,30 @@ export default class {
     , 
     ({paths})=>Array.from(paths).on((path)=>{
 
-      void function transform(){
+      const options = JSON.parse(path.dataset.options);
+      
+      void function transform() {
 
-        const { width } = path?.getBoundingClientRect() ?? {};
-          transformPath(path, HTMLCanvas.Helpers, { offsetX: width * stage.grid.GRIDCELL_DIM });
+          transformPath(path, HTMLCanvas.Helpers, { offsetX: options.scaling, ...transformations });
 
       }()
 
-      animate({ 
-        AnimationCounter, 
-        path, 
-        allPoints, 
-        overrides: {
-          ...animation
-        } 
-      });
+      const scalingFactor = Number(path.dataset.scaling) || 1;
+      if (animation) {
+        animate({
+          AnimationCounter, 
+          path, 
+          allPoints,
+          scalingFactor, 
+          overrides: {
+            ...animation
+          } 
+        });
+      } else {
+
+        path.setPoints(allPoints, scalingFactor);
+        
+      }
 
     })
     );
@@ -106,9 +121,7 @@ export default class {
 }
 
 
-function animate({AnimationCounter, path, allPoints, overrides}) {
-
-  const scalingFactor = Number(path.dataset.scaling) || 1;
+function animate({AnimationCounter, path, allPoints, scalingFactor, overrides}) {  
 
   const
     animConfig = {
