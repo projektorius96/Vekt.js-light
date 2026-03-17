@@ -2,7 +2,7 @@ import { transformPath } from '../../modules/transform-utils.js';
 
 export default class {
 
-  static init(id, {HTMLCanvas, XMLSVG, ENUMS, overrides = {}}) {
+  static init(id, {HTMLCanvas, XMLSVG, ENUMS, AnimationCounter, overrides = {}}) {
 
     const {
       fill
@@ -57,5 +57,33 @@ export default class {
     );
 
   }
+
+}
+
+
+function animate({AnimationCounter}) {
+
+  const
+    animConfig = {
+        from: 0,
+        to: 360,
+        duration: 1,
+        iterations: Infinity
+    }
+    ,
+    animCounter = AnimationCounter({
+        ...animConfig, callback: function ({ count }) {
+
+            /* Use the `{count}` as the animation primitive to implement the progressing animation */
+            
+        }
+    })
+  ;
+
+  /**
+   * @test
+   */
+  /* animCounter.pause(); */// # [PASSING]
+  /* animCounter.play(); */// # [PASSING]
 
 }
