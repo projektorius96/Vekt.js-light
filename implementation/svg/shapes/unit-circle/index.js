@@ -15,43 +15,46 @@ export default class {
     } = overrides;
     
     const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
+
+    /**
+     * Case B: pre-compute all circle points once (0°..360°, inclusive) so the
+     * animation callback only needs to slice this array — no trigonometry
+     * recalculation on every tick.
+     */
+    const allPoints = setRange(0, 1, 360).map((deg) => ({
+        x: Math.cos( Converters.degToRad( deg ) ) - 1 /* <== removes the annoying radius visible, when the shape is not filled */,
+        y: Math.sin( Converters.degToRad( deg ) ),
+    }));
+
     XMLSVG.Helpers.findByID(id)
     .setPaths([
         new XMLSVG.Views.Path({
             options: {
                 id: ENUMS.ID.unit_circle,
                 scaling: stage?.grid.GRIDCELL_DIM * 2.0,
-                points: [
-                    ...setRange(0, 1, 360 * 2).map((deg)=>{
-                        return {
-                            x: 1 * Math.cos( Converters.degToRad( deg ) ) - 1 /* <== removes the annoying radius visible, when the shape is not filled */,
-                            y: 1 * Math.sin( Converters.degToRad( deg ) ) - 0,
-                        }
-                    })
-                ],
+                /* Start with a single invisible point; the animation progressively
+                   reveals the rest of the circle on each AnimationCounter tick. */
+                points: allPoints.slice(0, 1),
 
                 /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
                 dashed: dashed ?? 1,
                 strokeWidth: strokeWidth ?? 1,
                 fill: fill || ENUMS.COLOR.none,
                 stroke: stroke || ENUMS.COLOR.black,
-                // /**
-                //  * @override
-                //  */
-                // ...overrideOptions
             }
         })
     ]
     , 
     ({paths})=>Array.from(paths).on((path)=>{
 
-      // this.transform({Helpers: HTMLCanvas.Helpers, path, XMLSVG, ENUMS});
       void function transform(){
 
-      const { width } = path?.getBoundingClientRect() ?? {};
-        transformPath(path, HTMLCanvas.Helpers, { offsetX: width * stage.grid.GRIDCELL_DIM });
+        const { width } = path?.getBoundingClientRect() ?? {};
+          transformPath(path, HTMLCanvas.Helpers, { offsetX: width * stage.grid.GRIDCELL_DIM });
 
       }()
+
+      animate({ AnimationCounter, path, allPoints });
 
     })
     );
@@ -61,12 +64,20 @@ export default class {
 }
 
 
-function animate({AnimationCounter}) {
+function animate({AnimationCounter, path, allPoints}) {
+
+  const scalingFactor = Number(path.dataset.scaling) || 1;
 
   const
     animConfig = {
         from: 0,
-        to: 360,
+        /**
+         * AnimationCounter increments count before invoking the callback, so
+         * the callback receives count = 1, 2, …, allPoints.length − 1.
+         * When count would reach allPoints.length the counter resets to 0
+         * (no callback), restarting the draw-and-loop cycle.
+         */
+        to: allPoints.length,
         duration: 1,
         iterations: Infinity
     }
@@ -74,8 +85,13 @@ function animate({AnimationCounter}) {
     animCounter = AnimationCounter({
         ...animConfig, callback: function ({ count }) {
 
-            /* Use the `{count}` as the animation primitive to implement the progressing animation */
-            
+            /**
+             * Case B: reveal one more point per tick by slicing the
+             * pre-computed allPoints array.  This avoids recreating 360
+             * setRange / Math.cos|sin calls on every animation frame.
+             */
+            path.setPoints(allPoints.slice(0, count + 1), scalingFactor);
+
         }
     })
   ;
