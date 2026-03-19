@@ -1,4 +1,4 @@
-import { transformPath } from '../../modules/transform-utils.js';
+import { transformPath } from '../../modules/utils.js';
 
 export default class {
 

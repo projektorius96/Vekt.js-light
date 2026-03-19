@@ -1,4 +1,4 @@
-import { PRINT } from '../../../../implementation/utils.js';
+import { PRINT } from '../../../../implementation/app/utils.js';
 export { PRINT };
 
 const { viewBox } = PRINT;

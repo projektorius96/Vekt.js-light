@@ -1,6 +1,6 @@
-import Views from './svg/entry.js';
-import { ENUMS, PRINT as STATIC_FIELD } from "./utils.js";
-import { userConfig } from "./user-config.js";
+import Views from './app/entry.js';
+import { ENUMS, PRINT as STATIC_FIELD } from "./app/utils.js";
+import { userConfig } from "./app/user-config.js";
 
 export default class {
 

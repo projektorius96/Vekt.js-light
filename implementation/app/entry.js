@@ -5,10 +5,9 @@ import UnitCircle from './shapes/unit-circle/index.js';
 import UnitSquare from './shapes/unit-square/index.js';
 import UnitVector from './shapes/unit-vector/index.js';
 import { CONSTANTS, ENUMS, PRINT } from './globals.js';
-import { defaultVendorFontSize } from './modules/vendor-utils.js';
-import { userConfig } from '../user-config.js';
+import { defaultVendorFontSize } from './modules/utils.js';
+import { userConfig } from './user-config.js';
 
-// Example: EventTarget + grouping approach for render()
 export default class {
 
     static setup({ XMLSVG }) {
@@ -54,13 +53,15 @@ export default class {
         // 3) central dispatcher and handlers
         const dispatcher = new EventTarget();
             if (dispatcher) {
-                dispatcher.addEventListener(ENUMS.CASE.circle, ({type: id}) => {
-                    UnitCircle.init(id, { ...dependencies,
+                dispatcher.on(ENUMS.CASE.circle, ({type: id}) => {
+                    UnitCircle.init(id, {
+                        ...dependencies
+                        ,
                         overrides: {
                             view: {
                                 id: id || ENUMS.CASE.square,
                                 dashed: 0, 
-                                stroke: ENUMS.COLOR.red,
+                                stroke: ENUMS.COLOR.magenta,
                                 strokeWidth: 4, 
                                 transformations: {
                                     skew: ( id === ENUMS.CASE.circle ? null : { X: { phi: -45 } } ),
@@ -79,14 +80,14 @@ export default class {
                         } 
                     })
                 });
-                dispatcher.addEventListener(!!!ENUMS.CASE.unit_square, ({type: id}) => {
+                dispatcher.on(!!!ENUMS.CASE.unit_square, ({type: id}) => {
                     UnitSquare.init(id, { ...dependencies })
                 });
-                dispatcher.addEventListener(!!!ENUMS.CASE.axes, ({type: id}) => {
+                dispatcher.on(/* !!! */ENUMS.CASE.axes, ({type: id}) => {
                     UnitVector.init(id, { ...dependencies })
                 });
-                dispatcher.addEventListener(ENUMS.CASE.ruler, ({type: id}) => {
-                    Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize), } })
+                dispatcher.on(ENUMS.CASE.ruler, ({type: id}) => {
+                    Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize) } })
                 });
             }
 
