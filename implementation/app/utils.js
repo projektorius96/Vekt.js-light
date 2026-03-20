@@ -7,14 +7,15 @@
  * ENUM.me;    // 'me'
  * ENUMS.COLOR.black; // 'black'
  */
-const PRINT = new Proxy(Object.create(null), {
+const Print = new Proxy(Object.create(null), {
     get(_nil, key) {
         return `${key}`;
     },
 });
 
-const [COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, ID] = Array(8).fill(PRINT);
+const [PRINT, COLOR, SHAPE, UI_EVENT, CASE, ATTRIBUTE, ID] = Array(7).fill(Print);
 const ENUMS = Object.freeze({
+    PRINT,
     COLOR,
     SHAPE,
     UI_EVENT,
@@ -23,4 +24,4 @@ const ENUMS = Object.freeze({
     ID,
 });
 
-export { PRINT, ENUMS };
+export { ENUMS };

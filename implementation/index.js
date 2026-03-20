@@ -1,5 +1,5 @@
 import Views from './app/entry.js';
-import { ENUMS, PRINT as STATIC_FIELD } from "./app/utils.js";
+import { ENUMS } from "./app/utils.js";
 import { userConfig } from "./app/user-config.js";
 
 export default class {
@@ -11,7 +11,8 @@ export default class {
      */
     static init({HTMLCanvas, XMLSVG}) {
 
-        const { setup } = STATIC_FIELD;
+        const
+            { setup } = ENUMS.PRINT;
         const stage = new HTMLCanvas.ViewGroup.Stage({...userConfig.canvas.stage});
 
             if ( stage ) {
@@ -42,7 +43,7 @@ export default class {
      */
     static render({HTMLCanvas, XMLSVG}, context) {
 
-        const { render } = STATIC_FIELD;
+        const { render } = ENUMS.PRINT;
     
         // DEV_NOTE # because we mix HTML Canvas (i.e. Canvas API) together with XML SVG (i.e. SVG) web technologies, we must do the following `context` check:..
         if ( context instanceof CanvasRenderingContext2D ) {
