@@ -1,5 +1,3 @@
-import { refreshPathFromCurrentPoints } from '../../../src/views/xmlsvg/svg-path-geometry.js';
-
 /**
  * Shared SVG transform logic for shape modules: refresh path points, then apply
  * rotation/translation/skew from stage center (stage.grid.SVG) plus optional offsets.
@@ -10,7 +8,7 @@ import { refreshPathFromCurrentPoints } from '../../../src/views/xmlsvg/svg-path
  * @returns {boolean} true if transform was applied
  */
 export function transformPath(path, Helpers, { angle, offsetX = 0, offsetY = 0, skew } = {}) {
-  if (!refreshPathFromCurrentPoints(path)) return false;
+  if (!path.setPoints(path.getPoints())) return false;
   const center = typeof stage !== 'undefined' && stage?.grid?.SVG;
   if (!center) return false;
 
@@ -28,3 +26,14 @@ export function transformPath(path, Helpers, { angle, offsetX = 0, offsetY = 0, 
   );
   return true;
 }
+
+/**
+ * @arbitrary
+ * NOTE: de-facto font-size for majority of modern browser vendors.
+ */
+export const defaultVendorFontSize = Number(
+    window
+        .getComputedStyle(document.documentElement)
+        .getPropertyValue('font-size')
+        .replace(CSS.px.name, '')
+    );

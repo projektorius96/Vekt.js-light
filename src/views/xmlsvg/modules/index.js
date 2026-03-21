@@ -1,5 +1,8 @@
-import { PRINT } from '../../../../implementation/utils.js';
-export { PRINT };
+export const PRINT = new Proxy(Object.create(null), {
+    get(_nil, key) {
+        return `${key}`;
+    },
+});
 
 const { viewBox } = PRINT;
 
@@ -57,7 +60,7 @@ export function setPoints(points = [], scalingFactor = 1) {
  *   @param {Number} opts.dy         Fine-tune baseline offset (e.g. 0.1em)
  *   @param {Number} opts.scale      Apply local scale transform (default 1)
  */
-export function drawLabel({svg, text, x, y, overrides = {}}) {
+export function drawLabel({svg, text, x = 0, y = 0, overrides = {}}) {
 
     const {
         dominantBaseline = 'middle',

@@ -1,5 +1,5 @@
-import { transformPath } from '../../modules/transform-utils.js';
-import { defaultVendorFontSize } from '../../modules/vendor-utils.js';
+import { transformPath } from '../../modules/utils.js';
+import { defaultVendorFontSize } from '../../modules/utils.js';
 
 /**
  * SVG-first grid grading implementation — Desmos-style coordinate plane.

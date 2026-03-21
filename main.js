@@ -1,5 +1,5 @@
 import { HTMLCanvas, XMLSVG } from './src/views/index.js';
-import Implementation from './implementation/main.js';
+import Stage from './implementation/index.js';
 
 import package_json from './package.json' with { type: 'json' };
 
@@ -8,13 +8,13 @@ document.on('DOMContentLoaded', ()=>{
     document.title = package_json.name;
 
     const
-        stage = Implementation.init({HTMLCanvas, XMLSVG})  
+        stage = Stage.init({HTMLCanvas, XMLSVG})  
 
     window.on('resize', ()=>{
 
             HTMLCanvas
                 .init({stage})
-                    .on( Implementation.render.bind(null, {HTMLCanvas, XMLSVG}) );
+                    .on( Stage.render.bind(null, {HTMLCanvas, XMLSVG}) );
         
     });
 
