@@ -5,11 +5,7 @@ import UnitVector from './unit-vector/index.js';
 
 export default function ({dependencies, containers}) {
 
-    const 
-        { ENUMS, userConfig } = dependencies
-        ,
-        { defaultVendorFontSize } = userConfig
-        ;    
+    const { ENUMS, userConfig, defaultVendorFontSize } = dependencies;
 
     // 3) central dispatcher and handlers (listeners)
     const dispatcher = new EventTarget();
