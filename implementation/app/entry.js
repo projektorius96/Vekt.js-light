@@ -39,7 +39,8 @@ export default class {
                 ENUMS, 
                 AnimationCounter, 
                 userConfig, 
-                defaultVendorFontSize
+                defaultVendorFontSize,
+                ...CONSTANTS
             }
         })
 

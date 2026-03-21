@@ -5,11 +5,7 @@ import UnitVector from './unit-vector/index.js';
 
 export default function ({dependencies, containers}) {
 
-    const 
-        { ENUMS, userConfig } = dependencies
-        ,
-        { defaultVendorFontSize } = userConfig
-        ;    
+    const { ENUMS, userConfig, defaultVendorFontSize } = dependencies;
 
     // 3) central dispatcher and handlers (listeners)
     const dispatcher = new EventTarget();
@@ -44,10 +40,10 @@ export default function ({dependencies, containers}) {
             dispatcher.on(ENUMS.CASE.unit_square, ({type: id}) => {
                 UnitSquare.init(id, { ...dependencies })
             });
-            dispatcher.on(!!!ENUMS.CASE.axes, ({type: id}) => {
+            dispatcher.on(ENUMS.CASE.axes, ({type: id}) => {
                 UnitVector.init(id, { ...dependencies })
             });
-            dispatcher.on(!!!ENUMS.CASE.ruler, ({type: id}) => {
+            dispatcher.on(ENUMS.CASE.ruler, ({type: id}) => {
                 Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize) }  })
             });
         }
