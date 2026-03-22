@@ -1,8 +1,21 @@
-import { transformPath } from '../../modules/utils.js';
-
 export default class {
 
-    static init(id, {HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR, overrides}) {
+    static init(id, {dependencies, overrides}) {
+
+        /**
+         * @deps
+         */
+        const {
+            HTMLCanvas, 
+            XMLSVG, 
+            ENUMS,
+            QUADRANT,
+            GLOBAL_SCALAR,
+            transformPath,
+            defaultVendorFontSize,
+            AnimationCounter, 
+            userConfig, 
+        } = dependencies;
 
         /**
          * @alias

@@ -2,16 +2,22 @@ import { transformPath } from '../../modules/utils.js';
 
 export default class {
 
-    static setTransfromPoints({ Helpers }) {
+    static init(id, { dependencies }) {
 
-        return ({ id }) => {
-            const path = document.getElementById(id);
-                transformPath(path, Helpers, {});
-        };
-
-    }
-
-    static init(id, { HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR }) {
+        /**
+         * @deps
+        */
+        const {
+            HTMLCanvas, 
+            XMLSVG, 
+            ENUMS,
+            QUADRANT,
+            GLOBAL_SCALAR,
+            transformPath,
+            defaultVendorFontSize,
+            AnimationCounter, 
+            userConfig,  
+        } = dependencies;
 
         /**
          * @alias
@@ -42,27 +48,29 @@ export default class {
             ;
 
         const scaling = Math.floor((window.innerHeight/2)) * GLOBAL_SCALAR;
-        XMLSVG.Helpers.findByID(id)
-            .setPaths([
-                ...AXES_CONFIG.map(({ id, fillStroke, angleMultiplier }) =>
-                    new PathView({
-                        options: {
-                            ...sharedOptions,
-                            id,
-                            fillStroke,
-                            scaling,
-                            angle: angleMultiplier * QUADRANT,
-                        },
-                    })
-                ),
+        XMLSVG.Helpers.findByID(id).setPaths([
+
+                ...AXES_CONFIG.map(({ id, fillStroke, angleMultiplier }) => {
+
+                    return(
+                        new PathView({
+                            options: {
+                                ...sharedOptions,
+                                id,
+                                fillStroke,
+                                scaling,
+                                angle: angleMultiplier * QUADRANT,
+                            }
+                        })
+                    )
+
+                })
+
             ], ({ paths }) => {
 
-                /**
-                  * @override
-                  */
                 SVGList.from(paths).on((path) => {
 
-                    // DEV-TIP # pass {0 | false} to [length] to hide arrow heads of line segment (or vector)
+                    // DEV-TIP # passing {length: 0 || false} hides arrow heads (tip) of vector
                     path.setPoints([
                         ...drawVector({ Helpers: HTMLCanvas.Helpers, path , length: false })
                     ], Number(path.dataset.scaling));
@@ -76,12 +84,13 @@ export default class {
 }
 
 function drawVector({ Helpers, path, angle, sharpness = 4, length = 2 }) {
+
     // DEV_NOTE # arrowhead points in local coordinates system (pointing along positive X axis)
     const baseShape = [
         { x: 1, y: 0 },
         { x: 0, y: 0 },                            // tip of arrow
-        { x: -length, y: length / sharpness },  // bottom wing
-        { x: -length, y: -length / sharpness },  // top wing
+        { x: -length, y: length / sharpness },     // bottom wing
+        { x: -length, y: -length / sharpness },    // top wing
         { x: 0, y: 0 },                            // MUST explicitly close the path!
     ]   // Scale + offset 
         .map((point) => {
