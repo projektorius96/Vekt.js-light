@@ -3,8 +3,10 @@ import UnitCircle from './unit-circle/index.js';
 import UnitSquare from './unit-square/index.js';
 import UnitVector from './unit-vector/index.js';
 
-export default function ({dependencies, containers}) {
-    
+export default class {
+
+    static drawPaths({dependencies, containers}) {
+
     /**
     * @deps
     */
@@ -33,7 +35,7 @@ export default function ({dependencies, containers}) {
                         }
                         , 
                         animation: (
-                            DONOT_ANIMATE 
+                            DO_ANIMATE 
                             ?
                             {
                                 sense: ENUMS.PRINT./* COUNTER_ */CLOCKWISE
@@ -67,13 +69,15 @@ export default function ({dependencies, containers}) {
                 Ruler.init(id, { dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: (stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize) /* !important */ ) }  })
             });
 
+            dispatcher ? drawContainers({dispatcher, containers}) : false ;
+
         }
 
-        registerContainers({dispatcher, containers});
+    }
     
 }
 
-function registerContainers({dispatcher, containers}) {
+function drawContainers({dispatcher, containers}) {
 
     containers
         .reduce((mapping, container) => {
@@ -84,5 +88,7 @@ function registerContainers({dispatcher, containers}) {
             dispatcher.dispatchEvent(new Event(container.id));
         })
     ;
+
+    return true;
     
 }

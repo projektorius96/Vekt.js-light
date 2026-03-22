@@ -1,10 +1,9 @@
 import './globals.css';
-import AnimationCounter from './modules/animations.js';
-import { CONSTANTS, ENUMS } from './globals.js';
-import { defaultVendorFontSize } from './modules/utils.js';
-import { userConfig } from './user-config.js';
-
 import Renderer from './shapes/renderer.js';
+import AnimationCounter from './modules/animations.js';
+import { defaultVendorFontSize, transformPath } from './modules/utils.js';
+import { CONSTANTS, ENUMS } from './globals.js';
+import { userConfig } from './user-config.js';
 
 export default class {
 
@@ -27,9 +26,9 @@ export default class {
 
     }
 
-    static render({ HTMLCanvas, XMLSVG, ENUMS }) {
+    static renderer({ HTMLCanvas, XMLSVG, ENUMS }) {
 
-        Renderer({
+        Renderer.drawPaths({
             containers: [...this.setup({ XMLSVG })]
             ,
             dependencies: {
@@ -39,6 +38,7 @@ export default class {
                 AnimationCounter, 
                 userConfig, 
                 defaultVendorFontSize,
+                transformPath,
                 ...CONSTANTS
             }
         })

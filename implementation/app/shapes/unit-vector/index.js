@@ -10,9 +10,13 @@ export default class {
         const {
             HTMLCanvas, 
             XMLSVG, 
-            ENUMS, 
-            QUADRANT, 
-            GLOBAL_SCALAR 
+            ENUMS,
+            QUADRANT,
+            GLOBAL_SCALAR,
+            transformPath,
+            defaultVendorFontSize,
+            AnimationCounter, 
+            userConfig,  
         } = dependencies;
 
         /**

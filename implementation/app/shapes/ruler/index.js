@@ -1,6 +1,3 @@
-import { transformPath } from '../../modules/utils.js';
-import { defaultVendorFontSize } from '../../modules/utils.js';
-
 /**
  * SVG-first grid grading implementation — Desmos-style coordinate plane.
  *
@@ -24,7 +21,11 @@ export default class {
         const {
             HTMLCanvas, 
             XMLSVG, 
-            ENUMS
+            ENUMS,
+            defaultVendorFontSize,
+            transformPath,
+            AnimationCounter, 
+            userConfig, 
         } = dependencies;
 
         /**

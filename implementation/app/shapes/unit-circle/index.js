@@ -1,5 +1,3 @@
-import { transformPath } from '../../modules/utils.js';
-
 export default class {
 
   static init(id, {dependencies, overrides}) {
@@ -7,8 +5,11 @@ export default class {
     const {
       HTMLCanvas, 
       XMLSVG, 
-      ENUMS, 
-      AnimationCounter
+      ENUMS,
+      AnimationCounter, 
+      transformPath,
+      defaultVendorFontSize,
+      userConfig, 
     } = dependencies;
 
     const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;

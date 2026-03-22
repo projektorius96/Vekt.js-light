@@ -8,13 +8,13 @@ document.on('DOMContentLoaded', ()=>{
     document.title = package_json.name;
 
     const
-        stage = Stage.init({HTMLCanvas, XMLSVG})  
+        stage = Stage.setup({HTMLCanvas, XMLSVG})  
 
     window.on('resize', ()=>{
 
             HTMLCanvas
                 .init({stage})
-                    .on( Stage.render.bind(null, {HTMLCanvas, XMLSVG}) );
+                    .on( Stage.renderer.bind(null, {HTMLCanvas, XMLSVG}) );
         
     });
 
