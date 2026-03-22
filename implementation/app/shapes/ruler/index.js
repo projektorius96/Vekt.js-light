@@ -123,12 +123,7 @@ export default class {
                                 text: String(-row * Math.ceil( stage?.grid.GRIDCELL_DIM )),  // negate: SVG y↓ vs. math y↑
                                 x:    (X_IN_MIDDLE - defaultVendorFontSize),
                                 y:    (Y_IN_MIDDLE + row * GRIDCELL_DIM) - (defaultVendorFontSize/2),
-                                overrides: {
-                                    textAnchor: overrides.label$textAnchor,
-                                    opacity: overrides.labelOpacity,
-                                    scale: overrides.labelScaling,
-                                    fill:  overrides.labelColor,
-                                },
+                                overrides
                             });
 
                         }
@@ -158,12 +153,7 @@ export default class {
                                 text: String(col * Math.ceil( stage?.grid.GRIDCELL_DIM )),
                                 x:    X_IN_MIDDLE + col * GRIDCELL_DIM  + (defaultVendorFontSize/2),
                                 y:    Y_IN_MIDDLE + defaultVendorFontSize,
-                                overrides: {
-                                    textAnchor: overrides.label$textAnchor,
-                                    opacity: overrides.labelOpacity,
-                                    scale: overrides.labelScaling,
-                                    fill:  overrides.labelColor,
-                                },
+                                overrides
                             });
 
                         }

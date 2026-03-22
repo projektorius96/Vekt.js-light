@@ -7,7 +7,6 @@ export default function ({dependencies, containers}) {
 
     const { ENUMS, userConfig, defaultVendorFontSize } = dependencies;
 
-    // 3) central dispatcher and handlers (listeners)
     const dispatcher = new EventTarget();
         if (dispatcher) {
             dispatcher.on(ENUMS.CASE.circle, ({type: id}) => {
@@ -48,14 +47,14 @@ export default function ({dependencies, containers}) {
             });
         }
 
-        const groups = containers.reduce((map, container) => {
-                    if (!map.has(container.id)) map.set(container.id, container);
-                    return map;
-                }, new Map())  
-
-    // 4) dispatch once per unique id with grouped elements
-    groups.forEach((container) => {
-        dispatcher.dispatchEvent(new Event(container.id));
-    });
+    containers
+        .reduce((mapping, container) => {
+            if (!mapping.has(container.id)) mapping.set(container.id, container);
+            return mapping;
+        }, new Map())  
+        .forEach((container) => {
+            dispatcher.dispatchEvent(new Event(container.id));
+        })
+    ;
     
 }
