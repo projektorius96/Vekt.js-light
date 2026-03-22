@@ -2,7 +2,7 @@ import { transformPath } from '../../modules/utils.js';
 
 export default class {
 
-    static init(id, {HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR}) {
+    static init(id, {HTMLCanvas, XMLSVG, ENUMS, QUADRANT, GLOBAL_SCALAR, overrides}) {
 
         /**
          * @alias
@@ -56,7 +56,13 @@ export default class {
         , 
         ({paths}) => Array.from(paths).on((path)=>{
             
-            transformPath(path, HTMLCanvas.Helpers, { skew: { X: { phi: -15 } } });
+            transformPath(path, { 
+                Helpers: HTMLCanvas.Helpers
+                , 
+                transformations: {
+                    ...overrides.path.transformations
+                } 
+            });
 
         })
         );

@@ -110,9 +110,14 @@ export default class {
 
                         // Full-viewport-width line segment — no arrowhead
                         // (conceptually: UnitVector.drawVector with { length: false })
-                        transformPath(path, HTMLCanvas.Helpers, {
-                            offsetX: -X_IN_MIDDLE,
-                            offsetY: row * GRIDCELL_DIM,
+                        transformPath(path, {
+                            Helpers: HTMLCanvas.Helpers
+                            , 
+                            transformations: {
+                                offsetX: -X_IN_MIDDLE,
+                                offsetY: row * GRIDCELL_DIM,
+                                ...overrides.transformations
+                            } 
                         });
 
                         /* ── y-axis tick labels (skip origin row) ── */
@@ -139,10 +144,15 @@ export default class {
 
                         // Full-viewport-height line segment — no arrowhead
                         // (conceptually: UnitVector.drawVector with { length: false })
-                        transformPath(path, HTMLCanvas.Helpers, {
-                            angle:   90,
-                            offsetX: col * GRIDCELL_DIM,
-                            offsetY: -Y_IN_MIDDLE,
+                        transformPath(path, {
+                            Helpers: HTMLCanvas.Helpers
+                            , 
+                            transformations: {
+                                angle:   90,
+                                offsetX: col * GRIDCELL_DIM,
+                                offsetY: -Y_IN_MIDDLE,
+                                ...overrides.transformations
+                            } 
                         });
 
                         /* ── x-axis tick labels (skip origin column) ── */

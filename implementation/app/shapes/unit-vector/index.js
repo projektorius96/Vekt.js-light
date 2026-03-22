@@ -91,7 +91,14 @@ function drawVector({ Helpers, path, angle, sharpness = 4, length = 2 }) {
             });
         });
 
-    transformPath(path, Helpers, { angle: angle ?? Number(path.dataset.angle) });
+    /* transformPath(path, Helpers, { angle: angle ?? Number(path.dataset.angle) }); */
+    transformPath(path, {
+        Helpers
+        , 
+        transformations: {
+            angle: angle ?? Number(path.dataset.angle)
+        } 
+    });
 
     return baseShape;
 
