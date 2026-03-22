@@ -4,17 +4,21 @@ import UnitSquare from './unit-square/index.js';
 import UnitVector from './unit-vector/index.js';
 
 export default function ({dependencies, containers}) {
-
+    
+    /**
+    * @deps
+    */
     const 
         { ENUMS, userConfig, defaultVendorFontSize } = dependencies
         ;
 
     const dispatcher = new EventTarget();
         if (dispatcher) {
+
             const [ DO_ANIMATE, DONOT_ANIMATE ] = [true, false];
             dispatcher.on(ENUMS.CASE.circle, ({type: id}) => {
                 UnitCircle.init(id, {
-                    ...dependencies
+                    dependencies
                     ,
                     overrides: {
                         path: {
@@ -23,7 +27,7 @@ export default function ({dependencies, containers}) {
                             stroke: ENUMS.COLOR.magenta,
                             strokeWidth: 4, 
                             transformations: {
-                                offsetX: stage.grid.GRIDCELL_DIM*2,
+                                offsetX: stage.grid.GRIDCELL_DIM * 2,
                                 skew: ( id === ENUMS.CASE.circle ? null : { X: { phi: -45 } } ),
                             }
                         }
@@ -40,8 +44,10 @@ export default function ({dependencies, containers}) {
                     } 
                 })
             });
+
             dispatcher.on(ENUMS.CASE.unit_square, ({type: id}) => {
-                UnitSquare.init(id, { ...dependencies, 
+                UnitSquare.init(id, {
+                    dependencies,
                     overrides: {
                         path: { 
                             transformations: { 
@@ -52,12 +58,15 @@ export default function ({dependencies, containers}) {
                     } 
                 })
             });
+
             dispatcher.on(ENUMS.CASE.axes, ({type: id}) => {
-                UnitVector.init(id, { ...dependencies })
+                UnitVector.init(id, { dependencies })
             });
+
             dispatcher.on(ENUMS.CASE.ruler, ({type: id}) => {
-                Ruler.init(id, { ...dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: (stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize) /* !important */ ) }  })
+                Ruler.init(id, { dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: (stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize) /* !important */ ) }  })
             });
+
         }
 
         registerContainers({dispatcher, containers});

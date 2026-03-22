@@ -35,8 +35,7 @@ export default class {
             dependencies: {
                 HTMLCanvas, 
                 XMLSVG, 
-                CONSTANTS, 
-                ENUMS, 
+                ENUMS,
                 AnimationCounter, 
                 userConfig, 
                 defaultVendorFontSize,

@@ -16,7 +16,16 @@ import { defaultVendorFontSize } from '../../modules/utils.js';
  */
 export default class {
 
-    static init(id, { HTMLCanvas, XMLSVG, ENUMS, overrides }) {
+    static init(id, { dependencies, overrides }) {
+
+        /**
+         * @deps
+        */
+        const {
+            HTMLCanvas, 
+            XMLSVG, 
+            ENUMS
+        } = dependencies;
 
         /**
          * @alias
