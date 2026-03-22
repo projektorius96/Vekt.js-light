@@ -110,9 +110,14 @@ export default class {
 
                         // Full-viewport-width line segment — no arrowhead
                         // (conceptually: UnitVector.drawVector with { length: false })
-                        transformPath(path, HTMLCanvas.Helpers, {
-                            offsetX: -X_IN_MIDDLE,
-                            offsetY: row * GRIDCELL_DIM,
+                        transformPath(path, {
+                            Helpers: HTMLCanvas.Helpers
+                            , 
+                            transformations: {
+                                offsetX: -X_IN_MIDDLE,
+                                offsetY: row * GRIDCELL_DIM,
+                                ...overrides.transformations
+                            } 
                         });
 
                         /* ── y-axis tick labels (skip origin row) ── */
@@ -123,12 +128,7 @@ export default class {
                                 text: String(-row * Math.ceil( stage?.grid.GRIDCELL_DIM )),  // negate: SVG y↓ vs. math y↑
                                 x:    (X_IN_MIDDLE - defaultVendorFontSize),
                                 y:    (Y_IN_MIDDLE + row * GRIDCELL_DIM) - (defaultVendorFontSize/2),
-                                overrides: {
-                                    textAnchor: overrides.label$textAnchor,
-                                    opacity: overrides.labelOpacity,
-                                    scale: overrides.labelScaling,
-                                    fill:  overrides.labelColor,
-                                },
+                                overrides
                             });
 
                         }
@@ -144,10 +144,15 @@ export default class {
 
                         // Full-viewport-height line segment — no arrowhead
                         // (conceptually: UnitVector.drawVector with { length: false })
-                        transformPath(path, HTMLCanvas.Helpers, {
-                            angle:   90,
-                            offsetX: col * GRIDCELL_DIM,
-                            offsetY: -Y_IN_MIDDLE,
+                        transformPath(path, {
+                            Helpers: HTMLCanvas.Helpers
+                            , 
+                            transformations: {
+                                angle:   90,
+                                offsetX: col * GRIDCELL_DIM,
+                                offsetY: -Y_IN_MIDDLE,
+                                ...overrides.transformations
+                            } 
                         });
 
                         /* ── x-axis tick labels (skip origin column) ── */
@@ -158,12 +163,7 @@ export default class {
                                 text: String(col * Math.ceil( stage?.grid.GRIDCELL_DIM )),
                                 x:    X_IN_MIDDLE + col * GRIDCELL_DIM  + (defaultVendorFontSize/2),
                                 y:    Y_IN_MIDDLE + defaultVendorFontSize,
-                                overrides: {
-                                    textAnchor: overrides.label$textAnchor,
-                                    opacity: overrides.labelOpacity,
-                                    scale: overrides.labelScaling,
-                                    fill:  overrides.labelColor,
-                                },
+                                overrides
                             });
 
                         }

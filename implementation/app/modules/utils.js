@@ -2,17 +2,20 @@
  * Shared SVG transform logic for shape modules: refresh path points, then apply
  * rotation/translation/skew from stage center (stage.grid.SVG) plus optional offsets.
  *
- * @param {SVGPathElement} path
- * @param {{ Trigonometry: { setTransform: Function } }} Helpers
- * @param {{ angle?: number, offsetX?: number, offsetY?: number, skew?: object }} options
- * @returns {boolean} true if transform was applied
+ * @returns {boolean} true if transform was applied on the `path`
  */
-export function transformPath(path, Helpers, { angle, offsetX = 0, offsetY = 0, skew } = {}) {
+export function transformPath(path, { Helpers, transformations }) {
+
+  const
+    { Trigonometry } = Helpers
+    ,
+    { angle = 0, offsetX = 0, offsetY = 0, skew = null } = transformations
+  ;
+
   if (!path.setPoints(path.getPoints())) return false;
   const center = typeof stage !== 'undefined' && stage?.grid?.SVG;
   if (!center) return false;
 
-  const { Trigonometry } = Helpers;
   const transformOpts = {
     angle: angle ?? Number(path.dataset.angle) ?? 0,
     translateX: center.X_IN_MIDDLE + offsetX,

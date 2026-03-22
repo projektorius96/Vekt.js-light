@@ -2,27 +2,25 @@ import { transformPath } from '../../modules/utils.js';
 
 export default class {
 
-  static init(id, {HTMLCanvas, XMLSVG, ENUMS, AnimationCounter, overrides = {}}) {
+  static init(id, {HTMLCanvas, XMLSVG, ENUMS, AnimationCounter, overrides}) {
 
     const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
 
-    const {
-      view
+    const 
+      { path, animation } = overrides
       ,
-      animation
-    } = overrides;
-
-    const {
-      fill
-      ,
-      dashed
-      , 
-      stroke
-      ,
-      strokeWidth
-      ,
-      transformations
-    } = view;
+      {
+        fill
+        ,
+        dashed
+        , 
+        stroke
+        ,
+        strokeWidth
+        ,
+        transformations
+      } = path
+      ;
 
     /**
      * @type
@@ -61,17 +59,17 @@ export default class {
         }
       ,
       cornerPoints = 
-        setRange(...shapeType.get(overrides.view.id ?? id)).map(tearoff$setRange);
+        setRange(...shapeType.get(overrides.path.id ?? id)).map(tearoff$setRange);
 
-    const allPoints = (overrides.view.id ?? id === ENUMS.SHAPE.square)
+    const allPoints = (overrides.path.id ?? id === ENUMS.SHAPE.square)
         ? interpolateCorners(cornerPoints)
         : cornerPoints;
         
-    XMLSVG.Helpers.findByID(/* overrides.view.id ??  */id)
+    XMLSVG.Helpers.findByID(/* overrides.path.id ??  */id)
     .setPaths([
         new XMLSVG.Views.Path({
             options: {
-                id: /* overrides.view.id ??  */id,
+                id: /* overrides.path.id ??  */id,
                 scaling: stage?.grid.GRIDCELL_DIM * 2.0,
                 /* Start with a single invisible point; the animation progressively
                    reveals the rest of the circle on each AnimationCounter tick. */
@@ -88,13 +86,13 @@ export default class {
     , 
     ({paths})=>Array.from(paths).on((path)=>{
 
-      const options = JSON.parse(path.dataset.options);
-      
-      void function transform() {
-
-          transformPath(path, HTMLCanvas.Helpers, { offsetX: options.scaling, ...transformations });
-
-      }()
+      transformPath(path, {
+        Helpers: HTMLCanvas.Helpers
+        , 
+        transformations: {
+            ...transformations
+        } 
+      });
 
       const scalingFactor = Number(path.dataset.scaling) || 1;
       if (animation) {
