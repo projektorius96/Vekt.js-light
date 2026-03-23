@@ -24,13 +24,21 @@
 
 #### **REMARKS**:
 
+> **MOTTO**: _Apart the Canvas API (HTMLCanvas) offered responsive web experience primitive `stage.grid.GRIDCELL_DIM`, this wrapper (call it a library if you want) offers a "path-first" paradigm, which together with knowledge of Maths and a bit of JavaScript-ish mind, can offer a way to draw any shape just from single "path", however you're always welcome to monkey patch on top of it, and/or contribute towards a more eloquent approach!_
+
 Most of the time you will be tinkering with the code under the following paths:
 
-- `<root>/implementation/user-config.js` that holds application-level configurations;
+- `<root>/implementation/user-config.js` that holds web application-level config;
 - `<root>/implementation/app/index.js` that holds to static calls:
-  - the `setup` static field meant to register `svg-container` (see - [SVGSVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGSVGElement))
-  - the `renderer` that holds `svg-path` (_see `drawPaths` in `/app/shapes/renderer.js`_) implementation (_each shape implementation is defined under `/app/shapes/`_) internally as `<path>` (see - [SVGPathElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGPathElement))
-- Happy coding!
+  - the `setup` meant to register `svg-container`, under which the instance(s) of container-bound `svg-path`  will be nested;
+  - the `renderer` does hold the `svg-path`(-s) (_see `drawPaths` in `/app/shapes/renderer.js`_) implementation (_each "shape" implementation is defined under `/app/shapes/`_) respectively;
+
+---
+
+#### Useful references
+
+- [SVGSVGElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGSVGElement)
+- [SVGPathElement](https://developer.mozilla.org/en-US/docs/Web/API/SVGPathElement)
 
 ---
 
