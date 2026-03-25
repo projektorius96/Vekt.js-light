@@ -27,7 +27,7 @@ export default class {
                 UnitVector.init(id, { dependencies })
             });
 
-            dispatcher.on(ENUMS.CASE.unit_square, ({type: parentID}) => {
+            dispatcher.on(ENUMS.CASE.unit_square, ({type: parentID}) => {                
 
                 const children = 3;
                     Array

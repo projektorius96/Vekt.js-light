@@ -24,7 +24,7 @@ export default class {
         ] = [Array];
             
         XMLSVG.Helpers.findByID(id)
-        .setPaths([
+        .appendPaths([
             new XMLSVG.Views.Path({
                 options: {
                     id: overrides.path.id || ENUMS.ID.unit_square,
