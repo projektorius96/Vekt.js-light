@@ -10,7 +10,7 @@ export default class {
     * @deps
     */
     const 
-        { ENUMS, userConfig, defaultVendorFontSize } = dependencies
+        { ENUMS, XMLSVG, userConfig, defaultVendorFontSize } = dependencies
         ;
 
     const dispatcher = new EventTarget();
@@ -27,6 +27,8 @@ export default class {
             });
 
             dispatcher.on(ENUMS.CASE.unit_square, ({type: parentID}) => {                
+
+                XMLSVG.Helpers.findByID(parentID)?.clearPaths();
 
                 const children = 3;
                     Array

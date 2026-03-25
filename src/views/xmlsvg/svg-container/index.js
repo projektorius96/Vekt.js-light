@@ -63,6 +63,12 @@ customElements.define(svg_container, class extends HTMLElement {
                     return true;
                 }
                 ,
+                [METHOD.clearPaths]() {
+                    const existingSVG = this.firstElementChild;
+                    if ( existingSVG ) existingSVG.remove();
+                    return this;
+                }
+                ,
                 [METHOD.appendPaths](paths, callback) {
 
                     const { viewBox } = ATTR;
