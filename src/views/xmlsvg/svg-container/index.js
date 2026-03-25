@@ -15,6 +15,8 @@ const [
     ATTR
 ] = Array(4).fill(PRINT);
 
+const XML_NAMESPACE = 'xmlns=http://www.w3.org/2000/svg';
+
 export const svg_container = getNamespace(import.meta.url);
 customElements.define(svg_container, class extends HTMLElement {
 
@@ -44,19 +46,55 @@ customElements.define(svg_container, class extends HTMLElement {
                     return this;
                 }
                 ,
-                [METHOD.setPaths](paths, callback){
+                [METHOD.setPaths](paths, callback) {
 
                     const { viewBox } = ATTR;
                     /* === INTERPOLATION === */
                         let interpolatedHTML = "";
                             /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
 
-                        const XML_NAMESPACE = 'xmlns=http://www.w3.org/2000/svg';
                         this.setHTMLUnsafe(/* html */`
                             <svg ${ XML_NAMESPACE } name="${ this.id }" viewBox="${ this.getAttribute(viewBox) }">${ interpolatedHTML }</svg>
                         `);
                         
                         if ( setMixin(this?.firstElementChild.children) ) callback({paths: this?.firstElementChild.children});
+                    /* === INTERPOLATION === */
+
+                    return true;
+                }
+                ,
+                [METHOD.clearPaths]() {
+                    const existingSVG = this.firstElementChild;
+                    if ( existingSVG ) existingSVG.remove();
+                    return this;
+                }
+                ,
+                [METHOD.appendPaths](paths, callback) {
+
+                    const { viewBox } = ATTR;
+                    /* === INTERPOLATION === */
+                        let interpolatedHTML = "";
+                            /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
+
+                        const existingSVG = this.firstElementChild;
+
+                        if ( !existingSVG ) {
+
+                            this.setHTMLUnsafe(/* html */`
+                                <svg ${ XML_NAMESPACE } name="${ this.id }" viewBox="${ this.getAttribute(viewBox) }">${ interpolatedHTML }</svg>
+                            `);
+
+                            if ( setMixin(this?.firstElementChild.children) ) callback?.({paths: this?.firstElementChild.children});
+
+                        } else {
+
+                            const existingCount = existingSVG.children.length;
+                            existingSVG.insertAdjacentHTML('beforeend', interpolatedHTML);
+
+                            const newlyAppended = Array.from(this?.firstElementChild.children).slice(existingCount);
+                            if ( setMixin(newlyAppended) ) callback?.({paths: newlyAppended});
+
+                        }
                     /* === INTERPOLATION === */
 
                     return true;
