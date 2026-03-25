@@ -1,5 +1,4 @@
 import Ruler from './ruler/index.js';
-import UnitCircle from './unit-circle/index.js';
 import UnitSquare from './unit-square/index.js';
 import UnitVector from './unit-vector/index.js';
 
@@ -44,8 +43,9 @@ export default class {
                                     dependencies,
                                     overrides: {
                                         path: {
-                                            id: `${parentID}-${childID}`,
-                                            fillStroke: ENUMS.COLOR.yellow,
+                                            id: `${parentID}_${childID}`,
+                                            fillStroke: ENUMS.COLOR.darkgrey,
+                                            SCALE_XY: 1,
                                             transformations: {
                                                 SCALE_X: 1,
                                                 SCALE_Y: 2,
@@ -57,34 +57,36 @@ export default class {
                                 })
                                 break;
                             }
-
                             case (childID === 2) : {
                                 initPath(parentID, {
                                     dependencies,
                                     overrides: {
                                         path: {
-                                            id: `${parentID}-${childID}`,
+                                            id: `${parentID}_${childID}`,
                                             fillStroke: ENUMS.COLOR.green,
+                                            SCALE_XY: 1,
                                             transformations: {
-                                                SCALE_X: 1,
+                                                SCALE_X: 2,
                                                 SCALE_Y: 1,
-                                                angle: 0,
-                                                skew: { X: { phi: 0 } },
+                                                angle: -90,
+                                                skew: { Y: { phi: -45 } },
                                             } 
                                         } 
                                     } 
                                 })
                                 break;
                             }
-
                             case (childID === 3) : {
                                 initPath(parentID, {
                                     dependencies,
                                     overrides: {
                                         path: {
-                                            id: `${parentID}-${childID}`,
+                                            id: `${parentID}_${childID}`,
                                             fillStroke: ENUMS.COLOR.red,
+                                            SCALE_XY: 2,
                                             transformations: {
+                                                offsetX: stage.grid.GRIDCELL_DIM * 1,
+                                                offsetY: -1 * stage.grid.GRIDCELL_DIM*3,
                                                 SCALE_X: 1,
                                                 SCALE_Y: 1,
                                                 angle: 0,
