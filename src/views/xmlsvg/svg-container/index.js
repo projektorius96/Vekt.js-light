@@ -78,13 +78,17 @@ customElements.define(svg_container, class extends HTMLElement {
                                 <svg ${ XML_NAMESPACE } name="${ this.id }" viewBox="${ this.getAttribute(viewBox) }">${ interpolatedHTML }</svg>
                             `);
 
+                            if ( setMixin(this?.firstElementChild.children) ) callback?.({paths: this?.firstElementChild.children});
+
                         } else {
 
+                            const existingCount = existingSVG.children.length;
                             existingSVG.insertAdjacentHTML('beforeend', interpolatedHTML);
 
-                        }
+                            const newlyAppended = Array.from(this?.firstElementChild.children).slice(existingCount);
+                            if ( setMixin(newlyAppended) ) callback?.({paths: newlyAppended});
 
-                        if ( setMixin(this?.firstElementChild.children) ) callback?.({paths: this?.firstElementChild.children});
+                        }
                     /* === INTERPOLATION === */
 
                     return true;
