@@ -15,6 +15,8 @@ const [
     ATTR
 ] = Array(4).fill(PRINT);
 
+const XML_NAMESPACE = 'xmlns=http://www.w3.org/2000/svg';
+
 export const svg_container = getNamespace(import.meta.url);
 customElements.define(svg_container, class extends HTMLElement {
 
@@ -51,12 +53,38 @@ customElements.define(svg_container, class extends HTMLElement {
                         let interpolatedHTML = "";
                             /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
 
-                        const XML_NAMESPACE = 'xmlns=http://www.w3.org/2000/svg';
                         this.setHTMLUnsafe(/* html */`
                             <svg ${ XML_NAMESPACE } name="${ this.id }" viewBox="${ this.getAttribute(viewBox) }">${ interpolatedHTML }</svg>
                         `);
                         
                         if ( setMixin(this?.firstElementChild.children) ) callback({paths: this?.firstElementChild.children});
+                    /* === INTERPOLATION === */
+
+                    return true;
+                }
+                ,
+                [METHOD.appendPaths](paths, callback) {
+
+                    const { viewBox } = ATTR;
+                    /* === INTERPOLATION === */
+                        let interpolatedHTML = "";
+                            /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
+
+                        const existingSVG = this.firstElementChild;
+
+                        if ( !existingSVG ) {
+
+                            this.setHTMLUnsafe(/* html */`
+                                <svg ${ XML_NAMESPACE } name="${ this.id }" viewBox="${ this.getAttribute(viewBox) }">${ interpolatedHTML }</svg>
+                            `);
+
+                        } else {
+
+                            existingSVG.insertAdjacentHTML('beforeend', interpolatedHTML);
+
+                        }
+
+                        if ( setMixin(this?.firstElementChild.children) ) callback?.({paths: this?.firstElementChild.children});
                     /* === INTERPOLATION === */
 
                     return true;
