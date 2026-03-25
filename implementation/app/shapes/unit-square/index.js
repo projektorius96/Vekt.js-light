@@ -10,7 +10,6 @@ export default class {
             XMLSVG, 
             ENUMS,
             QUADRANT,
-            GLOBAL_SCALAR,
             transformPath,
             defaultVendorFontSize,
             AnimationCounter, 
@@ -28,7 +27,7 @@ export default class {
         .setPaths([
             new XMLSVG.Views.Path({
                 options: {
-                    id: ENUMS.ID.unit_square,
+                    id: overrides.path.id || ENUMS.ID.unit_square,
                     hidden: !true,
                     
                     /* EXAMPLE # dashed := [1.0..10]; to disable, pass either := 0|false */
@@ -37,9 +36,9 @@ export default class {
                     strokeWidth: 1,
                     /* fill: ENUMS.COLOR.magenta,
                     stroke: ENUMS.COLOR.magenta, */
-                    fillStroke: ENUMS.COLOR.magenta,
+                    fillStroke: overrides.path.fillStroke || ENUMS.COLOR.magenta,
                     opacity: 0.25,
-                    scaling: stage.grid.GRIDCELL_DIM,
+                    scaling: stage.grid.GRIDCELL_DIM * (overrides.path.SCALE_XY ?? 1),
                     angle: -3 * QUADRANT,
                     points: [
 
@@ -59,10 +58,12 @@ export default class {
                     
                     ].map((basis)=>{
                         return({
-                            x: basis.x * GLOBAL_SCALAR,
-                            y: basis.y * GLOBAL_SCALAR,
+                            x: basis.x * (overrides.path.transformations.SCALE_X ?? 1),
+                            y: basis.y * (overrides.path.transformations.SCALE_Y ?? 1),
                         })
                     })
+                    ,
+                    ...overrides.path
                 }
             })
         ]

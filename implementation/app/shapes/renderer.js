@@ -18,55 +18,87 @@ export default class {
         if (dispatcher) {
 
             const [ DO_ANIMATE, DONOT_ANIMATE ] = [true, false];
-            dispatcher.on(ENUMS.CASE.circle, ({type: id}) => {
-                UnitCircle.init(id, {
-                    dependencies
-                    ,
-                    overrides: {
-                        path: {
-                            id: id || ENUMS.CASE.square,
-                            dashed: 0, 
-                            stroke: ENUMS.COLOR.magenta,
-                            strokeWidth: 4, 
-                            transformations: {
-                                offsetX: stage.grid.GRIDCELL_DIM * 2,
-                                skew: ( id === ENUMS.CASE.circle ? null : { X: { phi: -45 } } ),
-                            }
-                        }
-                        , 
-                        animation: (
-                            DO_ANIMATE 
-                            ?
-                            {
-                                sense: ENUMS.PRINT./* COUNTER_ */CLOCKWISE
-                            } 
-                            : 
-                            false
-                        )
-                    } 
-                })
-            });
 
-            dispatcher.on(ENUMS.CASE.unit_square, ({type: id}) => {
-                UnitSquare.init(id, {
-                    dependencies,
-                    overrides: {
-                        path: { 
-                            transformations: { 
-                                angle: -90,
-                                skew: { X: { phi: 0 } },
-                            } 
-                        } 
-                    } 
-                })
+            dispatcher.on(ENUMS.CASE.ruler, ({type: id}) => {
+                Ruler.init(id, { dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: (stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize) /* !important */ ) }  })
             });
 
             dispatcher.on(ENUMS.CASE.axes, ({type: id}) => {
                 UnitVector.init(id, { dependencies })
             });
 
-            dispatcher.on(ENUMS.CASE.ruler, ({type: id}) => {
-                Ruler.init(id, { dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: (stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize) /* !important */ ) }  })
+            dispatcher.on(ENUMS.CASE.unit_square, ({type: parentID}) => {
+
+                const children = 3;
+                    Array
+                    .from({length: children})
+                    .fill(UnitSquare.init).forEach((initPath, cycle)=>{                        
+                        
+                        // DEV_NOTE # as of now the "childID" is 1-based
+                        let childID = ++cycle;                        
+
+                        switch (true) {
+
+                            case (childID === 1) : {
+                                initPath(parentID, {
+                                    dependencies,
+                                    overrides: {
+                                        path: {
+                                            id: `${parentID}-${childID}`,
+                                            fillStroke: ENUMS.COLOR.yellow,
+                                            transformations: {
+                                                SCALE_X: 1,
+                                                SCALE_Y: 2,
+                                                angle: -90,
+                                                skew: { X: { phi: -45 } },
+                                            } 
+                                        } 
+                                    } 
+                                })
+                                break;
+                            }
+
+                            case (childID === 2) : {
+                                initPath(parentID, {
+                                    dependencies,
+                                    overrides: {
+                                        path: {
+                                            id: `${parentID}-${childID}`,
+                                            fillStroke: ENUMS.COLOR.green,
+                                            transformations: {
+                                                SCALE_X: 1,
+                                                SCALE_Y: 1,
+                                                angle: 0,
+                                                skew: { X: { phi: 0 } },
+                                            } 
+                                        } 
+                                    } 
+                                })
+                                break;
+                            }
+
+                            case (childID === 3) : {
+                                initPath(parentID, {
+                                    dependencies,
+                                    overrides: {
+                                        path: {
+                                            id: `${parentID}-${childID}`,
+                                            fillStroke: ENUMS.COLOR.red,
+                                            transformations: {
+                                                SCALE_X: 1,
+                                                SCALE_Y: 1,
+                                                angle: 0,
+                                                skew: { X: { phi: 0 } },
+                                            } 
+                                        } 
+                                    } 
+                                })
+                                break;
+                            }
+                        }
+
+                    })
+
             });
 
             dispatcher ? drawContainers({dispatcher, containers}) : false ;

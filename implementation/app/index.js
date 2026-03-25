@@ -14,14 +14,12 @@ export default class {
                 options: { id: ENUMS.ID.ruler }
             }),
             new XMLSVG.ViewGroup.Container({
+                options: { id: ENUMS.ID.axes } 
+            })
+            ,
+            new XMLSVG.ViewGroup.Container({
                 options: { id: ENUMS.ID.unit_square } 
             }),
-            new XMLSVG.ViewGroup.Container({
-                options: { id: ENUMS.ID.axes } 
-            }),
-            new XMLSVG.ViewGroup.Container({
-                options: { id: ENUMS.ID.circle } 
-            })
         ]);
 
     }

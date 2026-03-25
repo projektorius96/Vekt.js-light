@@ -44,7 +44,7 @@ customElements.define(svg_container, class extends HTMLElement {
                     return this;
                 }
                 ,
-                [METHOD.setPaths](paths, callback){
+                [METHOD.setPaths](paths, callback) {
 
                     const { viewBox } = ATTR;
                     /* === INTERPOLATION === */
