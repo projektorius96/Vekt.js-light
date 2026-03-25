@@ -1,8 +1,8 @@
-import { ENUMS } from "./utils.js";
+import { ENUMS, deepFreeze } from "./utils.js";
 
 export
     const
-        userConfig = {
+        userConfig = deepFreeze({
             canvas: {
                 stage: {
                     scale: 20
@@ -30,5 +30,4 @@ export
                     lineOpacity: 1 /* passing false | 0 - hides the abscissa (X) and ordinate (Y) */  
                 }
             }
-        }
-        ;
+        });

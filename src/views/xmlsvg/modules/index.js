@@ -4,8 +4,6 @@ export const PRINT = new Proxy(Object.create(null), {
     },
 });
 
-const { viewBox } = PRINT;
-
 export function getNamespace(import_meta_url) {
 
     return (
@@ -14,20 +12,18 @@ export function getNamespace(import_meta_url) {
 
 }
 
-/**
- * > NOTE: This function does set up `viewBox` attribute for an instance of `SVGElement` or other relevant interface(s)
- * 
- * @returns 
- */
 export function setCoords() {
 
-    this.setAttribute(viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`)
+    const { viewBox } = PRINT;
+        this.setAttribute(viewBox, `${0} ${0} ${Math.ceil(window.innerWidth)} ${Math.ceil(window.innerHeight)}`);
+
+    return true;
     
 }
 
 /**
  * 
- * @param {Array} points - list of points comprising a `path`, where such `path` is assigned to `SVGPathElement.attributes.d` internally;
+ * @param {Array} points - list of points comprising a `path`, where such `path` itself is in turn assigned to `SVGPathElement.attributes.d` internally;
  * @returns {SVGPathElement.attributes.d} path
  */
 export function setPoints(points = [], scalingFactor = 1) {    
@@ -35,7 +31,8 @@ export function setPoints(points = [], scalingFactor = 1) {
     if (points.length === 0) return "";
         let d = `M 0 0`;
             points.forEach((point, i) => {
-                if (i > 0){
+                if (i > 0) {
+                    // DEV_NOTE # notice, there's an intentionally non-breaking space before "L" operator; you MUST NOT remove it!
                     d += ` L ${scalingFactor * point.x} ${scalingFactor * point.y}`;
                 }
             });
