@@ -24,6 +24,7 @@ export class HTMLCanvas {
                                 );
                             }
                         })
+                        .filter(Boolean)
                 );
             }
     
