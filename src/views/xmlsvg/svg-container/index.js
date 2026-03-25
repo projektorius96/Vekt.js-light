@@ -11,7 +11,9 @@ const [
     CASE
     ,
     METHOD
-] = Array(3).fill(PRINT);
+    ,
+    ATTR
+] = Array(4).fill(PRINT);
 
 export const svg_container = getNamespace(import.meta.url);
 customElements.define(svg_container, class extends HTMLElement {
@@ -43,16 +45,19 @@ customElements.define(svg_container, class extends HTMLElement {
                 }
                 ,
                 [METHOD.setPaths](paths, callback){
-                                    
-                    let interpolatedHTML = "";
-                        /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
 
-                    const XML_NAMESPACE = 'xmlns=http://www.w3.org/2000/svg';
-                    this.setHTMLUnsafe(/* html */`
-                        <svg ${ XML_NAMESPACE } name="${ this.id }" viewBox="${ this.getAttribute('viewBox') }">${ interpolatedHTML }</svg>
-                    `);
-                    
-                    if ( setMixin(this?.firstElementChild.children) ) callback({paths: this?.firstElementChild.children});
+                    const { viewBox } = ATTR;
+                    /* === INTERPOLATION === */
+                        let interpolatedHTML = "";
+                            /* this. */paths.forEach( (svgElement)=>interpolatedHTML += svgElement?.getHTML() );
+
+                        const XML_NAMESPACE = 'xmlns=http://www.w3.org/2000/svg';
+                        this.setHTMLUnsafe(/* html */`
+                            <svg ${ XML_NAMESPACE } name="${ this.id }" viewBox="${ this.getAttribute(viewBox) }">${ interpolatedHTML }</svg>
+                        `);
+                        
+                        if ( setMixin(this?.firstElementChild.children) ) callback({paths: this?.firstElementChild.children});
+                    /* === INTERPOLATION === */
 
                     return true;
                 }
@@ -79,7 +84,7 @@ function setMixin(htmlcollection){
                         , 
                         {
                             /**
-                             * @see `<root>\\src\\views\\xmlsvg\\svg-path\\index.js` for its getter equivalent under `this.#serializePoints` call
+                             * @see `<root>/src/views/xmlsvg/svg-path/index.js` for its getter equivalent found under `this.#serializePoints` call
                              */
                             [METHOD.getPoints]() {
                                 return getScaledPointsFromDataset(this);
@@ -104,9 +109,11 @@ function setMixin(htmlcollection){
                             }
                             ,
                             [METHOD.getCurrentMatrix](){
+
+                                const { matrix } = this.transform.baseVal.consolidate();
                                 
                                 return (
-                                    this.transform.baseVal.consolidate().matrix
+                                    matrix    
                                 );
                                 
                             }

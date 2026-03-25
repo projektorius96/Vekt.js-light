@@ -24,4 +24,27 @@ const ENUMS = Object.freeze({
     ID,
 });
 
-export { ENUMS };
+/**
+ * 
+ * @param {Object} object 
+ * @returns an instance of deeply (not just shallowly) immutable object
+ */
+function deepFreeze(object) {
+    // Retrieve the property names defined on object
+    const propNames = Object.getOwnPropertyNames(object);
+
+    // Freeze properties before freezing self
+    for (const name of propNames) {
+        const value = object[name];
+
+        // Recursively freeze if the value is an object or array
+        if (value && typeof value === ATTRIBUTE.object) {
+            deepFreeze(value);
+        }
+    }
+
+    return Object.freeze(object);
+}
+
+
+export { ENUMS, deepFreeze };

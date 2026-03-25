@@ -27,6 +27,7 @@ export function initGlobalLayoutStyles() {
   `);
   document.adoptedStyleSheets.push(sheet);
   globalLayoutStylesApplied = true;
+
 }
 
 /**

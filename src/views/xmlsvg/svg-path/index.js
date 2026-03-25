@@ -1,10 +1,5 @@
 import { PRINT, getNamespace, setPoints } from "../modules/index.js";
 
-/**
- * @alias
- */
-const COLOR = PRINT;
-
 export const svg_path = getNamespace(import.meta.url);
 customElements.define(svg_path, class extends HTMLElement {
     
@@ -27,6 +22,13 @@ customElements.define(svg_path, class extends HTMLElement {
     }
 
     #initPath(options) {
+
+        /**
+         * @alias
+         */
+        const 
+            COLOR = PRINT
+            ;
 
         !options.hidden 
             ?
@@ -75,7 +77,7 @@ customElements.define(svg_path, class extends HTMLElement {
     }
 
     /**
-     * @see `<root>\\src\\views\\xmlsvg\\svg-container\\index.js` for its getter equivalent under `[METHOD.getPoints]` namespace
+     * @see `<root>/src/views/xmlsvg/svg-container/index.js` for its getter equivalent found under `[METHOD.getPoints]` namespace
      */
     #serializePoints(options) {        
 
