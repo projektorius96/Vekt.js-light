@@ -57,7 +57,7 @@ export function setPoints(points = [], scalingFactor = 1) {
  *   @param {Number} opts.dy         Fine-tune baseline offset (e.g. 0.1em)
  *   @param {Number} opts.scale      Apply local scale transform (default 1)
  */
-export function drawLabel({svg, text, x = 0, y = 0, overrides = {}}) {
+export function drawLabel({kind = 'default', svg, text, x = 0, y = 0, overrides}) {
 
     const {
         dominantBaseline = 'middle',
@@ -74,17 +74,35 @@ export function drawLabel({svg, text, x = 0, y = 0, overrides = {}}) {
 
     // Create text element
     const t = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        t.setAttribute('transform', `translate(${x}, ${y}) scale(${scale})`);
-        t.setAttribute('text-anchor', textAnchor);
-        t.setAttribute('dominant-baseline', dominantBaseline);
-        t.setAttribute('font-family', fontFamily);
-        t.setAttribute('font-size', fontSize);
-        t.setAttribute('font-style', fontStyle);
-        t.setAttribute('opacity', opacity);
-        t.setAttribute('fill', fill);
-        t.setAttribute('dx', dx);
-        t.setAttribute('dy', dy);
-        t.textContent = text;
+        switch (kind) {
+            case 'ruler':
+                t.setAttribute('transform', `translate(${x}, ${y}) scale(${overrides?.lineScaling || scale})`);
+                t.setAttribute('text-anchor', textAnchor);
+                t.setAttribute('dominant-baseline', dominantBaseline);
+                t.setAttribute('font-family', fontFamily);
+                t.setAttribute('font-size', fontSize);
+                t.setAttribute('font-style', fontStyle);
+                t.setAttribute('opacity', overrides?.lineOpacity || opacity);
+                t.setAttribute('fill', overrides?.lineColor || fill);
+                t.setAttribute('dx', dx);
+                t.setAttribute('dy', dy);
+
+            break;
+            case 'default':
+                t.setAttribute('transform', `translate(${x}, ${y}) scale(${scale})`);
+                t.setAttribute('text-anchor', textAnchor);
+                t.setAttribute('dominant-baseline', dominantBaseline);
+                t.setAttribute('font-family', fontFamily);
+                t.setAttribute('font-size', fontSize);
+                t.setAttribute('font-style', fontStyle);
+                t.setAttribute('opacity', opacity);
+                t.setAttribute('fill', fill);
+                t.setAttribute('dx', dx);
+                t.setAttribute('dy', dy);
+            break;
+        }
+
+                t.textContent = text;
 
     svg.appendChild(t);
     return t;

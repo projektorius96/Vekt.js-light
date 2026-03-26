@@ -72,7 +72,7 @@ export default class {
 
                     // DEV-TIP # passing {length: 0 || false} hides arrow heads (tip) of vector
                     path.setPoints([
-                        ...drawVector({ Helpers: HTMLCanvas.Helpers, path , length: false })
+                        ...drawVector({ Helpers: HTMLCanvas.Helpers, path /* , length: false */ })
                     ], Number(path.dataset.scaling));
 
                 });
@@ -95,8 +95,8 @@ function drawVector({ Helpers, path, angle, sharpness = 4, length = 2 }) {
     ]   // Scale + offset 
         .map((point) => {
             return ({
-                x: ((Number(path.dataset.scaling/stage.grid.GRIDCELL_DIM) * point.x) + path.getPoints().at(-1)['x']),
-                y: ((Number(path.dataset.scaling/stage.grid.GRIDCELL_DIM) * point.y) + path.getPoints().at(-1)['y']),
+                x: ((1 * point.x) + path.getPoints().at(-1)['x']),
+                y: ((1 * point.y) + path.getPoints().at(-1)['y']),
             });
         });
 

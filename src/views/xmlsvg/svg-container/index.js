@@ -139,7 +139,7 @@ function setMixin(htmlcollection){
                             }
                             ,
                             [METHOD.setLabel](/* arguments */){
-                                
+                                                                
                                 return (
                                     drawLabel(...arguments)
                                 );
