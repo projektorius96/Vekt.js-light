@@ -25,8 +25,8 @@ export
                     labelColor: ENUMS.COLOR.black, 
                     labelOpacity: 1,
                     
-                    lineScaling: 2, 
-                    lineColor: ENUMS.COLOR.grey, 
+                    lineScaling: 1, 
+                    lineColor: ENUMS.COLOR.black, 
                     lineOpacity: 1 /* passing false | 0 - hides the abscissa (X) and ordinate (Y) */  
                 }
             }

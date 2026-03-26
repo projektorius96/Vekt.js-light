@@ -14,7 +14,7 @@
 export default class {
 
     static init(id, { dependencies, overrides }) {
-
+        
         /**
          * @deps
         */
@@ -134,6 +134,7 @@ export default class {
                         if (row !== 0 && defaultVendorFontSize) {
 
                             path.setLabel({
+                                kind: `ruler`,
                                 svg:  path.getParent(),
                                 text: String(-row * Math.ceil( stage?.grid.GRIDCELL_DIM )),  // negate: SVG y↓ vs. math y↑
                                 x:    (X_IN_MIDDLE - defaultVendorFontSize),
@@ -169,6 +170,7 @@ export default class {
                         if (col !== 0 && defaultVendorFontSize) {
 
                             path.setLabel({
+                                kind: `ruler`,
                                 svg:  path.getParent(),
                                 text: String(col * Math.ceil( stage?.grid.GRIDCELL_DIM )),
                                 x:    X_IN_MIDDLE + col * GRIDCELL_DIM  + (defaultVendorFontSize/2),

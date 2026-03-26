@@ -19,7 +19,7 @@ export default class {
             const [ DO_ANIMATE, DONOT_ANIMATE ] = [true, false];
 
             dispatcher.on(ENUMS.CASE.ruler, ({type: id}) => {
-                Ruler.init(id, { dependencies, overrides: { ...userConfig.ruler.overrides, labelScaling: (stage.grid.GRIDCELL_DIM / (4 * defaultVendorFontSize) /* !important */ ) }  })
+                Ruler.init(id, { dependencies, overrides: { ...userConfig.ruler.overrides }  })
             });
 
             dispatcher.on(ENUMS.CASE.axes, ({type: id}) => {

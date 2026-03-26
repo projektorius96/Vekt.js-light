@@ -12,7 +12,12 @@ export default class {
         return ([
             new XMLSVG.ViewGroup.Container({
                 options: { id: ENUMS.ID.ruler }
-            }),
+            })
+            ,
+            new XMLSVG.ViewGroup.Container({
+                options: { id: ENUMS.ID.axes } 
+            })
+            ,
             new XMLSVG.ViewGroup.Container({
                 options: { id: ENUMS.ID.axes } 
             })
