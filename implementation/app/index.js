@@ -19,6 +19,10 @@ export default class {
             })
             ,
             new XMLSVG.ViewGroup.Container({
+                options: { id: ENUMS.ID.axes } 
+            })
+            ,
+            new XMLSVG.ViewGroup.Container({
                 options: { id: ENUMS.ID.unit_square } 
             }),
         ]);
