@@ -12,12 +12,6 @@ customElements.define(svg_path, class extends HTMLElement {
                 this.#serializePoints
             ].forEach((f)=>f.call(this, options));
         }
-        
-        Object.assign(SVGPathElement, {
-            store: {
-                [options.id] : options
-            }
-        })
 
     }
 
@@ -57,7 +51,6 @@ customElements.define(svg_path, class extends HTMLElement {
                         ['data-angle',    ( options.angle  || 0 )],
                         ['data-skew_x',  ( options.skew_x  || 0 )],
                         ['data-skew_y',  ( options.skew_y  || 0 )],
-                        ['data-options',  JSON.stringify(options)],
                     ])
                 }
             )

@@ -40,14 +40,14 @@ export default class {
             }
             ,
             AXES_CONFIG = [
-                { id: ENUMS.ID.east, fillStroke: ENUMS.COLOR.green, angleMultiplier: 0 },
-                { id: ENUMS.ID.south, fillStroke: ENUMS.COLOR.black, angleMultiplier: 1 },
-                { id: ENUMS.ID.west, fillStroke: ENUMS.COLOR.blue, angleMultiplier: 2 },
-                { id: ENUMS.ID.north, fillStroke: ENUMS.COLOR.red, angleMultiplier: 3 },
+                { id: ENUMS.ID.south, fillStroke: ENUMS.COLOR.black, angleMultiplier: -1 },
+                { id: ENUMS.ID.east, fillStroke: ENUMS.COLOR.black, angleMultiplier: 0 },
+                { id: ENUMS.ID.west, fillStroke: ENUMS.COLOR.black, angleMultiplier: 1 },
             ]
             ;
 
-        const scaling = Math.floor((window.innerHeight/2)) * GLOBAL_SCALAR;
+        const isMobile = screen.orientation.type.includes('portrait');
+        
         XMLSVG.Helpers.findByID(id).setPaths([
 
                 ...AXES_CONFIG.map(({ id, fillStroke, angleMultiplier }) => {
@@ -58,7 +58,7 @@ export default class {
                                 ...sharedOptions,
                                 id,
                                 fillStroke,
-                                scaling,
+                                scaling: stage.grid.GRIDCELL_DIM,
                                 angle: angleMultiplier * QUADRANT,
                             }
                         })
@@ -70,10 +70,26 @@ export default class {
 
                 SVGList.from(paths).on((path) => {
 
-                    // DEV-TIP # passing {length: 0 || false} hides arrow heads (tip) of vector
-                    path.setPoints([
-                        ...drawVector({ Helpers: HTMLCanvas.Helpers, path /* , length: false */ })
-                    ], Number(path.dataset.scaling));
+                    /**
+                     * @override
+                     */
+                    if (path.id === 'west') {
+
+                        path.dataset.angle = 135
+                        path.dataset.scaling = path.dataset.scaling/1.2
+                        
+                    }
+
+                    const INFINITE_LENGTH = !true;
+                        if (INFINITE_LENGTH) {
+                            path.setPoints([
+                                ...drawVector({ Helpers: HTMLCanvas.Helpers, path, length: 0 })
+                            ], Number(GLOBAL_SCALAR * (path.dataset.scaling)));
+                        } else {
+                            path.setPoints([
+                                ...drawVector({ Helpers: HTMLCanvas.Helpers, path, sharpness: 6, length: stage.grid.GRIDCELL_DIM/6 })
+                            ], Number(GLOBAL_SCALAR * (path.dataset.scaling / Math.ceil(stage.grid.GRIDCELL_DIM))));
+                        }
 
                 });
 
@@ -83,7 +99,7 @@ export default class {
 
 }
 
-function drawVector({ Helpers, path, angle, sharpness = 4, length = 2 }) {
+function drawVector({ Helpers, path, angle, sharpness = 1, length = 1 }) {
 
     // DEV_NOTE # arrowhead points in local coordinates system (pointing along positive X axis)
     const baseShape = [
@@ -95,8 +111,8 @@ function drawVector({ Helpers, path, angle, sharpness = 4, length = 2 }) {
     ]   // Scale + offset 
         .map((point) => {
             return ({
-                x: ((1 * point.x) + path.getPoints().at(-1)['x']),
-                y: ((1 * point.y) + path.getPoints().at(-1)['y']),
+                x: point.x + (path.getPoints().at(-1)['x']),
+                y: point.y + (path.getPoints().at(-1)['y']),
             });
         });
 
@@ -105,6 +121,8 @@ function drawVector({ Helpers, path, angle, sharpness = 4, length = 2 }) {
         Helpers
         , 
         transformations: {
+            offsetX: stage.grid.GRIDCELL_DIM,
+            offsetY: -1 * stage.grid.GRIDCELL_DIM,
             angle: angle ?? Number(path.dataset.angle)
         } 
     });
