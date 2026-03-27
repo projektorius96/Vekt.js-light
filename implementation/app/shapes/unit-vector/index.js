@@ -45,8 +45,6 @@ export default class {
                 { id: ENUMS.ID.west, fillStroke: ENUMS.COLOR.black, angleMultiplier: 1 },
             ]
             ;
-
-        const isMobile = screen.orientation.type.includes('portrait');
         
         XMLSVG.Helpers.findByID(id).setPaths([
 
