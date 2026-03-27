@@ -1,6 +1,6 @@
 import Ruler from './ruler/index.js';
-import UnitSquare from './unit-square/index.js';
 import UnitVector from './unit-vector/index.js';
+import UnitCircle from './unit-circle/index.js';
 
 export default class {
 
@@ -16,7 +16,9 @@ export default class {
     const dispatcher = new EventTarget();
         if (dispatcher) {
 
-            const [ DO_ANIMATE, DONOT_ANIMATE ] = [true, false];
+            const 
+                [ DO_ANIMATE, DONOT_ANIMATE ] = [true, false]
+                ;
 
             dispatcher.on(ENUMS.CASE.ruler, ({type: id}) => {
                 Ruler.init(id, { dependencies, overrides: { ...userConfig.ruler.overrides }  })
@@ -26,83 +28,34 @@ export default class {
                 UnitVector.init(id, { dependencies })
             });
 
-            dispatcher.on(ENUMS.CASE.unit_square, ({type: parentID}) => {                
-
-                XMLSVG.Helpers.findByID(parentID)?.clearPaths();
-
-                const children = 3;
-                    Array
-                    .from({length: children})
-                    .fill(UnitSquare.init).forEach((initPath, cycle)=>{                        
-                        
-                        // DEV_NOTE # as of now the "childID" is 1-based
-                        let childID = ++cycle;                        
-
-                        switch (true) {
-
-                            case (childID === 1) : {
-                                initPath(parentID, {
-                                    dependencies,
-                                    overrides: {
-                                        path: {
-                                            id: `${parentID}_${childID}`,
-                                            fillStroke: ENUMS.COLOR.darkgrey,
-                                            SCALE_XY: 1,
-                                            transformations: {
-                                                SCALE_X: 1,
-                                                SCALE_Y: 2,
-                                                angle: -90,
-                                                skew: { X: { phi: -45 } },
-                                            } 
-                                        } 
-                                    } 
-                                })
-                                break;
-                            }
-                            case (childID === 2) : {
-                                initPath(parentID, {
-                                    dependencies,
-                                    overrides: {
-                                        path: {
-                                            id: `${parentID}_${childID}`,
-                                            fillStroke: ENUMS.COLOR.green,
-                                            SCALE_XY: 1,
-                                            transformations: {
-                                                SCALE_X: 2,
-                                                SCALE_Y: 1,
-                                                angle: -90,
-                                                skew: { Y: { phi: -45 } },
-                                            } 
-                                        } 
-                                    } 
-                                })
-                                break;
-                            }
-                            case (childID === 3) : {
-                                initPath(parentID, {
-                                    dependencies,
-                                    overrides: {
-                                        path: {
-                                            id: `${parentID}_${childID}`,
-                                            fillStroke: ENUMS.COLOR.red,
-                                            SCALE_XY: 2,
-                                            transformations: {
-                                                offsetX: stage.grid.GRIDCELL_DIM * 1,
-                                                offsetY: -1 * stage.grid.GRIDCELL_DIM*3,
-                                                SCALE_X: 1,
-                                                SCALE_Y: 1,
-                                                angle: 0,
-                                                skew: { X: { phi: 0 } },
-                                            } 
-                                        } 
-                                    } 
-                                })
-                                break;
+            dispatcher.on(ENUMS.CASE.circle, ({type: id}) => {
+                UnitCircle.init(id, {
+                    dependencies
+                    ,
+                    overrides: {
+                        path: {
+                            // DEV_NOTE # please comment out either side of "OR" statement to see the difference in action!
+                            id: id || ENUMS.CASE.square,
+                            dashed: 0, 
+                            stroke: ENUMS.COLOR.magenta,
+                            strokeWidth: 4, 
+                            transformations: {
+                                offsetX: stage.grid.GRIDCELL_DIM * 2,
+                                skew: ( id === ENUMS.CASE.circle ? null : { X: { phi: -45 } } ),
                             }
                         }
-
-                    })
-
+                        , 
+                        animation: (
+                            DO_ANIMATE 
+                            ?
+                            {
+                                sense: ENUMS.PRINT.COUNTER_CLOCKWISE
+                            } 
+                            : 
+                            false
+                        )
+                    } 
+                })
             });
 
             dispatcher ? drawContainers({dispatcher, containers}) : false ;
