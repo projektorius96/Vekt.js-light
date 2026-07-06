@@ -42,4 +42,4 @@ Most of the time you will be tinkering with the code under the following paths:
 
 ---
 
-> Made with ♥ by [**projektorius96**](https://github.com/projektorius96) | 2026
+> Made with ♥ by [**projektorius96**](https://github.com/projektorius96), assisted by GitHub Copilot (Pro) | 2026
