@@ -15,7 +15,7 @@ export default class {
     const { Converters, setRange } = HTMLCanvas.Helpers.Trigonometry;
 
     const 
-      { path, animation } = overrides
+      { path } = overrides
       ,
       {
         fill
@@ -28,21 +28,6 @@ export default class {
         ,
         transformations
       } = path
-      ;
-
-    /**
-     * @type
-     */
-    const 
-      shapeType = new Map([
-        [ENUMS.SHAPE.circle, [0, 1, 360]],
-        [ENUMS.SHAPE.square, [0, 90, 360]],
-      ])
-      ,
-      rotationType = new Map([
-        [ENUMS.ATTRIBUTE.COUNTER_CLOCKWISE,  1],
-        [ENUMS.ATTRIBUTE.CLOCKWISE,  -1],
-      ])
       ;
 
     /**
@@ -62,22 +47,26 @@ export default class {
         (deg)=>{          
           return({
                 x: /* ____________________________________________ */ 1   * Math.cos( Converters.degToRad( deg ) ) - 1  /* <== removes the annoying radius visible, when the shape is not filled */,
-                y: -1 * Number( rotationType.get(animation?.sense) || 1 ) * Math.sin( Converters.degToRad( deg ) ),
+                y: -1 * Number( 1 ) * Math.sin( Converters.degToRad( deg ) ),
           });
         }
       ,
       cornerPoints = 
-        setRange(...shapeType.get(overrides.path.id ?? id)).map(tearoff$setRange);
+        setRange(0, 1, 360).map(tearoff$setRange);
 
-    const allPoints = (overrides.path.id ?? id === ENUMS.SHAPE.square)
+    const allPoints = (overrides.path.id ?? id )
         ? interpolateCorners(cornerPoints)
         : cornerPoints;
-        
-    XMLSVG.Helpers.findByID(/* overrides.path.id ??  */id)
+    
+    let overridenPathID;
+    if ((overridenPathID = overrides?.path?.id)) {
+      XMLSVG.Helpers.findByID(id).setAttribute('id', overridenPathID)
+    }
+    XMLSVG.Helpers.findByID(overrides.path.id ?? id)
     .setPaths([
         new XMLSVG.Views.Path({
             options: {
-                id: /* overrides.path.id ??  */id,
+                id: overrides.path.id ?? id,
                 scaling: stage?.grid.GRIDCELL_DIM * 2.0,
                 /* Start with a single invisible point; the animation progressively
                    reveals the rest of the circle on each AnimationCounter tick. */
@@ -103,66 +92,12 @@ export default class {
       });
 
       const scalingFactor = Number(path.dataset.scaling) || 1;
-      if (animation) {
-        animate({
-          AnimationCounter, 
-          path, 
-          allPoints,
-          scalingFactor, 
-          overrides: {
-            ...animation
-          } 
-        });
-      } else {
+      path.setPoints(allPoints, scalingFactor);
 
-        path.setPoints(allPoints, scalingFactor);
-        
-      }
-
-    })
+      })
     );
 
   }
-
-}
-
-
-function animate({AnimationCounter, path, allPoints, scalingFactor, overrides}) {  
-
-  const
-    animConfig = {
-        from: 0,
-        /**
-         * AnimationCounter increments count before invoking the callback, so
-         * the callback receives count = 1, 2, …, allPoints.length − 1, then
-         * count=0 at the cycle boundary (path reset to invisible), then 1 again.
-         * With ~361 points the blank reset frame is < 0.3 % of the cycle.
-         */
-        to: allPoints.length,
-        duration: 1,
-        iterations: Infinity,
-        ...overrides
-    }
-    ,
-    animCounter = AnimationCounter({
-        ...animConfig, callback: function ({ count }) {          
-          
-            /**
-             * Case B: reveal one more point per tick by slicing the
-             * pre-computed allPoints array.  This avoids recreating 360
-             * setRange / Math.cos|sin calls on every animation frame.
-             */
-            path.setPoints(allPoints.slice(0, count + 1), scalingFactor);
-
-        }
-    })
-  ;
-
-  /**
-   * @test
-   */
-  /* animCounter.pause(); */// # [PASSING]
-  /* animCounter.play(); */// # [PASSING]
 
 }
 
