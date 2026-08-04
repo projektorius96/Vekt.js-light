@@ -1,8 +1,6 @@
 import './globals.css';
-import AnimationCounter from './modules/animations.js';
-import { defaultVendorFontSize, transformPath } from './modules/utils.js';
-import { CONSTANTS, ENUMS } from './globals.js';
 import { userConfig } from './user-config.js';
+import { defaultVendorFontSize, transformPath } from './modules/utils.js';
 import UnitCircle from './shapes/unit-circle/index.js';
 
 export default class {
@@ -11,41 +9,37 @@ export default class {
 
         return ([
             new XMLSVG.ViewGroup.Container({
-                options: { id: ENUMS.ID.circle } 
+                options: { id: 'renderer' }
             })
         ]);
 
     }
 
-    static renderer({ HTMLCanvas, XMLSVG, ENUMS }) {
+    static renderer({HTMLCanvas, XMLSVG, ENUMS}) {        
 
-        const dependencies = 
-            Object.assign(
-                Object.create(null)
-                ,
+        const 
+            dependencies = 
                 {
-                    HTMLCanvas, 
-                    XMLSVG, 
-                    ENUMS,
-                    userConfig,
-                    transformPath,
-                    defaultVendorFontSize,
+                    HTMLCanvas, XMLSVG, ENUMS, userConfig, transformPath,
                 }
-        );
+        ;
 
-        UnitCircle.init(ENUMS.SHAPE.circle, {
+        const [renderer] = this.setup({XMLSVG});
+
+        const scalingFactor = 1;
+        UnitCircle.init(renderer.id, {
             dependencies
             ,
             overrides: {
                 path: {
-                    // DEV_NOTE # please comment out either side of "OR" statement to see the difference in action!
-                    id: ENUMS.ID.square,
-                    dashed: 0, 
-                    strokeWidth: 4, 
+                    id: ENUMS.ID.circle_top,
                     stroke: ENUMS.COLOR.green,
                     fill: ENUMS.COLOR.green,
+                    dashed: 0, 
+                    strokeWidth: 4,
+                    scalingFactor, 
                     transformations: {
-                        /* ... */
+                        offsetX: stage.grid.GRIDCELL_DIM * scalingFactor,
                     }
                 }
             } 

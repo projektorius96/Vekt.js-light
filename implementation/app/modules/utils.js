@@ -4,7 +4,7 @@
  *
  * @returns {boolean} true if transform was applied on the `path`
  */
-export function transformPath(path, { Helpers, transformations }) {
+export function transformPath(path, { Helpers, transformations, afterTransform }) {
 
   const
     { Trigonometry } = Helpers
@@ -27,6 +27,11 @@ export function transformPath(path, { Helpers, transformations }) {
     'transform',
     new DOMMatrix(Trigonometry.setTransform(transformOpts)).toString()
   );
+
+  if (typeof afterTransform === 'function') {
+    afterTransform({path});
+  }
+
   return true;
 }
 
