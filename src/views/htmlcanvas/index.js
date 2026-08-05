@@ -12,8 +12,8 @@ export class HTMLCanvas {
      * @param {HTMLDivElement} `stage` - a reference to the current instance of `stage`; NOTE: "`stage"` is reserved word and `HTMLElement.prototype.id`, hence "ID" the context it is used within !
      * @returns {Iterable} `Iterable` : if such iterable is iterated, each value of such `Iterable`'s is a "`view-group`"; top-level `view-group` conventionally is called **"`stage`"**, otherwise it's a **"`layer`"**
      */
-        static init({ stage, container = null }) {
-
+        static init({ stage, container = null }) {            
+            
             if (container) {               
                 container?.appendChild(stage);
             }
@@ -51,7 +51,7 @@ export class HTMLCanvas {
          * @param {HTMLDivElement} stage - canvas wrapping element (**"view-group"**), if such "`view-group`" is a top-level `view-group`, by convention we will call it the **"`stage`"**
          * @returns {Boolean} `true`
          */
-        static #responsify(){
+        static #responsify({stage}) {
 
             const
                 GRIDCELL_DIM = ( stage.clientWidth / this.#evenNumber( stage.scale ) )

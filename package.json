@@ -4,5 +4,8 @@
     "type": "module",
     "devDependencies": {
         "vite": "^8.2.0"
+    },
+    "exports": {
+        ".": "./src/views/index.js"
     }
 }

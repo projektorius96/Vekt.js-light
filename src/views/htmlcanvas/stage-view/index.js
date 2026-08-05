@@ -7,7 +7,6 @@ customElements.define(stage_view, class extends HTMLDivElement {
 
         setStyling.call( super() );
 
-
             this.id = "stage";        
             this.scale = scale;
 

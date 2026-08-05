@@ -1,7 +1,7 @@
 import { HTMLCanvas, XMLSVG } from './src/views/index.js';
 import Stage from './implementation/index.js';
 import package_json from './package.json' with { type: 'json' };
-import { userConfig } from './implementation/app/user-config.js';
+import { userConfig } from './implementation/user-config.js';
 
 document.on('DOMContentLoaded', ()=>{
 

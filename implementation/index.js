@@ -1,6 +1,6 @@
-import App from './app/index.js';
-import { ENUMS } from "./app/utils.js";
-import { userConfig } from "./app/user-config.js";
+import App from './app.js';
+import { ENUMS } from "./utils.js";
+import { userConfig } from "./user-config.js";
 
 export default class {
 

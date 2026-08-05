@@ -1,4 +1,3 @@
-import '../gui/index.js';
 import './globals.css';
 import { userConfig } from './user-config.js';
 import { defaultVendorFontSize, transformPath } from './modules/utils.js';
