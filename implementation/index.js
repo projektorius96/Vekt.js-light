@@ -14,7 +14,6 @@ export default class {
         const { setup } = ENUMS.PRINT;
         
         const stage = new HTMLCanvas.ViewGroup.Stage({...userConfig.canvas.stage});
-            console.log(stage)
             if ( stage ) {
 
                 stage.appendChild(

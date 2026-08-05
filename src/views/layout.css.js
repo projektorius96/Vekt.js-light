@@ -39,7 +39,7 @@ export function getViewportFillStyle(opts = {}) {
   const base = /* css */`
     display: block;
     width: calc(100vw - var(--vertical-scrollbar-width));
-    height: 100vh;
+    height: 100%;
     position: ${position};
     top: 0px;
     left: 0px;
