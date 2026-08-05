@@ -1,6 +1,12 @@
 import setStyling from './index.css.js';
-import { PRINT, getNamespace, setCoords, setPoints, drawLabel } from '../modules/index.js';
-import { getScaledPointsFromDataset } from '../svg-path-geometry.js';
+import { 
+    PRINT, 
+    getNamespace, 
+    setCoords, 
+    setPoints,
+    getScaledPointsFromDataset, 
+    drawLabel,
+} from '../modules/index.js';
 
 /**
  * @alias
