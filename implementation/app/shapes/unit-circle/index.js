@@ -1,6 +1,6 @@
 export default class {
 
-  static init(id, {dependencies, overrides}) {
+  static init(id, {dependencies, overrides, onRender}) {
 
     const {
       HTMLCanvas, 
@@ -68,6 +68,10 @@ export default class {
         ,
         afterTransform: ({path})=> path.setPoints(allPoints, path.dataset.scaling)
       });
+
+      if (typeof onRender === 'function') {
+        onRender({path});
+      }
 
       })
     );

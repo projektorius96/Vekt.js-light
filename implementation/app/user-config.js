@@ -5,6 +5,7 @@ export
         userConfig = deepFreeze({
             canvas: {
                 stage: {
+                    id: ENUMS.ID.header,
                     scale: 20
                 },
                 layers: {

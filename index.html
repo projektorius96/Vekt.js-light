@@ -1,11 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title></title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <script type="module" src="./main.js"></script>
+  <title></title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <script type="module" src="./main.js"></script>
+  <style>
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: system-ui, sans-serif;
+        background: #f4f4f4;
+        padding: 2rem;
+    }
+
+    /*
+     * Parent grid
+     * -----------
+     * One column
+     * Two rows
+     *
+     * auto rows mean:
+     * every row becomes exactly as tall
+     * as its own content requires.
+     */
+    .grid {
+        display: grid;
+
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+
+        gap: 1.5rem;
+
+        max-width: 900px;
+        margin-inline: auto;
+    }
+</style>
 </head>
-  <body></body>
+  <body>
+    <div class="grid">
+        <section id="header" class="panel"></section>
+        <section id="footer" class="panel"></section>
+    </div>
+  </body>
 </html>
