@@ -1,6 +1,6 @@
 export default class {
 
-  static init(id, {dependencies, overrides, onRender}) {
+  static init(id, {dependencies, overrides}) {
 
     const {
       HTMLCanvas, 
@@ -32,7 +32,7 @@ export default class {
       tearoff$setRange = 
         (deg)=>{          
           return({
-                x: /* ____________________________________________ */ 1   * Math.cos( Converters.degToRad( deg ) ) - 1  /* <== removes the annoying radius visible, when the shape is not filled */,
+                x: /* ____________________________________________ */ 1   * Math.cos( Converters.degToRad( deg ) )/*  - 1 */  /* <== removes the annoying radius visible, when the shape is not filled */,
                 y: -1 * Number( 1 ) * Math.sin( Converters.degToRad( deg ) ),
           });
         }
@@ -68,10 +68,6 @@ export default class {
         ,
         afterTransform: ({path})=> path.setPoints(allPoints, path.dataset.scaling)
       });
-
-      if (typeof onRender === 'function') {
-        onRender({path});
-      }
 
       })
     );

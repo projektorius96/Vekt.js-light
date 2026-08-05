@@ -43,13 +43,6 @@ export default class {
                         offsetX: stage.grid.GRIDCELL_DIM * scalingFactor,
                     }
                 }
-            },
-            onRender: function ({path}) {
-                switch (path.id) {
-                    case ENUMS.ID.circle_top:
-                        console.log(`${path.id} was rendered`);
-                        break;
-                }
             }
         })
 
