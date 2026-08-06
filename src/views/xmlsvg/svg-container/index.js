@@ -4,7 +4,7 @@ import {
     getNamespace, 
     setCoords, 
     setPoints,
-    getScaledPointsFromDataset, 
+    getScaledPointsFromDataset,
     drawLabel,
 } from '../modules/index.js';
 
