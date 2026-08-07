@@ -6,8 +6,4 @@ EventTarget.prototype.on = EventTarget.prototype.addEventListener;
 EventTarget.prototype.rm = EventTarget.prototype.removeEventListener;
 EventTarget.prototype.dispatch = EventTarget.prototype.dispatchEvent;
 
-Object.defineProperties(Array.prototype, {
-  on: {
-    value: Array.prototype.forEach,
-  },
-});
+Array.prototype.on = Array.prototype.forEach;

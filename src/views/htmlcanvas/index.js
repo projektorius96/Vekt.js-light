@@ -97,9 +97,10 @@ export class HTMLCanvas {
     }
 
     static #getIterable(nonIterable){
-        if (!Array.isArray(nonIterable)){
-            return Array.from(nonIterable)
+        if (Array.isArray(nonIterable)){
+            return nonIterable;
         }
+        return Array.from(nonIterable);
     }
 
     static ViewGroup = {
