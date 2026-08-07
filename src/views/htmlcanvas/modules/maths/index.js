@@ -1,14 +1,17 @@
-function skewXMatrix(phi, translateX, translateY) {
+/**
+ * Builds a skew matrix along either the X or Y axis.
+ * @param {'X'|'Y'} axis - which axis to skew along
+ * @param {Number} phi - skew angle, in radians
+ * @param {Number} translateX
+ * @param {Number} translateY
+ * @returns {DOMMatrix}
+ */
+function skewMatrix(axis, phi, translateX, translateY) {
     // signature: scaleX, skewX, skewY, scaleY, translateX, translateY
+    const skewX = axis === 'X' ? Math.tan(phi) : 0;
+    const skewY = axis === 'Y' ? Math.tan(phi) : 0;
     return new DOMMatrix([
-        1, 0, Math.tan(phi), 1, translateX, translateY
-    ]);
-}
-
-function skewYMatrix(phi, translateX, translateY) {
-    return new DOMMatrix([
-        // signature: scaleX, skewX, skewY, scaleY, translateX, translateY
-        1, Math.tan(phi), 0, 1, translateX, translateY
+        1, skewY, skewX, 1, translateX, translateY
     ]);
 }
 
@@ -54,13 +57,13 @@ export function setTransform({angle = 0, translateX = 0, translateY = 0, skew = 
 
     if (skew?.X) {
         const phiX = degToRad( skew?.X?.phi || 0 );
-        const skewX = new DOMMatrix(skewXMatrix(phiX, 0, 0));
+        const skewX = skewMatrix('X', phiX, 0, 0);
         resultMatrix = skewX.multiply(baseMatrix);
     }
 
     if (skew?.Y) {
         const phiY = degToRad( skew?.Y?.phi || 0 );
-        const skewY = new DOMMatrix(skewYMatrix(phiY, 0, 0));
+        const skewY = skewMatrix('Y', phiY, 0, 0);
         resultMatrix = skewY.multiply(baseMatrix);
     }
 
@@ -104,22 +107,16 @@ export function radToDeg(rad){
  * @returns {Array}                     one-dimensional array holding a range
  */
 export function setRange(start, step, end, isIncluded=true, skip = []){
-    
+
     const range = [];
-    
-    loop1: for (start; start < end + isIncluded; start += step) {
 
-        loop2: for (let items of skip) {
+    for (let value = start; value < end + isIncluded; value += step) {
 
-            if (items == start) {
+        const isSkipped = skip.some((item) => item == value);
 
-                continue loop1;
-
-            }
-
+        if (!isSkipped) {
+            range.push(value);
         }
-
-        range.push(start)
 
     }
 
