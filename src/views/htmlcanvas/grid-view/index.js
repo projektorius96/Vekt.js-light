@@ -41,16 +41,9 @@ export class grid_view {
 
         }
 
-        let
-            divisorX = Math.ceil( stage.clientWidth / gridcellDim )
-            ,
-            divisorY = Math.ceil( stage.clientHeight / gridcellDim )
-        ;
-        ;[...new Array(divisorY)].map((v, row)=>{
+        const divisorY = Math.ceil( stage.clientHeight / gridcellDim );
 
-            return v = 1+row;
-
-        }).forEach((row)=>{
+        for (let row = 1; row <= divisorY; row++) {
 
             gridcellMatrix.forEach((_, col)=>{
 
@@ -61,11 +54,10 @@ export class grid_view {
                 }
 
                 drawGrid(gridcellDim * col, gridcellDim * row);
-            
-            });
-        
 
-        });
+            });
+
+        }
 
         return context;
     
